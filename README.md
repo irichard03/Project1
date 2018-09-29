@@ -4,7 +4,8 @@ This will be a music site, combining the Spotify API with the Beats Per Minute A
 
 ## API Info
 
-[BPM API](https://getsongbpm.com/api)
+[BPM API](https://getsongbpm.com/api)  
+
 [Spotify API](https://developer.spotify.com/documentation/web-api/)
 
 We will use Firebase to store user preferences such as favorite genres and artists with basic authentication (e-mail)
