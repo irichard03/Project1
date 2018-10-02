@@ -19,19 +19,23 @@ var userName = "";
 //init materialize
 M.AutoInit();
 //login info for firebase
-$("#login").on("click keypress", function (e) { //this ID will be used in the login screen at the start of the game
+$("#loginButton").on("click keypress", function (e) { //this ID will be used in the login screen at the start of the game
     e.preventDefault();
-    userName = $("#").val().trim();
-    if (userName.length > 0); {
+    userName = $("#userID").val().trim();
+    console.log(userName);
+    if (userName.length > 0) { //firebase still being called when string is empty
         fireAccounts.once("value", function (snap) {
-            if (!snap.child(userName).exists()) {
-                database.ref("accounts/" + userName).push({
+            if (!snap.child(userName).exists()) { //this way of identifying if the username is already in  use doesnt work
+                database.ref("accounts/").push({
                     name: userName,
-                    level: 1
+                    level: 1,
+                    dateAdded: firebase.database.ServerValue.TIMESTAMP
                 });
             }
+        }, function (errorObject) {
+            console.log("Errors handled: " + errorObject.code);
         });
-        $("#").val("");
+        $("#userID").val("");
     }
 });
 
@@ -46,4 +50,4 @@ $("#chat-submit").on("click keypress", function (e) {
 });
 fireChat.on("child_added", function (snap) {
     $("#chatLog").append("<div>" + snap.val() + "</div>").scrollTop($("#chatLog")[0].scrollHeight);
-}); 
+});
