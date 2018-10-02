@@ -36,6 +36,8 @@ $("#loginButton").on("click keypress", function (e) { //this ID will be used in 
             console.log("Errors handled: " + errorObject.code);
         });
         $("#userID").val("");
+    } else {
+        $("#loginMsg").html("<i class=\"red-text errorAlert text-darken-2 loginAlert material-icons\">" + "error" +"</i>You've left it blank.");
     }
 });
 
