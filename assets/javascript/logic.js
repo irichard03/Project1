@@ -46,4 +46,21 @@ $("#chat-submit").on("click keypress", function (e) {
 });
 fireChat.on("child_added", function (snap) {
     $("#chatLog").append("<div>" + snap.val() + "</div>").scrollTop($("#chatLog")[0].scrollHeight);
-}); 
+});
+
+//Jacob's AJAX Calls
+var APIKey = "166a433c57516f51dfab1f7edaed8413";
+var locationSelected;  //this will need to be updated once we have locations to select from
+
+var queryURL = "https://api.openweathermap.org/data/2.5/weather?" +
+    "q=" + locationSelected + " &units=imperial&appid=" + APIKey;
+    
+$.ajax({
+    url: queryURL,
+    method: "GET"
+})
+    .then(function (response) {
+        console.log("Wind Speed: " + response.wind.speed);
+        console.log("Humidity: " + response.main.humidity);
+        console.log("Temperature (F): " + response.main.temp);
+    });
