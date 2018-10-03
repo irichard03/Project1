@@ -13,23 +13,22 @@
     <title>Football Hooligans</title>
 </head>
 
-<body class="blue">
+<body>
     
     <!--main container, all things go in here-->
-    <div class="container main">
+    
         <header>
             <nav>
-                <div class="nav-wrapper">
-                    <a href="index.html" class="brand-logo center">Football Hooligans</a>
-                        <ul class="left hide-on-med-and-down">
-                            <li><a href="signup.html">Sign-up</a></li>
-                            <li><a href="profile.html">Profile</a></li>
-                            <li class="active"><a href="fight.html">Fight</a></li>
-                        </ul>
+                <div class="nav-wrapper orange darken-3">
+                    <a class="center brand-logo">HARSHMELLOWGANS</a>
+                    <ul id="nav-mobile" class="right hide-on-med-and-down">
+                        <li><a class="waves-effect waves-light btn modal-trigger" href="#modal1">Instructions</a></li>
+                        <li><a class="waves-effect waves-light btn disabled" href="fight.html">Fight</a></li>
+                    </ul>
                 </div>
             </nav>    
         </header>
-
+    <div class="container main">
         <section>
             <div class="row">
                 <div class="col m4">
@@ -72,17 +71,34 @@
                 </div>
 
                 <div class="row">
-                        <img src="assets/images/CharacterBASE.png">
-                        <img class ="player1 red darken-2" src="assets/images/CharacterBASE.png">
-                        <img src="assets/images/CharacterBASE.png">
-                        <img class ="player2 blue darken-2" src="assets/images/CharacterBASE.png">
-                        <img src="assets/images/CharacterBASE.png">
+                        <div class="positions" id="playerBack">                   
+                            <img class ="player1 red darken-2" src="assets/images/CharacterBASE.png">
+                        </div>
+                        <div class="positions" id="playerForward">                   
+                            <img class ="player1 red darken-2" src="assets/images/CharacterBASE.png">
+                        </div>
+                        <div class="playerButtons">
+                            <a onclick="M.toast({html: 'I am a toast'})" class="toaster btn">Punch!</a>    
+                            <a onclick="M.toast({html: 'I am a toast'})" class="toaster btn">Kick!</a>
+                            <a onclick="M.toast({html: 'I am a toast'})" class="toaster btn">Rock!</a>
+                            <a onclick="M.toast({html: 'I am a toast'})" class="toaster btn">Drink!</a>
+                        </div>
+                        <div class="display">
+                            
+                        </div>
+                        <div class="cpuButtons">
+                            
+                        </div>
+                        <div class="positions" id="cpuBack">
+                            <img class ="player2 blue darken-2" src="assets/images/CharacterBASE.png">
+                        </div>
+                        <div class="positions" id="cpuForward">
+                            <img class ="player2 blue darken-2" src="assets/images/CharacterBASE.png">
+                        </div>
                 </div>
                 
             </div>
         </section>
-
-    <!---end main container, if you place things outside of this it better be a footer-->
     </div>
 
 
