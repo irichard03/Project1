@@ -72,7 +72,7 @@ for (var i = 0; i < cityArray.length; i++) {
             var cityHumidity = "humidity"+response.name;
 
             $(`#${cityTemp}`).html("Temp: "+response.main.temp + "F");
-            $(`#${cityHumidity}`).html("Humidity: "+ response.main.humidity +"%")
+            $(`#${cityHumidity}`).html("Humidity: "+ response.main.humidity +"%");
         });
 }
 
@@ -85,13 +85,18 @@ $('.card-title').on("click",function() {
 var totalPower = 100;
 $("#powerOneSlide").change(function(){
     var powerInput = $("#powerOneSlide").val();
-    $("#displayPowerOne").html("Strength: "+powerInput);
-})
+    $("#displayPowerOne").html("Health: "+powerInput);
+});
 
 $("#powerTwoSlide").change(function(){
     var powerInput = $("#powerTwoSlide").val();
-    $("#displayPowerTwo").html("Wit: "+powerInput);
-})
+    $("#displayPowerTwo").html("Strength: "+powerInput);
+});
+
+$("#powerThreeSlide").change(function(){
+    var powerInput = $("#powerThreeSlide").val();
+    $("#displayPowerThree").html("Wits: "+powerInput);
+});
 
 $("#profileBtn").on("click", function(){
     var nickName = $("#nameField").val().trim();
@@ -102,6 +107,6 @@ $("#profileBtn").on("click", function(){
     console.log(`Favorite Team: ${prefCity}`);
     console.log(`Strength: ${strengthInput}`);
     console.log(`Wit: ${witInput}`);
-})
+});
 
     
