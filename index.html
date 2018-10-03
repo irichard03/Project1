@@ -7,23 +7,65 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <!--changed bootstrap cdn to materialize-->
+    <!--Materialize-->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU"
         crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Luckiest+Guy" rel="stylesheet">
     <link rel="stylesheet" href="assets/css/style.css">
     <title>Project 1</title>
 </head>
-
+<!--Navbar: contains instructions and more-->
+<nav>
+    <div class="nav-wrapper orange darken-3">
+        <a class="center brand-logo">HARSHMELLOWGANS</a>
+        <ul id="nav-mobile" class="right hide-on-med-and-down">
+            <li><a class="waves-effect waves-light btn modal-trigger" href="#modal1">Instructions</a></li>
+        </ul>
+    </div>
+</nav>
+<!--Main Container for Login-->
+<div class="container">
+    <div class="row">
+        <div class="row valign-center">
+        <h5 id="loginMsg" class="center">Enter your name to get started!</h5>
+    </div>
+        <div class="col s2 offset-s5">
+            <div class="row center">
+                <input type="text" id="userID">
+                <label for="userID" placeholder="Name"></label>
+                <button class="center btn waves-effect waves-light" id="loginButton" type="submit" name="action">Submit
+                    <i class="material-icons right">send</i>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--Modals Go Here-->
+    <!--Login Page Instructions Modal-->
+    <div id="modal1" class="modal">
+            <div class="modal-content">
+            <h4>Instructions yo</h4>
+            <p>A bunch of text</p>
+            </div>
+            <div class="modal-footer">
+            <a href="#!" class="modal-close waves-effect waves-green btn-flat">Coolio</a>
+            </div>
+        </div>
 <body>
-
+<!--Link to Scripts-->
+    <!--FireBase-->
     <script src="https://www.gstatic.com/firebasejs/5.5.1/firebase.js"></script>
+    <!--jQuery-->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
         crossorigin="anonymous"></script>
+    <!--Popper.js-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
         crossorigin="anonymous"></script>
-        <!--replace bootstrap js link with materialize link-->
+    <!--Materialize scripts-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <!--Local Script-->
     <script src="assets/javascript/logic.js"></script>
 </body>
 
