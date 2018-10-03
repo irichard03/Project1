@@ -9,3 +9,13 @@
 .errorAlert {
     font-size: 24px;
 }
+
+.main {
+    background-image: url("../images/kevin-hernandez-446780-unsplash.jpg");
+    background-size: cover;
+}
+
+.player2,.flipMe {
+    -webkit-transform: scaleX(-1);
+    transform: scaleX(-1);
+}

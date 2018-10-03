@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <!--changed bootstrap cdn to materialize-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU"
+        crossorigin="anonymous">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <title>Football Hooligans</title>
+</head>
+
+<body class="blue">
+    
+    <!--main container, all things go in here-->
+    <div class="container main">
+        <header>
+            <nav>
+                <div class="nav-wrapper">
+                    <a href="index.html" class="brand-logo center">Football Hooligans</a>
+                        <ul class="left hide-on-med-and-down">
+                            <li><a href="signup.html">Sign-up</a></li>
+                            <li><a href="profile.html">Profile</a></li>
+                            <li class="active"><a href="fight.html">Fight</a></li>
+                        </ul>
+                </div>
+            </nav>    
+        </header>
+
+        <section>
+            <div class="row">
+                <div class="col m4">
+                        <div class="col s12 m7">
+                                <div class="card horizontal red">
+                                  <div class="card-image">
+                                    <img src="assets/images/CharacterBASE.png">
+                                </div>
+                                <div class="card-stacked">
+                                    <div class="card-content">
+                                        <p class="booze white-text">Booze.</p>
+                                    </div>
+                                    <div class="card-action blue">
+                                        <p class="health white-text">Health</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                </div>
+                <div class="col m4">
+                
+                </div>
+                <div class="col m4 ">
+                        <div class="col s12 m7">
+                                <div class="card horizontal blue">
+                                  <div class="card-image">
+                                    <img class ="flipMe" src="assets/images/CharacterBASE.png">
+                                  </div>
+                                  <div class="card-stacked">
+                                    <div class="card-content">
+                                        <p class="booze white-text">Booze.</p>
+                                    </div>
+                                    <div class="card-action red">
+                                      <p class="health white-text">Health</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                </div>
+
+                <div class="row">
+                        <img src="assets/images/CharacterBASE.png">
+                        <img class ="player1 red darken-2" src="assets/images/CharacterBASE.png">
+                        <img src="assets/images/CharacterBASE.png">
+                        <img class ="player2 blue darken-2" src="assets/images/CharacterBASE.png">
+                        <img src="assets/images/CharacterBASE.png">
+                </div>
+                
+            </div>
+        </section>
+
+    <!---end main container, if you place things outside of this it better be a footer-->
+    </div>
+
+
+    <script src="https://www.gstatic.com/firebasejs/5.5.1/firebase.js"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+        <!--replace bootstrap js link with materialize link-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script src="assets/javascript/logic.js"></script>
+</body>
+
+</html>
