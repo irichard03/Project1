@@ -1,3 +1,11 @@
 .card-title { 
     cursor: pointer; 
 }
+
+.brand-logo {
+    font-family: "Luckiest Guy", cursive;
+}
+
+.errorAlert {
+    font-size: 24px;
+}
