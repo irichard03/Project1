@@ -53,3 +53,31 @@ $("#chat-submit").on("click keypress", function (e) {
 fireChat.on("child_added", function (snap) {
     $("#chatLog").append("<div>" + snap.val() + "</div>").scrollTop($("#chatLog")[0].scrollHeight);
 });
+
+//Jacob's AJAX Calls
+var APIKey = "166a433c57516f51dfab1f7edaed8413";
+var cityArray = ["Houston,Texas", "Dallas,Texas", "Buffalo,New York","Seattle,Washington","Miami,Florida","Philadelphia,Pennsylvania","Boston,Massachusetts","Atlanta,Georgia"];
+var locationSelected;  //this will need to be updated once we have locations to select from
+
+for (var i = 0; i < cityArray.length; i++) {
+    var queryURL = "https://api.openweathermap.org/data/2.5/weather?" +
+        "q=" + cityArray[i] + " &units=imperial&appid=" + APIKey;
+
+    $.ajax({
+        url: queryURL,
+        method: "GET"
+    })
+        .then(function (response) {
+            var cityTemp = "temp"+response.name;
+            var cityHumidity = "humidity"+response.name;
+
+            $(`#${cityTemp}`).html("Temp: "+response.main.temp + "F");
+            $(`#${cityHumidity}`).html("Humidity: "+ response.main.humidity +"%")
+            console.log(response);
+        });
+}
+
+//Jacob's card-title Click
+$('.card-title').on("click",function() { 
+    console.log($(this).attr("data-city"));
+});
