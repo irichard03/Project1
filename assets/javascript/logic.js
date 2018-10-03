@@ -73,7 +73,6 @@ for (var i = 0; i < cityArray.length; i++) {
 
             $(`#${cityTemp}`).html("Temp: "+response.main.temp + "F");
             $(`#${cityHumidity}`).html("Humidity: "+ response.main.humidity +"%")
-            console.log(response);
         });
 }
 
@@ -81,3 +80,28 @@ for (var i = 0; i < cityArray.length; i++) {
 $('.card-title').on("click",function() { 
     console.log($(this).attr("data-city"));
 });
+
+// Jacob's Profile Page JS
+var totalPower = 100;
+$("#powerOneSlide").change(function(){
+    var powerInput = $("#powerOneSlide").val();
+    $("#displayPowerOne").html("Strength: "+powerInput);
+})
+
+$("#powerTwoSlide").change(function(){
+    var powerInput = $("#powerTwoSlide").val();
+    $("#displayPowerTwo").html("Wit: "+powerInput);
+})
+
+$("#profileBtn").on("click", function(){
+    var nickName = $("#nameField").val().trim();
+    var prefCity = $("#prefTeam").val().trim();
+    var strengthInput = $("#powerOneSlide").val();
+    var witInput = $("#powerTwoSlide").val();
+    console.log(`Nick Name: ${nickName}`);
+    console.log(`Favorite Team: ${prefCity}`);
+    console.log(`Strength: ${strengthInput}`);
+    console.log(`Wit: ${witInput}`);
+})
+
+    

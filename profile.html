@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <!--Materialize-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU"
+        crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Luckiest+Guy" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <title>Project 1</title>
+</head>
+
+<body>
+    <!--Navbar: contains instructions and more-->
+    <nav>
+        <div class="nav-wrapper orange darken-3">
+            <a class="center brand-logo">HARSHMELLOWGANS</a>
+            <ul id="nav-mobile" class="right hide-on-med-and-down">
+                <li>
+                    <a class="waves-effect waves-light btn modal-trigger" href="#modal1">Instructions</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <div class="container">
+        <div class="row">
+            <form class="col s12">
+                <div class="row">
+                    <div class="input-field col s6">
+                        <i class="material-icons prefix">account_circle</i>
+                        <input id="nameField" type="text" class="validate">
+                        <label for="nameField">Nick Name</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s12">
+                        <i class="material-icons prefix">location_city</i>
+                        <select id="prefTeam">
+                            <option value="" disabled selected>Choose your Team</option>
+                            <option value="Houston">Houston</option>
+                            <option value="Seattle">Seattle</option>
+                            <option value="Buffalo">Buffalo</option>
+                            <option value="Dallas">Dallas</option>
+                            <option value="Miami">Miami</option>
+                            <option value="Philadelphia">Philadelphia</option>
+                            <option value="Boston">Boston</option>
+                            <option value="Atlanta">Atlanta</option>
+                        </select>
+                        <label>Favorite Team</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s12">
+                        <p id="displayPowerOne">Strength: </p>
+                        <p class="range-field">
+                            <input type="range" id="powerOneSlide" min="0" max="50">
+                        </p>
+                    </div>
+                </div>
+                <div class="row">
+                        <div class="input-field col s12">
+                            <p id="displayPowerTwo">Wit: </p>
+                            <p class="range-field">
+                                <input type="range" id="powerTwoSlide" min="0" max="50">
+                            </p>
+                        </div>
+                    </div>
+                <div class="row">
+                    <a class="waves-effect waves-orange btn" id="profileBtn">Save
+                        <i class="material-icons left">save</i>
+                    </a>
+                </div>
+            </form>
+        </div>
+
+        <!--Login Page Instructions Modal-->
+        <div id="modal1" class="modal">
+            <div class="modal-content">
+                <h4>Instructions yo</h4>
+                <p>A bunch of text</p>
+            </div>
+            <div class="modal-footer">
+                <a href="#!" class="modal-close waves-effect waves-green btn-flat">Coolio</a>
+            </div>
+        </div>
+    </div>
+    <!--Link to Scripts-->
+    <!--FireBase-->
+    <script src="https://www.gstatic.com/firebasejs/5.5.1/firebase.js"></script>
+    <!--jQuery-->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+    <!--Popper.js-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+        crossorigin="anonymous"></script>
+    <!-- AJAX -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <!--Materialize scripts-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <!--Local Script-->
+
+    <script src="assets/javascript/logic.js"></script>
+
+</body>
+
+</html>
