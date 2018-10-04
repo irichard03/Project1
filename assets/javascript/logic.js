@@ -19,7 +19,7 @@ var userName = "";
 //init materialize
 M.AutoInit();
 //login info for firebase
-$("#loginButton").on("click keypress", function (e) { //this ID will be used in the login screen at the start of the game
+$("#loginButton").on("click", function (e) { //this ID will be used in the login screen at the start of the game
     e.preventDefault();
     userName = $("#userID").val().trim();
     console.log(userName);
@@ -37,7 +37,7 @@ $("#loginButton").on("click keypress", function (e) { //this ID will be used in 
         });
         $("#userID").val("");
     } else {
-        $("#loginMsg").html("<i class=\"red-text errorAlert text-darken-2 loginAlert material-icons\">" + "error" +"</i>You've left it blank.");
+        $("#loginMsg").html("<i class=\"red-text errorAlert text-darken-2 loginAlert material-icons\">" + "error" + "</i>You've left it blank.");
     }
 });
 
@@ -56,49 +56,49 @@ fireChat.on("child_added", function (snap) {
 
 //Jacob's AJAX Calls
 var APIKey = "166a433c57516f51dfab1f7edaed8413";
-var cityArray = ["Houston,Texas", "Dallas,Texas", "Buffalo,New York","Seattle,Washington","Miami,Florida","Philadelphia,Pennsylvania","Boston,Massachusetts","Atlanta,Georgia"];
-var locationSelected;  //this will need to be updated once we have locations to select from
+var cityArray = ["Houston,Texas", "Dallas,Texas", "Buffalo,New York", "Seattle,Washington", "Miami,Florida", "Philadelphia,Pennsylvania", "Boston,Massachusetts", "Atlanta,Georgia"];
+var locationSelected; //this will need to be updated once we have locations to select from
 
 for (var i = 0; i < cityArray.length; i++) {
     var queryURL = "https://api.openweathermap.org/data/2.5/weather?" +
         "q=" + cityArray[i] + " &units=imperial&appid=" + APIKey;
 
     $.ajax({
-        url: queryURL,
-        method: "GET"
-    })
+            url: queryURL,
+            method: "GET"
+        })
         .then(function (response) {
-            var cityTemp = "temp"+response.name;
-            var cityHumidity = "humidity"+response.name;
+            var cityTemp = "temp" + response.name;
+            var cityHumidity = "humidity" + response.name;
 
-            $(`#${cityTemp}`).html("Temp: "+response.main.temp + "F");
-            $(`#${cityHumidity}`).html("Humidity: "+ response.main.humidity +"%");
+            $(`#${cityTemp}`).html("Temp: " + response.main.temp + "F");
+            $(`#${cityHumidity}`).html("Humidity: " + response.main.humidity + "%");
         });
 }
 
 //Jacob's card-title Click
-$('.card-title').on("click",function() { 
+$('.card-title').on("click", function () {
     console.log($(this).attr("data-city"));
 });
 
 // Jacob's Profile Page JS
 var totalPower = 100;
-$("#powerOneSlide").change(function(){
+$("#powerOneSlide").change(function () {
     var powerInput = $("#powerOneSlide").val();
-    $("#displayPowerOne").html("Health: "+powerInput);
+    $("#displayPowerOne").html("Health: " + powerInput);
 });
 
-$("#powerTwoSlide").change(function(){
+$("#powerTwoSlide").change(function () {
     var powerInput = $("#powerTwoSlide").val();
-    $("#displayPowerTwo").html("Strength: "+powerInput);
+    $("#displayPowerTwo").html("Strength: " + powerInput);
 });
 
-$("#powerThreeSlide").change(function(){
+$("#powerThreeSlide").change(function () {
     var powerInput = $("#powerThreeSlide").val();
-    $("#displayPowerThree").html("Wits: "+powerInput);
+    $("#displayPowerThree").html("Wits: " + powerInput);
 });
 
-$("#profileBtn").on("click", function(){
+$("#profileBtn").on("click", function () {
     var nickName = $("#nameField").val().trim();
     var prefCity = $("#prefTeam").val().trim();
     var strengthInput = $("#powerOneSlide").val();
@@ -109,4 +109,50 @@ $("#profileBtn").on("click", function(){
     console.log(`Wit: ${witInput}`);
 });
 
-    
+//Combat Functions
+var baseAcc = 0.9; // 3.677 - (23/(10+wits)^.7)
+var baseDodge = 0.1;
+var userDodge = 0; // 1 - (attackerAccuracy/(attackerAccuracy + (defenderWits/100)^0.985))
+var userHealth = 10; //10 * vitality;
+var Attacks = {
+    "kick": {
+        damage: 0,
+        accuracy: 0
+    },
+    "punch": {
+        damage: 0,
+        accuracy: 0
+    },
+    "throw": {
+        damage: 0,
+        accuracy: 0
+    }
+};
+//ignore, math testing
+var test = 0;
+var baseKick = 2;
+var kickAccPenalty = 0.2;
+var basePunch = 1;
+var baseThrow = 0.6;
+var throwAccBonus = 0.2;
+var baseLevelFactor = 1; //increase by 0.1 per lvl
+var tenStr = 10;
+var fifteenStr = 15;
+var twentyStr = 20;
+
+var kickTen;
+var kickTwenty;
+var kickFifteen;
+var punchTen;
+var punchFifteen;
+var punchTwenty;
+var throwTen;
+var throwFifteen;
+var throwTwenty;
+
+$(document).ready(function () {
+ test = Math.round(Math.random()* baseKick/2);
+ kickTen = baseKick * tenStr + test;
+ kickTwenty = baseKick * 20 + Math.round(Math.random()* (20*baseKick)/5);
+ console.log(kickTwenty);
+});
