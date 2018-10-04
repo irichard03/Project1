@@ -18,27 +18,76 @@ var connectedRef = database.ref(".info/connected");
 var userName = "";
 //init materialize
 M.AutoInit();
+
+firebase.auth().onAuthStateChanged(function (user) {
+    if (user) {
+        // User is signed in.
+        
+        var isAnonymous = user.isAnonymous;
+        var uid = user.uid;
+        
+        // ...
+    } else {
+        // User is signed out.
+        // ...
+    }
+});
+//Anonymous authentication
+function login() {
+    firebase.auth().signInAnonymously().catch(function (error) {
+        // Handle Errors here.
+        var errorCode = error.code;
+        var errorMessage = error.message;
+        // ...
+
+    });
+
+    //
+    var user = firebase.auth().currentUser;
+    if (user) {
+        userName = $("#userID").val().trim();
+        user.updateProfile({
+            displayName: userName,
+        }).then(function () {
+            var displayName = user.displayName;
+            console.log(displayName);
+            if (user.displayName.length > 0) { //firebase still being called when string is empty
+                fireAccounts.once("value", function (snap) {
+                    if (!snap.child(user.displayName).exists()) { //this way of identifying if the username is already in  use doesnt work
+                        database.ref(`accounts/${user.displayName}`).set({
+                            wins: '',
+                            losses: '',
+                            dateAdded: firebase.database.ServerValue.TIMESTAMP
+                        });
+                        
+                    }
+                    else {
+                        console.log("That user is already here, so I won't add it");
+                        
+                    }
+                    // Here we can just see what username is connected
+                    var newConnection = database.ref("connections/").push(user.displayName);
+                    newConnection.onDisconnect().remove();
+                    
+                }, function (errorObject) {
+                    console.log("Errors handled: " + errorObject.code);
+                });
+                $("#userID").val("");
+            } else {
+                $("#loginMsg").html("<i class=\"red-text errorAlert text-darken-2 loginAlert material-icons\">" + "error" + "</i>You've left it blank.");
+            }
+        }, function (error) {
+            console.log("Errors handled with profile update: " + errorObject.code);
+        });
+    }
+    
+}
+
+
 //login info for firebase
 $("#loginButton").on("click keypress", function (e) { //this ID will be used in the login screen at the start of the game
     e.preventDefault();
-    userName = $("#userID").val().trim();
-    console.log(userName);
-    if (userName.length > 0) { //firebase still being called when string is empty
-        fireAccounts.once("value", function (snap) {
-            if (!snap.child(userName).exists()) { //this way of identifying if the username is already in  use doesnt work
-                database.ref("accounts/").push({
-                    name: userName,
-                    level: 1,
-                    dateAdded: firebase.database.ServerValue.TIMESTAMP
-                });
-            }
-        }, function (errorObject) {
-            console.log("Errors handled: " + errorObject.code);
-        });
-        $("#userID").val("");
-    } else {
-        $("#loginMsg").html("<i class=\"red-text errorAlert text-darken-2 loginAlert material-icons\">" + "error" +"</i>You've left it blank.");
-    }
+    login();
 });
 
 $("#chat-submit").on("click keypress", function (e) {
@@ -56,28 +105,28 @@ fireChat.on("child_added", function (snap) {
 
 //Jacob's AJAX Calls
 var APIKey = "166a433c57516f51dfab1f7edaed8413";
-var cityArray = ["Houston,Texas", "Dallas,Texas", "Buffalo,New York","Seattle,Washington","Miami,Florida","Philadelphia,Pennsylvania","Boston,Massachusetts","Atlanta,Georgia"];
-var locationSelected;  //this will need to be updated once we have locations to select from
+var cityArray = ["Houston,Texas", "Dallas,Texas", "Buffalo,New York", "Seattle,Washington", "Miami,Florida", "Philadelphia,Pennsylvania", "Boston,Massachusetts", "Atlanta,Georgia"];
+var locationSelected; //this will need to be updated once we have locations to select from
 
 for (var i = 0; i < cityArray.length; i++) {
     var queryURL = "https://api.openweathermap.org/data/2.5/weather?" +
         "q=" + cityArray[i] + " &units=imperial&appid=" + APIKey;
 
     $.ajax({
-        url: queryURL,
-        method: "GET"
-    })
+            url: queryURL,
+            method: "GET"
+        })
         .then(function (response) {
-            var cityTemp = "temp"+response.name;
-            var cityHumidity = "humidity"+response.name;
+            var cityTemp = "temp" + response.name;
+            var cityHumidity = "humidity" + response.name;
 
-            $(`#${cityTemp}`).html("Temp: "+response.main.temp + "F");
-            $(`#${cityHumidity}`).html("Humidity: "+ response.main.humidity +"%")
+            $(`#${cityTemp}`).html("Temp: " + response.main.temp + "F");
+            $(`#${cityHumidity}`).html("Humidity: " + response.main.humidity + "%")
             console.log(response);
         });
 }
 
 //Jacob's card-title Click
-$('.card-title').on("click",function() { 
+$('.card-title').on("click", function () {
     console.log($(this).attr("data-city"));
 });
