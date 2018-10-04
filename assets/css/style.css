@@ -9,3 +9,135 @@
 .errorAlert {
     font-size: 24px;
 }
+
+.main {
+    background-image: url("../images/kevin-hernandez-446780-unsplash.jpg");
+    background-size: cover;
+}
+
+.player2,.flipMe {
+    -webkit-transform: scaleX(-1);
+    transform: scaleX(-1);
+    float: right;
+}
+
+.player {
+    position: relative;
+    float: left;
+    height: 140px;
+    width: 80px;
+    margin-top: 8px;
+}
+
+.cpu {
+    position: relative;
+    float: right;
+    height: 140px;
+    width: 80px;
+    margin-top: 8px;
+    -webkit-transform: scaleX(-1);
+    transform: scaleX(-1);
+}
+.player1, .player2 {
+    width: 150px;
+    height: 270px;
+    margin-left: 8px;
+    margin-bottom: 8px;
+}
+
+
+#toast-container {
+    top: auto !important;
+    right: auto !important;
+    bottom: 20%;
+    left:50%;  
+  }
+
+.main {
+    height: 90%;
+}
+
+.playerReadOut {
+    display: inline;
+    background-color: blue;
+    height: 200px;
+}
+
+.cpuReadOut {
+    float: right;
+    position: relative;
+    background-color: blue;
+}
+
+
+h7 {
+    position: relative;
+    display: block;
+    background-color: red;
+}
+
+#nickName{
+    width: 200px;
+    background-color: Yellow;
+}
+
+#cpuNickName {
+    width: 200px;
+    background-color: yellow;
+}
+
+#playeHealth{
+    width: 100px;
+    background-color: green;
+}
+
+#playerStrength{
+    width: 100px;
+    background-color: violet;
+}
+.barCol,.playerBarCol{
+    margin-left: 0px;
+    padding: 0px;
+    margin-top: 8px;
+    background-color:white;
+}
+
+.cpuBarCol{
+    margin-right: 0px;
+    padding: 0px;
+    margin-top: 8px;
+    background-color: white;
+}
+
+
+#cpuBooze {
+   
+    background-color: maroon;
+    width: 10px;
+    
+}
+
+.boxWidth {
+    float: left;
+    background-color: blue;
+    width: 425px;
+}
+
+.cpuReadOut {
+    float: right;
+    position: relative;
+    background-color: blue;
+    height:200px;
+}
+
+#cpuWit {
+    position: relative;
+    width: 100px;
+
+}
+
+#cpuStrength{
+   
+    position: relative;
+    width: 100px;
+}
