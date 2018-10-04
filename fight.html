@@ -32,80 +32,34 @@
         </header>
     <div class="container main">
         <section>
-            <div class="row">
-                <div class="col m4">
-                        <div class="col s12 m7">
-                                <div class="card horizontal red">
-                                  <div class="card-image">
-                                    <img src="assets/images/CharacterBASE.png">
-                                </div>
-                                <div class="card-stacked">
-                                    <div class="card-content">
-                                        <p class="booze white-text">Booze.</p>
-                                    </div>
-                                    <div class="card-action blue">
-                                        <p class="health white-text">Health</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                </div>
-                <div class="col m4">
-                
-                </div>
-                <div class="col m4 ">
-                        <div class="col s12 m7">
-                                <div class="card horizontal blue">
-                                  <div class="card-image">
-                                    <img class ="flipMe" src="assets/images/CharacterBASE.png">
-                                  </div>
-                                  <div class="card-stacked">
-                                    <div class="card-content">
-                                        <p class="booze white-text">Booze.</p>
-                                    </div>
-                                    <div class="card-action red">
-                                      <p class="health white-text">Health</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                </div>
-
-                <div class="row">
-                        <div class="positions" id="playerBack">                   
-                            <img class ="player1 red darken-2" src="assets/images/CharacterBASE.png">
-                        </div>
-                        <div class="positions" id="playerForward">                   
-                            <img class ="player1 red darken-2" src="assets/images/CharacterBASE.png">
-                        </div>
-                        <div class="playerButtons">
-                            <div class="fixed-action-btn">
-                                <a class="btn-floating btn-large red">
-                                  <i class="large material-icons">mode_edit</i>
-                                </a>
-                                <ul>
-                                  <li><a class="btn-floating red"><i class="material-icons">keyboard</i></a></li>
-                                  <li><a class="btn-floating yellow darken-1"><i class="material-icons">format_quote</i></a></li>
-                                  <li><a class="btn-floating green"><i class="material-icons">publish</i></a></li>
-                                  <li><a class="btn-floating blue"><i class="material-icons">attach_file</i></a></li>
-                                </ul>
-                              </div>
-                        </div>
-                        <div class="display">
-                            
-                        </div>
-                        <div class="cpuButtons">
-                            
-                        </div>
-                        <div class="positions" id="cpuBack">
-                            <img class ="player2 blue darken-2" src="assets/images/CharacterBASE.png">
-                        </div>
-                        <div class="positions" id="cpuForward">
-                            <img class ="player2 blue darken-2" src="assets/images/CharacterBASE.png">
-                        </div>
+            <div class="row top">
+                <div class="playerReadout">
+                <!---player readout-->
+                    <div class="col playerCol">
+                        <img class="player" src="assets/images/CharacterBASE.jpeg">
+                    </div>
+                    <div class="col barCol  ">
+                    <h7 id="nickName">ChowderHead</h7>
+                    <h7 id="playeHealth">Health</h7>
+                    <h7 id="playerStrength">Strength</h7>
+                    <h7 id="playerWit">Wit</h7>
+                    <h7 id="playerBooze">Booze</h7>
+                    </div>
                 </div>
                 
+                <div class="cpuReadout">
+                    <!---player readout-->
+                        <div class="col cpuCol">
+                            <img class="cpu" src="assets/images/CharacterBASE.jpeg">
+                        </div>
+                        <div class="col barCol  ">
+                        <h7 id="cpuNickName">ChowderHead</h7>
+                        <h7 id="cpuHealth">Health</h7>
+                        <h7 id="cpuStrength">Strength</h7>
+                        <h7 id="cpuWit">Wit</h7>
+                        <h7 id="cpuBooze">Booze</h7>
+                        </div>
+                    </div>
             </div>
         </section>
     </div>

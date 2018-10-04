@@ -21,14 +21,26 @@
     float: right;
 }
 
-.player1{
+.player {
+    position: relative;
     float: left;
+    height: 140px;
+    width: 80px;
+    margin-top: 8px;
+}
+
+.cpu {
+    position: relative;
+    float: right;
+    height: 140px;
+    width: 80px;
+    margin-top: 8px;
 }
 .player1, .player2 {
     width: 150px;
     height: 270px;
     margin-left: 8px;
-    margin-right: 8px;
+    margin-bottom: 8px;
 }
 
 
@@ -39,3 +51,49 @@
     left:50%;  
   }
 
+.main {
+    height: 90%;
+}
+
+.playerReadout {
+    display: inline;
+    background-color: blue;
+    height: 200px;
+}
+
+h7 {
+    position: relative;
+    display: block;
+    background-color: red;
+    margin-left: -20px;
+
+}
+
+#nickName{
+    width: 200px;
+    background-color: Yellow;
+}
+
+#playeHealth{
+    width: 100px;
+    background-color: green;
+}
+
+#playerStrength{
+    width: 100px;
+    background-color: violet;
+}
+.barCol,playerCol,cpuCol {
+    margin-left: 0px;
+    padding: 0px;
+    margin-top: 8px;
+}
+
+.cpuReadOut {
+    float: right;
+    position: relative
+}
+
+#cpuBooze {
+    background-color: maroon;
+}
