@@ -55,8 +55,7 @@ function login() {
                             losses: '',
                             dateAdded: firebase.database.ServerValue.TIMESTAMP
                         });
-                    }
-                    else {
+                    } else {
                         console.log("That user is already here, so I won't add it");
                     }
                     // Here we can just see what username is connected
@@ -199,18 +198,18 @@ var baseAcc = 0.9; // 3.677 - (23/(10+wits)^.7)
 var baseDodge = 0.1;
 var userDodge = 0; // 1 - (attackerAccuracy/(attackerAccuracy + (defenderWits/100)^0.985))
 var userHealth = 10; //10 * vitality;
-var Attacks = {
+var attacks = {
     "kick": {
-        damage: 0,
-        accuracy: 0
+        damage: baseKick * userStr + Math.round(Math.random() * (userStr * baseKick) / 5),
+        accuracy: userAcc - 0.35
     },
     "punch": {
-        damage: 0,
-        accuracy: 0
+        damage: basePunch * userStr + Math.round(Math.random() * (userStr * basePunch) / 10),
+        accuracy: userAcc
     },
     "throw": {
-        damage: 0,
-        accuracy: 0
+        damage: baseThrow * userStr + Math.round(Math.random() * (userStr * baseThrow) / 15),
+        accuracy: userAcc + 0.35
     }
 };
 //ignore, math testing
@@ -224,20 +223,28 @@ var baseLevelFactor = 1; //increase by 0.1 per lvl
 var tenStr = 10;
 var fifteenStr = 15;
 var twentyStr = 20;
-
-var kickTen;
-var kickTwenty;
-var kickFifteen;
-var punchTen;
-var punchFifteen;
-var punchTwenty;
-var throwTen;
-var throwFifteen;
-var throwTwenty;
+var userStr;
+var enemyStr;
+var userWits;
+var enemyWits;
+var enemyAcc;
+var userAcc = 3.677 - (23 / Math.pow((10 + wits), 0.7));
 
 $(document).ready(function () {
- test = Math.round(Math.random()* baseKick/2);
- kickTen = baseKick * tenStr + test;
- kickTwenty = baseKick * 20 + Math.round(Math.random()* (20*baseKick)/5);
- console.log(kickTwenty);
+    kickTwenty = baseKick * 20 + Math.round(Math.random() * (20 * baseKick) / 5);
+    console.log(kickTwenty);
 });
+//battle commands
+var battle = {
+    attack: function (attackType) {
+        var roll = Math.random();
+        if (roll > battle.evadeCheck(wits)) {
+            enemyHP = enemyHP - attacks.attackType.damage;
+        } else {
+            //you missed
+        }
+    },
+    evadeCheck: function (wits, attackType) {
+        return 1 - (attacks.attackType.accuracy/(attacks.attackType.accuracy + (enemyWits/100)^0.985));
+    },
+};
