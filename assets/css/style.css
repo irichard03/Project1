@@ -35,6 +35,8 @@
     height: 140px;
     width: 80px;
     margin-top: 8px;
+    -webkit-transform: scaleX(-1);
+    transform: scaleX(-1);
 }
 .player1, .player2 {
     width: 150px;
@@ -55,23 +57,33 @@
     height: 90%;
 }
 
-.playerReadout {
+.playerReadOut {
     display: inline;
     background-color: blue;
     height: 200px;
 }
 
+.cpuReadOut {
+    float: right;
+    position: relative;
+    background-color: blue;
+}
+
+
 h7 {
     position: relative;
     display: block;
     background-color: red;
-    margin-left: -20px;
-
 }
 
 #nickName{
     width: 200px;
     background-color: Yellow;
+}
+
+#cpuNickName {
+    width: 200px;
+    background-color: yellow;
 }
 
 #playeHealth{
@@ -83,17 +95,49 @@ h7 {
     width: 100px;
     background-color: violet;
 }
-.barCol,playerCol,cpuCol {
+.barCol,.playerBarCol{
     margin-left: 0px;
     padding: 0px;
     margin-top: 8px;
+    background-color:white;
+}
+
+.cpuBarCol{
+    margin-right: 0px;
+    padding: 0px;
+    margin-top: 8px;
+    background-color: white;
+}
+
+
+#cpuBooze {
+   
+    background-color: maroon;
+    width: 10px;
+    
+}
+
+.boxWidth {
+    float: left;
+    background-color: blue;
+    width: 425px;
 }
 
 .cpuReadOut {
     float: right;
-    position: relative
+    position: relative;
+    background-color: blue;
+    height:200px;
 }
 
-#cpuBooze {
-    background-color: maroon;
+#cpuWit {
+    position: relative;
+    width: 100px;
+
+}
+
+#cpuStrength{
+   
+    position: relative;
+    width: 100px;
 }
