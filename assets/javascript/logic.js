@@ -22,10 +22,10 @@ M.AutoInit();
 firebase.auth().onAuthStateChanged(function (user) {
     if (user) {
         // User is signed in.
-        
+
         var isAnonymous = user.isAnonymous;
         var uid = user.uid;
-        
+
         // ...
     } else {
         // User is signed out.
@@ -59,16 +59,16 @@ function login() {
                             losses: '',
                             dateAdded: firebase.database.ServerValue.TIMESTAMP
                         });
-                        
+
                     }
                     else {
                         console.log("That user is already here, so I won't add it");
-                        
+
                     }
                     // Here we can just see what username is connected
                     var newConnection = database.ref("connections/").push(user.displayName);
                     newConnection.onDisconnect().remove();
-                    
+
                 }, function (errorObject) {
                     console.log("Errors handled: " + errorObject.code);
                 });
@@ -80,7 +80,7 @@ function login() {
             console.log("Errors handled with profile update: " + errorObject.code);
         });
     }
-    
+
 }
 
 
@@ -113,14 +113,14 @@ for (var i = 0; i < cityArray.length; i++) {
         "q=" + cityArray[i] + " &units=imperial&appid=" + APIKey;
 
     $.ajax({
-            url: queryURL,
-            method: "GET"
-        })
+        url: queryURL,
+        method: "GET"
+    })
         .then(function (response) {
             var cityTemp = "temp" + response.name;
             var cityHumidity = "humidity" + response.name;
-            $(`#${cityTemp}`).html("Temp: "+response.main.temp + "F");
-            $(`#${cityHumidity}`).html("Humidity: "+ response.main.humidity +"%");
+            $(`#${cityTemp}`).html("Temp: " + response.main.temp + "F");
+            $(`#${cityHumidity}`).html("Humidity: " + response.main.humidity + "%")
         });
 }
 
@@ -130,31 +130,72 @@ $('.card-title').on("click", function () {
 });
 
 // Jacob's Profile Page JS
-var totalPower = 100;
-$("#powerOneSlide").change(function(){
-    var powerInput = $("#powerOneSlide").val();
-    $("#displayPowerOne").html("Health: "+powerInput);
-});
+var totalPower = 30;
+var healthStat = 0;
+var witStat = 0;
+var strengthStat = 0;
 
-$("#powerTwoSlide").change(function(){
-    var powerInput = $("#powerTwoSlide").val();
-    $("#displayPowerTwo").html("Strength: "+powerInput);
-});
+$("#minusBtnHealth").on("click", function () {
+    if (totalPower < 30 && totalPower >= 0) {
+        healthStat--;
+        totalPower++;
+        $("#displayPowerOne").html(`Health: ${healthStat}`);
+        $("#pointsAvailable").html(`Points Avaialble: ${totalPower}`)
+    }
+})
 
-$("#powerThreeSlide").change(function(){
-    var powerInput = $("#powerThreeSlide").val();
-    $("#displayPowerThree").html("Wits: "+powerInput);
-});
+$("#plusBtnHealth").on("click", function () {
+    if (totalPower <= 30 && totalPower > 0) {
+        healthStat++;
+        totalPower--;
+        $("#displayPowerOne").html(`Health: ${healthStat}`)
+        $("#pointsAvailable").html(`Points Avaialble: ${totalPower}`);
+    }
+})
+$("#minusBtnStrength").on("click", function () {
+    if (totalPower < 30 && totalPower >= 0) {
+        strengthStat--;
+        totalPower++;
+        $("#displayPowerTwo").html(`Strength: ${strengthStat}`);
+        $("#pointsAvailable").html(`Points Avaialble: ${totalPower}`)
+    }
+})
 
-$("#profileBtn").on("click", function(){
+$("#plusBtnStrength").on("click", function () {
+    if (totalPower <= 30 && totalPower > 0) {
+        strengthStat++;
+        totalPower--;
+        $("#displayPowerTwo").html(`Strength: ${strengthStat}`)
+        $("#pointsAvailable").html(`Points Avaialble: ${totalPower}`);
+    }
+})
+$("#minusBtnWits").on("click", function () {
+    if (totalPower < 30 && totalPower >= 0) {
+        witStat--;
+        totalPower++;
+        $("#displayPowerThree").html(`Wits: ${witStat}`);
+        $("#pointsAvailable").html(`Points Avaialble: ${totalPower}`)
+    }
+})
+
+$("#plusBtnWits").on("click", function () {
+    if (totalPower <= 30 && totalPower > 0) {
+        witStat++;
+        totalPower--;
+        $("#displayPowerThree").html(`Wits: ${witStat}`)
+        $("#pointsAvailable").html(`Points Avaialble: ${totalPower}`);
+    }
+})
+
+$("#profileBtn").on("click", function () {
     var nickName = $("#nameField").val().trim();
     var prefCity = $("#prefTeam").val().trim();
     var strengthInput = $("#powerOneSlide").val();
     var witInput = $("#powerTwoSlide").val();
     console.log(`Nick Name: ${nickName}`);
     console.log(`Favorite Team: ${prefCity}`);
-    console.log(`Strength: ${strengthInput}`);
-    console.log(`Wit: ${witInput}`);
-});
+    console.log(`Health: ${healthStat}`);
+    console.log(`Strength: ${strengthStat}`);
+    console.log(`Wit: ${witStat}`);
+})
 
-    
