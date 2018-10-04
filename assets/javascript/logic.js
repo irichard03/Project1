@@ -1,3 +1,4 @@
+/*jshint esversion: 6 */
 //Init Firebase
 var config = {
     apiKey: "AIzaSyCzKFhnqEPr92D--fdoL7-hiYJvCB4tbDs",
@@ -111,7 +112,7 @@ for (var i = 0; i < cityArray.length; i++) {
             var cityHumidity = "humidity" + response.name;
 
             $(`#${cityTemp}`).html("Temp: " + response.main.temp + "F");
-            $(`#${cityHumidity}`).html("Humidity: " + response.main.humidity + "%")
+            $(`#${cityHumidity}`).html("Humidity: " + response.main.humidity + "%");
         });
 }
 
@@ -132,53 +133,52 @@ $("#minusBtnHealth").on("click", function () {
         healthStat--;
         totalPower++;
         $("#displayPowerOne").html(`Health: ${healthStat}`);
-        $("#pointsAvailable").html(`Points Avaialble: ${totalPower}`)
+        $("#pointsAvailable").html(`Points Avaialble: ${totalPower}`);
     }
-})
+});
 
 $("#plusBtnHealth").on("click", function () {
     if (totalPower <= 30 && totalPower > 0) {
         healthStat++;
         totalPower--;
-        $("#displayPowerOne").html(`Health: ${healthStat}`)
+        $("#displayPowerOne").html(`Health: ${healthStat}`);
         $("#pointsAvailable").html(`Points Avaialble: ${totalPower}`);
     }
-})
+});
 $("#minusBtnStrength").on("click", function () {
     if (totalPower < 30 && totalPower >= 0) {
         strengthStat--;
         totalPower++;
         $("#displayPowerTwo").html(`Strength: ${strengthStat}`);
-        $("#pointsAvailable").html(`Points Avaialble: ${totalPower}`)
+        $("#pointsAvailable").html(`Points Avaialble: ${totalPower}`);
     }
-})
+});
 
 $("#plusBtnStrength").on("click", function () {
     if (totalPower <= 30 && totalPower > 0) {
         strengthStat++;
         totalPower--;
-        $("#displayPowerTwo").html(`Strength: ${strengthStat}`)
+        $("#displayPowerTwo").html(`Strength: ${strengthStat}`);
         $("#pointsAvailable").html(`Points Avaialble: ${totalPower}`);
     }
-})
+});
 $("#minusBtnWits").on("click", function () {
     if (totalPower < 30 && totalPower >= 0) {
         witStat--;
         totalPower++;
         $("#displayPowerThree").html(`Wits: ${witStat}`);
-        $("#pointsAvailable").html(`Points Avaialble: ${totalPower}`)
+        $("#pointsAvailable").html(`Points Avaialble: ${totalPower}`);
     }
-})
+});
 
 $("#plusBtnWits").on("click", function () {
     if (totalPower <= 30 && totalPower > 0) {
         witStat++;
         totalPower--;
-        $("#displayPowerThree").html(`Wits: ${witStat}`)
+        $("#displayPowerThree").html(`Wits: ${witStat}`);
         $("#pointsAvailable").html(`Points Avaialble: ${totalPower}`);
     }
-})
-
+});
 
 $("#profileBtn").on("click", function () {
     var nickName = $("#nameField").val().trim();
@@ -190,8 +190,31 @@ $("#profileBtn").on("click", function () {
     console.log(`Health: ${healthStat}`);
     console.log(`Strength: ${strengthStat}`);
     console.log(`Wit: ${witStat}`);
-})
+});
+//trying to DRY jacobs stuff result unsuccessful
+$("#").on("click", function () { // this doesnt do anything 
+    var direction = $(this).attr("id");
+    var stat = $(this).attr("data-stat");
+    var display = $(this).attr("data-display");
+    var name = $(this).attr("data-name");
+    console.log("direction: " + direction);
+    console.log("stat: " + stat);
+    console.log("display: " + display);
+    powerDisplay(stat, display, direction, name);
+});
 
+function powerDisplay(stat, display, direction, name) {
+    if (totalPower <= 30 && totalPower > 0 && direction.indexOf("plus") !== -1) {
+        stat++;
+        totalPower--;
+    } else if (totalPower < 30 && totalPower >= 0 && direction.indexOf("minus") !== -1) {
+        stat--;
+        totalPower++;
+    }
+    $(display).html(name + ":" + stat);
+    $("#pointsAvailable").html(`Points Avaialble: ${totalPower}`);
+    console.log(stat);
+}
 
 //Combat Functions
 var baseAcc = 0.9; // 3.677 - (23/(10+wits)^.7)
@@ -228,7 +251,7 @@ var enemyStr;
 var userWits;
 var enemyWits;
 var enemyAcc;
-var userAcc = 3.677 - (23 / Math.pow((10 + wits), 0.7));
+var userAcc = 3.677 - (23 / Math.pow((10 + enemyWits), 0.7));
 
 $(document).ready(function () {
     kickTwenty = baseKick * 20 + Math.round(Math.random() * (20 * baseKick) / 5);
@@ -245,6 +268,6 @@ var battle = {
         }
     },
     evadeCheck: function (wits, attackType) {
-        return 1 - (attacks.attackType.accuracy/(attacks.attackType.accuracy + (enemyWits/100)^0.985));
+        return 1 - (attacks.attackType.accuracy / (attacks.attackType.accuracy + (wits / 100) ^ 0.985));
     },
 };
