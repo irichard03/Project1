@@ -14,96 +14,81 @@
     <link rel="stylesheet" href="assets/css/style.css">
     <title>Project 1</title>
 </head>
-<!--Navbar: contains instructions and more-->
-<nav>
-    <div class="nav-wrapper orange darken-3">
-        <a class="center brand-logo">HARSHMELLOWGANS</a>
-        <ul id="nav-mobile" class="right hide-on-med-and-down">
-            <li><a class="waves-effect waves-light btn modal-trigger" href="#modal1">Instructions</a></li>
-            <li><a class="waves-effect waves-light btn disabled" href="fight.html">Fight</a></li>
-        </ul>
-    </div>
-</nav>
-<!--Main Container for Login-->
-<div class="container">
-    <div class="row">
-        <div class="row valign-center">
-            <h5 id="loginMsg" class="center">Enter your name to get started!</h5>
-        </div>
-        <div class="col s2 offset-s5">
-            <div id="login1" class="row center">
-                <form>
-                    <input type="text" id="userID">
-                    <label for="userID" placeholder="Name"></label>
-                    <button class="center btn waves-effect waves-light" id="loginButton" type="submit" name="action">Submit
-                        <i class="material-icons right">send</i>
-                    </button>
-                </form>
-            </div>
-            <div id="login2" class="row center" hidden>
-                <button class="center btn waves-effect waves-light" id="logoutButton" type="submit" name="action">Logout
-                    <i class="material-icons right">send</i>
-                </button>
-            </div>
-        </div>
-    </div>
-</div>
-<!--Modals Go Here-->
-<!--Login Page Instructions Modal-->
-<div id="modal1" class="modal">
-    <div class="modal-content">
-        <h4>Instructions yo</h4>
-        <p>A bunch of text</p>
-    </div>
-    <div class="modal-footer">
-        <a href="#!" class="modal-close waves-effect waves-green btn-flat">Coolio</a>
-    </div>
-</div>
 
 <body>
+    <!--Navbar: contains instructions and more-->
+    <nav>
+        <div class="nav-wrapper orange darken-3">
+            <a class="center brand-logo">HARSHMELLOWGANS</a>
+            <ul id="nav-mobile" class="right hide-on-med-and-down">
+                <li>
+                    <a class="waves-effect waves-light btn modal-trigger" href="#modal1">Instructions</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <!--Modals Go Here-->
+    <!--Login Page Instructions Modal-->
+    <div id="modal1" class="modal">
+        <div class="modal-content">
+            <h4>Instructions yo</h4>
+            <p>A bunch of text</p>
+        </div>
+        <div class="modal-footer">
+            <a href="#!" class="modal-close waves-effect waves-green btn-flat">Coolio</a>
+        </div>
+    </div>
     <div class="container">
         <!-- Section for Selecting City -->
         <div class="section cityOptions">
             <div class="row">
-                <div class="col s3 card-title" data-city="Houston">
+                <div class="col s3 card-title" data-city="Houston" data-opponent="">
                     <h5>Houston</h5>
+                    <h6 id="nameHouston"></h6>
                     <h6 id="tempHouston"></h6>
                     <h6 id="humidityHouston"></h6>
                 </div>
-                <div class="col s3 card-title" data-city="Seattle">
+                <div class="col s3 card-title" data-city="Seattle" data-opponent="">
                     <h5>Seattle</h5>
+                    <h6 id="nameSeattle"></h6>
                     <h6 id="tempSeattle"></h6>
                     <h6 id="humiditySeattle"></h6>
                 </div>
-                <div class="col s3 card-title" data-city="Buffalo">
+                <div class="col s3 card-title" data-city="Buffalo" data-opponent="">
                     <h5>Buffalo</h5>
+                    <h6 id="nameBuffalo"></h6>
                     <h6 id="tempBuffalo"></h6>
                     <h6 id="humidityBuffalo"></h6>
                 </div>
-                <div class="col s3 card-title" data-city="Dallas">
+                <div class="col s3 card-title" data-city="Dallas" data-opponent="">
                     <h5>Dallas</h5>
+                    <h6 id="nameDallas"></h6>
                     <h6 id="tempDallas"></h6>
                     <h6 id="humidityDallas"></h6>
                 </div>
             </div>
             <div class="row">
-                <div class="col s3 card-title" data-city="Miami">
+                <div class="col s3 card-title" data-city="Miami" data-opponent="">
                     <h5>Miami</h5>
+                    <h6 id="nameMiami"></h6>
                     <h6 id="tempMiami"></h6>
                     <h6 id="humidityMiami"></h6>
                 </div>
-                <div class="col s3 card-title" data-city="Philadelphia">
+                <div class="col s3 card-title" data-city="Philadelphia" data-opponent="">
                     <h5>Philadelphia</h5>
+                    <h6 id="namePhiladelphia"></h6>
                     <h6 id="tempPhiladelphia"></h6>
                     <h6 id="humidityPhiladelphia"></h6>
                 </div>
-                <div class="col s3 card-title" data-city="Boston">
+                <div class="col s3 card-title" data-city="Boston" data-opponent="">
                     <h5>Boston</h5>
+                    <h6 id="nameBoston"></h6>
                     <h6 id="tempBoston"></h6>
                     <h6 id="humidityBoston"></h6>
                 </div>
-                <div class="col s3 card-title" data-city="Atlanta">
+                <div class="col s3 card-title" data-city="Atlanta" data-opponent="">
                     <h5>Atlanta</h5>
+                    <h6 id="nameAtlanta"></h6>
                     <h6 id="tempAtlanta"></h6>
                     <h6 id="humidityAtlanta"></h6>
                 </div>
