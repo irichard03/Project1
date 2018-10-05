@@ -46,12 +46,7 @@
                         <h7 id="playerWit">Wit</h7>
                         <h7 id="playerBooze">Booze</h7>
                     </div>
-                </div>
-
-                <div class="boxWidth">
-                    <p>a box</p>
-                </div>
-
+              </div>
                 <div class="right cpuReadOut ">
                     <!---cpu readout-->
                     <div class="col cpuBarCol ">
@@ -66,8 +61,40 @@
                     </div>
                 </div>
             </div>
+            <!--Players and player controls here-->
+            <div class="row bottom">
+                <div class="col left playerZone">
+                        <a class="btn-floating btn-large waves-effect waves-light teal playerPunch" onclick="M.toast({html: 'POW!', classes: 'rounded'})"><i class="fas fa-hand-rock"></i></i></a>
+                        <a class="btn-floating btn-large waves-effect waves-light teal playerStab" onclick="M.toast({html: 'SNIKT!', classes: 'rounded'})"><i class="fas fa-screwdriver"></i></a>
+                        <a class="btn-floating btn-large waves-effect waves-light teal playerThrow" onclick="M.toast({html: 'BANG!', classes: 'rounded'})"><i class="fas fa-trash-alt"></i></a>
+                    
+                        <img class="playerFighter" src="assets/images/CharacterBASE.jpeg">
+                </div>
+            
+
+                <div class="toastZone">
+                        
+                </div>
+                        <div class="col right cpuZone">
+                            <a class="btn-floating btn-large waves-effect waves-light teal cpuPunch" onclick="M.toast({html: 'POW!', classes: 'rounded'})"><i class="fas fa-hand-rock"></i></i></a>   
+                            <a class="btn-floating btn-large waves-effect waves-light teal cpuStab" onclick="M.toast({html: 'SNIKT!', classes: 'rounded'})"><i class="fas fa-screwdriver"></i></a>
+                            <a class="btn-floating btn-large waves-effect waves-light teal cpuThrow" onclick="M.toast({html: 'BANG!', classes: 'rounded'})"><i class="fas fa-trash-alt"></i></a>
+                            <img class="cpuFighter" src="assets/images/CharacterBASE.jpeg">
+                        </div>
+            </div>
+            </div>
         </section>
     </div>
+
+    <div class="displayBox">
+        <!--gifs display in this area, initially hidden-->
+    </div>
+
+    
+    
+    
+    
+    
 
 
     <script src="https://www.gstatic.com/firebasejs/5.5.1/firebase.js"></script>
