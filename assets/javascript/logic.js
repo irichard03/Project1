@@ -1,3 +1,4 @@
+/*jshint esversion: 6 */
 //Init Firebase
 var config = {
     apiKey: "AIzaSyCzKFhnqEPr92D--fdoL7-hiYJvCB4tbDs",
@@ -21,10 +22,8 @@ M.AutoInit();
 firebase.auth().onAuthStateChanged(function (user) {
     if (user) {
         // User is signed in.
-
         var isAnonymous = user.isAnonymous;
         var uid = user.uid;
-
         // ...
     } else {
         // User is signed out.
@@ -38,9 +37,7 @@ function login() {
         var errorCode = error.code;
         var errorMessage = error.message;
         // ...
-
     });
-
     //
     var user = firebase.auth().currentUser;
     if (user) {
@@ -58,11 +55,8 @@ function login() {
                             losses: '',
                             dateAdded: firebase.database.ServerValue.TIMESTAMP
                         });
-
-                    }
-                    else {
+                    } else {
                         console.log("That user is already here, so I won't add it");
-
                     }
                     // Here we can just see what username is connected
                     var newConnection = database.ref("connections/").push(user.displayName);
@@ -79,16 +73,14 @@ function login() {
             console.log("Errors handled with profile update: " + errorObject.code);
         });
     }
-
 }
-
 
 //login info for firebase
 $("#loginButton").on("click keypress", function (e) { //this ID will be used in the login screen at the start of the game
     e.preventDefault();
     login();
 });
-
+//chat functions
 $("#chat-submit").on("click keypress", function (e) {
     e.preventDefault();
     var chatMessage = userName + ": " + $("#chat-input").val().trim();
@@ -101,7 +93,6 @@ $("#chat-submit").on("click keypress", function (e) {
 fireChat.on("child_added", function (snap) {
     $("#chatLog").append("<div>" + snap.val() + "</div>").scrollTop($("#chatLog")[0].scrollHeight);
 });
-
 //Jacob's AJAX Calls
 var APIKey = "166a433c57516f51dfab1f7edaed8413";
 var cityArray = ["Houston,Texas", "Dallas,Texas", "Buffalo,New York", "Seattle,Washington", "Miami,Florida", "Philadelphia,Pennsylvania", "Boston,Massachusetts", "Atlanta,Georgia"];
@@ -118,8 +109,9 @@ for (var i = 0; i < cityArray.length; i++) {
         .then(function (response) {
             var cityTemp = "temp" + response.name;
             var cityHumidity = "humidity" + response.name;
+
             $(`#${cityTemp}`).html("Temp: " + response.main.temp + "F");
-            $(`#${cityHumidity}`).html("Humidity: " + response.main.humidity + "%")
+            $(`#${cityHumidity}`).html("Humidity: " + response.main.humidity + "%");
         });
 }
 
@@ -129,6 +121,7 @@ $('.card-title').on("click", function () {
 });
 
 // Jacob's Profile Page JS
+
 var totalPower = 30;
 var healthStat = 0;
 var witStat = 0;
@@ -139,52 +132,52 @@ $("#minusBtnHealth").on("click", function () {
         healthStat--;
         totalPower++;
         $("#displayPowerOne").html(`Health: ${healthStat}`);
-        $("#pointsAvailable").html(`Points Avaialble: ${totalPower}`)
+        $("#pointsAvailable").html(`Points Avaialble: ${totalPower}`);
     }
-})
+});
 
 $("#plusBtnHealth").on("click", function () {
     if (totalPower <= 30 && totalPower > 0) {
         healthStat++;
         totalPower--;
-        $("#displayPowerOne").html(`Health: ${healthStat}`)
+        $("#displayPowerOne").html(`Health: ${healthStat}`);
         $("#pointsAvailable").html(`Points Avaialble: ${totalPower}`);
     }
-})
+});
 $("#minusBtnStrength").on("click", function () {
     if (totalPower < 30 && totalPower >= 0) {
         strengthStat--;
         totalPower++;
         $("#displayPowerTwo").html(`Strength: ${strengthStat}`);
-        $("#pointsAvailable").html(`Points Avaialble: ${totalPower}`)
+        $("#pointsAvailable").html(`Points Avaialble: ${totalPower}`);
     }
-})
+});
 
 $("#plusBtnStrength").on("click", function () {
     if (totalPower <= 30 && totalPower > 0) {
         strengthStat++;
         totalPower--;
-        $("#displayPowerTwo").html(`Strength: ${strengthStat}`)
+        $("#displayPowerTwo").html(`Strength: ${strengthStat}`);
         $("#pointsAvailable").html(`Points Avaialble: ${totalPower}`);
     }
-})
+});
 $("#minusBtnWits").on("click", function () {
     if (totalPower < 30 && totalPower >= 0) {
         witStat--;
         totalPower++;
         $("#displayPowerThree").html(`Wits: ${witStat}`);
-        $("#pointsAvailable").html(`Points Avaialble: ${totalPower}`)
+        $("#pointsAvailable").html(`Points Avaialble: ${totalPower}`);
     }
-})
+});
 
 $("#plusBtnWits").on("click", function () {
     if (totalPower <= 30 && totalPower > 0) {
         witStat++;
         totalPower--;
-        $("#displayPowerThree").html(`Wits: ${witStat}`)
+        $("#displayPowerThree").html(`Wits: ${witStat}`);
         $("#pointsAvailable").html(`Points Avaialble: ${totalPower}`);
     }
-})
+});
 
 $("#profileBtn").on("click", function () {
     var nickName = $("#nameField").val().trim();
@@ -196,25 +189,53 @@ $("#profileBtn").on("click", function () {
     console.log(`Health: ${healthStat}`);
     console.log(`Strength: ${strengthStat}`);
     console.log(`Wit: ${witStat}`);
-})
+});
+//trying to DRY jacobs stuff result unsuccessful
+$("#").on("click", function () { // this doesnt do anything 
+    var direction = $(this).attr("id");
+    var stat = $(this).attr("data-stat");
+    var display = $(this).attr("data-display");
+    var name = $(this).attr("data-name");
+    console.log("direction: " + direction);
+    console.log("stat: " + stat);
+    console.log("display: " + display);
+    powerDisplay(stat, display, direction, name);
+});
+
+
+function powerDisplay(stat, display, direction, name) {
+    if (totalPower <= 30 && totalPower > 0 && direction.indexOf("plus") !== -1) {
+        stat++;
+        totalPower--;
+    } else if (totalPower < 30 && totalPower >= 0 && direction.indexOf("minus") !== -1) {
+        stat--;
+        totalPower++;
+    }
+    $(display).html(name + ":" + stat);
+    $("#pointsAvailable").html(`Points Avaialble: ${totalPower}`);
+    console.log(stat);
+}
+
 
 //Combat Functions
 var baseAcc = 0.9; // 3.677 - (23/(10+wits)^.7)
 var baseDodge = 0.1;
 var userDodge = 0; // 1 - (attackerAccuracy/(attackerAccuracy + (defenderWits/100)^0.985))
 var userHealth = 10; //10 * vitality;
-var Attacks = {
+
+var attacks = {
     "kick": {
-        damage: 0,
-        accuracy: 0
+        damage: baseKick * userStr + Math.round(Math.random() * (userStr * baseKick) / 5),
+        accuracy: userAcc - 0.35
     },
     "punch": {
-        damage: 0,
-        accuracy: 0
+        damage: basePunch * userStr + Math.round(Math.random() * (userStr * basePunch) / 10),
+        accuracy: userAcc
     },
     "throw": {
-        damage: 0,
-        accuracy: 0
+        damage: baseThrow * userStr + Math.round(Math.random() * (userStr * baseThrow) / 15),
+        accuracy: userAcc + 0.35
+
     }
 };
 //ignore, math testing
@@ -229,19 +250,29 @@ var tenStr = 10;
 var fifteenStr = 15;
 var twentyStr = 20;
 
-var kickTen;
-var kickTwenty;
-var kickFifteen;
-var punchTen;
-var punchFifteen;
-var punchTwenty;
-var throwTen;
-var throwFifteen;
-var throwTwenty;
+var userStr;
+var enemyStr;
+var userWits;
+var enemyWits;
+var enemyAcc;
+var userAcc = 3.677 - (23 / Math.pow((10 + enemyWits), 0.7));
 
 $(document).ready(function () {
- test = Math.round(Math.random()* baseKick/2);
- kickTen = baseKick * tenStr + test;
- kickTwenty = baseKick * 20 + Math.round(Math.random()* (20*baseKick)/5);
- console.log(kickTwenty);
+    kickTwenty = baseKick * 20 + Math.round(Math.random() * (20 * baseKick) / 5);
+    console.log(kickTwenty);
 });
+//battle commands
+var battle = {
+    attack: function (attackType) {
+        var roll = Math.random();
+        if (roll > battle.evadeCheck(wits)) {
+            enemyHP = enemyHP - attacks.attackType.damage;
+        } else {
+            //you missed
+        }
+    },
+    evadeCheck: function (wits, attackType) {
+        return 1 - (attacks.attackType.accuracy / (attacks.attackType.accuracy + (wits / 100) ^ 0.985));
+    },
+};
+
