@@ -19,7 +19,6 @@ var connectedRef = database.ref(".info/connected");
 var userName = "";
 //init materialize
 M.AutoInit();
-
 firebase.auth().onAuthStateChanged(function (user) {
     if (user) {
         // User is signed in.
@@ -203,6 +202,7 @@ $("#").on("click", function () { // this doesnt do anything
     powerDisplay(stat, display, direction, name);
 });
 
+
 function powerDisplay(stat, display, direction, name) {
     if (totalPower <= 30 && totalPower > 0 && direction.indexOf("plus") !== -1) {
         stat++;
@@ -216,11 +216,13 @@ function powerDisplay(stat, display, direction, name) {
     console.log(stat);
 }
 
+
 //Combat Functions
 var baseAcc = 0.9; // 3.677 - (23/(10+wits)^.7)
 var baseDodge = 0.1;
 var userDodge = 0; // 1 - (attackerAccuracy/(attackerAccuracy + (defenderWits/100)^0.985))
 var userHealth = 10; //10 * vitality;
+
 var attacks = {
     "kick": {
         damage: baseKick * userStr + Math.round(Math.random() * (userStr * baseKick) / 5),
@@ -233,6 +235,7 @@ var attacks = {
     "throw": {
         damage: baseThrow * userStr + Math.round(Math.random() * (userStr * baseThrow) / 15),
         accuracy: userAcc + 0.35
+
     }
 };
 //ignore, math testing
@@ -246,6 +249,7 @@ var baseLevelFactor = 1; //increase by 0.1 per lvl
 var tenStr = 10;
 var fifteenStr = 15;
 var twentyStr = 20;
+
 var userStr;
 var enemyStr;
 var userWits;
@@ -271,3 +275,4 @@ var battle = {
         return 1 - (attacks.attackType.accuracy / (attacks.attackType.accuracy + (wits / 100) ^ 0.985));
     },
 };
+
