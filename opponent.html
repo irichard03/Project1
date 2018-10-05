@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <!--Materialize-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU"
+        crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Luckiest+Guy" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <title>Project 1</title>
+</head>
+
+<body>
+    <!--Navbar: contains instructions and more-->
+    <nav>
+        <div class="nav-wrapper orange darken-3">
+            <a class="center brand-logo">HARSHMELLOWGANS</a>
+            <ul id="nav-mobile" class="right hide-on-med-and-down">
+                <li>
+                    <a class="waves-effect waves-light btn modal-trigger" href="#modal1">Instructions</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <!--Modals Go Here-->
+    <!--Login Page Instructions Modal-->
+    <div id="modal1" class="modal">
+        <div class="modal-content">
+            <h4>Instructions yo</h4>
+            <p>A bunch of text</p>
+        </div>
+        <div class="modal-footer">
+            <a href="#!" class="modal-close waves-effect waves-green btn-flat">Coolio</a>
+        </div>
+    </div>
+    <div class="container">
+        <!-- Section for Selecting City -->
+        <div class="section cityOptions">
+            <div class="row">
+                <div class="col s3 card-title" data-city="Houston" data-opponent="">
+                    <h5>Houston</h5>
+                    <h6 id="nameHouston"></h6>
+                    <h6 id="tempHouston"></h6>
+                    <h6 id="humidityHouston"></h6>
+                </div>
+                <div class="col s3 card-title" data-city="Seattle" data-opponent="">
+                    <h5>Seattle</h5>
+                    <h6 id="nameSeattle"></h6>
+                    <h6 id="tempSeattle"></h6>
+                    <h6 id="humiditySeattle"></h6>
+                </div>
+                <div class="col s3 card-title" data-city="Buffalo" data-opponent="">
+                    <h5>Buffalo</h5>
+                    <h6 id="nameBuffalo"></h6>
+                    <h6 id="tempBuffalo"></h6>
+                    <h6 id="humidityBuffalo"></h6>
+                </div>
+                <div class="col s3 card-title" data-city="Dallas" data-opponent="">
+                    <h5>Dallas</h5>
+                    <h6 id="nameDallas"></h6>
+                    <h6 id="tempDallas"></h6>
+                    <h6 id="humidityDallas"></h6>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col s3 card-title" data-city="Miami" data-opponent="">
+                    <h5>Miami</h5>
+                    <h6 id="nameMiami"></h6>
+                    <h6 id="tempMiami"></h6>
+                    <h6 id="humidityMiami"></h6>
+                </div>
+                <div class="col s3 card-title" data-city="Philadelphia" data-opponent="">
+                    <h5>Philadelphia</h5>
+                    <h6 id="namePhiladelphia"></h6>
+                    <h6 id="tempPhiladelphia"></h6>
+                    <h6 id="humidityPhiladelphia"></h6>
+                </div>
+                <div class="col s3 card-title" data-city="Boston" data-opponent="">
+                    <h5>Boston</h5>
+                    <h6 id="nameBoston"></h6>
+                    <h6 id="tempBoston"></h6>
+                    <h6 id="humidityBoston"></h6>
+                </div>
+                <div class="col s3 card-title" data-city="Atlanta" data-opponent="">
+                    <h5>Atlanta</h5>
+                    <h6 id="nameAtlanta"></h6>
+                    <h6 id="tempAtlanta"></h6>
+                    <h6 id="humidityAtlanta"></h6>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--Link to Scripts-->
+    <!--FireBase-->
+    <script src="https://www.gstatic.com/firebasejs/5.5.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.5.1/firebase-database.js"></script>
+
+    <script src="https://www.gstatic.com/firebasejs/5.5.1/firebase-auth.js"></script>
+    <!--jQuery-->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+    <!--Popper.js-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+        crossorigin="anonymous"></script>
+    <!-- AJAX -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <!--Materialize scripts-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <!--Local Script-->
+
+    <script src="assets/javascript/logic.js"></script>
+</body>
+
+</html>

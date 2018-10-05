@@ -96,9 +96,13 @@ fireChat.on("child_added", function (snap) {
 //Jacob's AJAX Calls
 var APIKey = "166a433c57516f51dfab1f7edaed8413";
 var cityArray = ["Houston,Texas", "Dallas,Texas", "Buffalo,New York", "Seattle,Washington", "Miami,Florida", "Philadelphia,Pennsylvania", "Boston,Massachusetts", "Atlanta,Georgia"];
+var cityNames = ["Houston", "Dallas", "Buffalo", "Seattle", "Miami", "Philadelphia", "Boston", "Atlanta"]
+var nameArray = [];
 var locationSelected; //this will need to be updated once we have locations to select from
+var i = 0;
 
-for (var i = 0; i < cityArray.length; i++) {
+// API to find weather for each city and update html
+for ( i = 0; i < cityArray.length; i++) {
     var queryURL = "https://api.openweathermap.org/data/2.5/weather?" +
         "q=" + cityArray[i] + " &units=imperial&appid=" + APIKey;
 
@@ -115,9 +119,39 @@ for (var i = 0; i < cityArray.length; i++) {
         });
 }
 
-//Jacob's card-title Click
+// API to randomly generate names for each city
+for ( i = 0; i < cityArray.length; i++) {
+    var queryURL = "https://randomuser.me/api/"
+
+    $.ajax({
+        url: queryURL,
+        dataType: 'json',
+    })
+        .then(function(data) {
+            var randomName = data.results[0].name.first;
+            randomName.toString();
+            nameArray.push(randomName.substr(0,1).toUpperCase()+randomName.substr(1));
+        })
+    // Needs timeout before displays names so API can complete
+    if(i === (cityArray.length-1))  {
+        setTimeout(giveNames,1500);
+    }
+}
+
+// Updates cards to show Name from API & sets oppponent attribute for card
+function giveNames() {
+    for ( i= 0; i < cityNames.length; i++ ){
+        var nameHolder = "name" + cityNames[i];
+        $(`#${nameHolder}`).html("Opponent: " + nameArray[i]);
+        $(`#${nameHolder}`).parent().attr("data-opponent", nameArray[i]);
+    }
+};
+
+
+//Jacob's card-title Click grabs City and Name
 $('.card-title').on("click", function () {
     console.log($(this).attr("data-city"));
+    console.log($(this).attr("data-opponent"));
 });
 
 // Jacob's Profile Page JS
