@@ -160,3 +160,51 @@ h7 {
     background-color: blue;
     width:425px;
 }
+
+.displayBox {
+    position: absolute;
+    height: 360px;
+    width: 360px;
+    background-color: greenyellow;
+    margin-left: 38%;
+    margin-top: -40%;
+    display: none;
+    
+}
+
+.playerPunch{
+    position: absolute;
+    margin-left: 388px;
+    
+}
+
+.playerStab{
+    position: absolute;
+    margin-left: 328px  ;
+    
+}
+
+.playerThrow{
+    position: absolute;
+    margin-left: 268px;
+}
+.cpuPunch{
+    position: absolute;
+    margin-left: -40px;
+    -webkit-transform: scaleX(-1);
+    transform: scaleX(-1);
+}
+
+.cpuStab{
+    position: absolute;
+    margin-left: 20px;
+    -webkit-transform: scaleX(-1);
+    transform: scaleX(-1);
+}
+
+.cpuThrow{
+    position: absolute;
+    margin-left: 80px;
+    -webkit-transform: scaleX(-1);
+    transform: scaleX(-1);
+}
