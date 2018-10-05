@@ -28,30 +28,33 @@
 <div class="container">
     <div class="row">
         <div class="row valign-center">
-        <h5 id="loginMsg" class="center">Enter your name to get started!</h5>
-    </div>
+            <h5 id="loginMsg" class="center">Enter your name to get started!</h5>
+        </div>
         <div class="col s2 offset-s5">
             <div class="row center">
-                <input type="text" id="userID">
-                <label for="userID" placeholder="Name"></label>
-                <button class="center btn waves-effect waves-light" id="loginButton" type="submit" name="action">Submit
-                    <i class="material-icons right">send</i>
-                </button>
+                <form>
+                    <input type="text" id="userID">
+                    <label for="userID" placeholder="Name"></label>
+                    <button class="center btn waves-effect waves-light" id="loginButton" type="submit" name="action">Submit
+                        <i class="material-icons right">send</i>
+                    </button>
+                </form>
             </div>
         </div>
     </div>
 </div>
 <!--Modals Go Here-->
-    <!--Login Page Instructions Modal-->
-    <div id="modal1" class="modal">
-            <div class="modal-content">
-            <h4>Instructions yo</h4>
-            <p>A bunch of text</p>
-            </div>
-            <div class="modal-footer">
-            <a href="#!" class="modal-close waves-effect waves-green btn-flat">Coolio</a>
-            </div>
-        </div>
+<!--Login Page Instructions Modal-->
+<div id="modal1" class="modal">
+    <div class="modal-content">
+        <h4>Instructions yo</h4>
+        <p>A bunch of text</p>
+    </div>
+    <div class="modal-footer">
+        <a href="#!" class="modal-close waves-effect waves-green btn-flat">Coolio</a>
+    </div>
+</div>
+
 <body>
     <div class="container">
         <!-- Section for Selecting City -->
@@ -102,17 +105,19 @@
             </div>
         </div>
     </div>
-  
-<!--Link to Scripts-->
+
+    <!--Link to Scripts-->
     <!--FireBase-->
     <script src="https://www.gstatic.com/firebasejs/5.5.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/5.5.1/firebase-database.js"></script>
     
     <script src="https://www.gstatic.com/firebasejs/5.5.1/firebase-auth.js"></script>
     <!--jQuery-->
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
     <!--Popper.js-->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+        crossorigin="anonymous"></script>
     <!-- AJAX -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <!--Materialize scripts-->

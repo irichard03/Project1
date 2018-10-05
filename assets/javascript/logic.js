@@ -18,7 +18,6 @@ var connectedRef = database.ref(".info/connected");
 var userName = "";
 //init materialize
 M.AutoInit();
-
 firebase.auth().onAuthStateChanged(function (user) {
     if (user) {
         // User is signed in.
@@ -113,9 +112,9 @@ for (var i = 0; i < cityArray.length; i++) {
         "q=" + cityArray[i] + " &units=imperial&appid=" + APIKey;
 
     $.ajax({
-        url: queryURL,
-        method: "GET"
-    })
+            url: queryURL,
+            method: "GET"
+        })
         .then(function (response) {
             var cityTemp = "temp" + response.name;
             var cityHumidity = "humidity" + response.name;
@@ -199,3 +198,50 @@ $("#profileBtn").on("click", function () {
     console.log(`Wit: ${witStat}`);
 })
 
+//Combat Functions
+var baseAcc = 0.9; // 3.677 - (23/(10+wits)^.7)
+var baseDodge = 0.1;
+var userDodge = 0; // 1 - (attackerAccuracy/(attackerAccuracy + (defenderWits/100)^0.985))
+var userHealth = 10; //10 * vitality;
+var Attacks = {
+    "kick": {
+        damage: 0,
+        accuracy: 0
+    },
+    "punch": {
+        damage: 0,
+        accuracy: 0
+    },
+    "throw": {
+        damage: 0,
+        accuracy: 0
+    }
+};
+//ignore, math testing
+var test = 0;
+var baseKick = 2;
+var kickAccPenalty = 0.2;
+var basePunch = 1;
+var baseThrow = 0.6;
+var throwAccBonus = 0.2;
+var baseLevelFactor = 1; //increase by 0.1 per lvl
+var tenStr = 10;
+var fifteenStr = 15;
+var twentyStr = 20;
+
+var kickTen;
+var kickTwenty;
+var kickFifteen;
+var punchTen;
+var punchFifteen;
+var punchTwenty;
+var throwTen;
+var throwFifteen;
+var throwTwenty;
+
+$(document).ready(function () {
+ test = Math.round(Math.random()* baseKick/2);
+ kickTen = baseKick * tenStr + test;
+ kickTwenty = baseKick * 20 + Math.round(Math.random()* (20*baseKick)/5);
+ console.log(kickTwenty);
+});
