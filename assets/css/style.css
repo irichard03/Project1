@@ -10,10 +10,17 @@
     font-size: 24px;
 }
 
+
 .main {
     background-image: url("../images/kevin-hernandez-446780-unsplash.jpg");
     background-size: cover;
 }
+
+.player,.cpu {
+    border: 4px solid #ff9100;
+}
+
+
 
 .player2,.flipMe {
     -webkit-transform: scaleX(-1);
@@ -57,7 +64,6 @@
 .cpuReadOut {
     float: right;
     position: relative;
-    background-color: blue;
 }
 
 
@@ -66,25 +72,39 @@ h7 {
     display: block;
 }
 
-#nickName, #cpuNickName{
+#nickName, #cpuNickName {
     width: 200px;
-    background-color: Yellow;
+    background-image: linear-gradient(to TOP, rgba(20,0,0,0), rgba(255,255,0,1));
 }
 
-#playeHealth{
-    width: 100px;
-    background-color: green;
+#playerHealth {
+    position: relative;
+    width: 100%;
+    background-image: linear-gradient(to RIGHT, rgba(20,0,0,0), rgba(0,255,0,1));
 }
 
-#playerStrength{
-    width: 100px;
-    background-color: violet;
+#playerWit {
+    position: relative;
+    width: 100%;
+    background-color: royalblue;
+}
+
+#playerBooze {
+    position: relative;
+    width: 100%;
+    background-image: linear-gradient(to RIGHT, rgba(20,0,0,0), rgba(239,108,0,1));
+}
+
+#playerStrength {
+    position: relative;
+    width: 100%;
+    background-image: linear-gradient(to RIGHT, rgba(20,0,0,0), rgba(255,0,0,1));
 }
 .barCol,.playerBarCol,.cpuBarCol{
     margin-left: 0px;
     padding: 0px;
     margin-top: 8px;
-    background-color:white;
+    background-image: linear-gradient(to top, rgba(255,0,0,0), rgba(239,108,0,1));
 }
 
 .boxWidth {
@@ -96,39 +116,42 @@ h7 {
 
 .cpuReadOut,.playerReadOut {
     position: relative;
-    background-color: blue;
     height:200px;
     width: 325px;
 }
 
-#cpuWit {
+#cpuHealth {
     position: relative;
-    width: 100px;
-
+    width: 100%;
+    background-color: green;
 }
 
-#cpuStrength{
-   
+#cpuWit {
     position: relative;
-    width: 100px;
+    width: 100%;
+    background-image: linear-gradient(to LEFT, rgba(20,0,0,0), rgba(0,0,255,1));
+}
+
+#cpuStrength {
+    position: relative;
+    width: 100%;
+    background-image: linear-gradient(to LEFT, rgba(20,0,0,0), rgba(255,0,0,1));
 }
 
 #cpuBooze {
-   
-    background-color: maroon;
-    width: 10px;
+    position: relative;
+    width: 100%;
+    background-image: linear-gradient(to LEFT, rgba(20,0,0,0), rgba(239,108,0,1));
 }
 
 .bottom {
     margin-top: 0px;
     width: 100%;
     height: 400px;
-    background-color: orange;
 }
 
 .top {
     width: 100%;
-    background-color: blue;
 }
 
 .playerFighter {
@@ -150,14 +173,12 @@ h7 {
 .playerZone {
     float: left;
     position: relative;
-    background-color: red;
     width: 424px;
 }
 
 .cpuZone {
     float: right;
     position: relative;
-    background-color: blue;
     width:425px;
 }
 
@@ -172,39 +193,11 @@ h7 {
     
 }
 
-.playerPunch{
+.cpuButtons{
     position: absolute;
-    margin-left: 388px;
-    
+    margin-left: 44px;
 }
 
-.playerStab{
+.playerButtons{
     position: absolute;
-    margin-left: 328px  ;
-    
-}
-
-.playerThrow{
-    position: absolute;
-    margin-left: 268px;
-}
-.cpuPunch{
-    position: absolute;
-    margin-left: -40px;
-    -webkit-transform: scaleX(-1);
-    transform: scaleX(-1);
-}
-
-.cpuStab{
-    position: absolute;
-    margin-left: 20px;
-    -webkit-transform: scaleX(-1);
-    transform: scaleX(-1);
-}
-
-.cpuThrow{
-    position: absolute;
-    margin-left: 80px;
-    -webkit-transform: scaleX(-1);
-    transform: scaleX(-1);
 }
