@@ -20,12 +20,18 @@
     <nav>
         <div class="nav-wrapper orange darken-3">
             <ul id="nav-mobile" class="left hide-on-med-and-down">
-                <li><a class="waves-effect waves-light btn modal-trigger" href="#modal1">Instructions</a></li>
+                <li>
+                    <a class="waves-effect waves-light btn modal-trigger" href="#modal1">Instructions</a>
+                </li>
             </ul>
             <a class="center brand-logo">HARSHMELLOWGANS</a>
             <ul id="nav-mobile" class="right hide-on-med-and-down">
-                <li><a id="profileNavBtn" class="waves-effect waves-light btn disabled" href="index.html">Login</a></li>
-                <li><a id="fightNavBtn" class="waves-effect waves-light btn disabled" href="fight.html">Fight</a></li>
+                <li>
+                    <a id="profileNavBtn" class="waves-effect waves-light btn disabled" href="index.html">Login</a>
+                </li>
+                <li>
+                    <a id="fightNavBtn" class="waves-effect waves-light btn disabled" href="fight.html">Fight</a>
+                </li>
             </ul>
         </div>
     </nav>
@@ -33,10 +39,9 @@
         <div class="row">
             <form class="col s12">
                 <div class="row">
-                    <div class="input-field col s6">
+                    <div class="col s6">
                         <i class="material-icons prefix">account_circle</i>
-                        <input id="nameField" type="text" class="validate">
-                        <label id="nameLabel" for="nameField"></label>
+                        <h5 id="nameLabel"></h5>
                     </div>
                 </div>
                 <div class="row">
@@ -64,32 +69,30 @@
                 <div class="row noTop">
                     <div class="input-field col s12">
                         <p id="displayPowerOne">Health: 0</p>
-                        <a class="waves-effect waves-light btn powerBtn" data-name="Health" data-stat="healthStat"
-                            data-display="#displayPowerOne" id="minusBtnHealth">-</a>
-                        <a class="waves-effect waves-light btn powerBtn" data-name="Health" data-stat="healthStat"
-                            data-display="#displayPowerOne" id="plusBtnHealth">+</a>
+                        <a class="waves-effect waves-light btn powerBtn" data-name="Health" data-stat="healthStat" data-display="#displayPowerOne"
+                            id="minusBtnHealth">-</a>
+                        <a class="waves-effect waves-light btn powerBtn" data-name="Health" data-stat="healthStat" data-display="#displayPowerOne"
+                            id="plusBtnHealth">+</a>
                     </div>
                 </div>
                 <div class="row noTop">
                     <div class="input-field col s12">
                         <p id="displayPowerTwo">Strength: 0</p>
-                        <a class="waves-effect waves-light btn powerBtn" data-name="Strength" data-stat="strengthStat"
-                            data-display="#displayPowerTwo" id="minusBtnStrength">-</a>
-                        <a class="waves-effect waves-light btn powerBtn" data-name="Strength" data-stat="strengthStat"
-                            data-display="#displayPowerTwo" id="plusBtnStrength">+</a>
+                        <a class="waves-effect waves-light btn powerBtn" data-name="Strength" data-stat="strengthStat" data-display="#displayPowerTwo"
+                            id="minusBtnStrength">-</a>
+                        <a class="waves-effect waves-light btn powerBtn" data-name="Strength" data-stat="strengthStat" data-display="#displayPowerTwo"
+                            id="plusBtnStrength">+</a>
                     </div>
                 </div>
                 <div class="row noTop">
                     <div class="input-field col s12">
                         <p id="displayPowerThree">Wits: 0</p>
-                        <a class="waves-effect waves-light btn powerBtn" data-name="Wits" data-stat="witStat"
-                            data-display="#displayPowerThree" id="minusBtnWits">-</a>
-                        <a class="waves-effect waves-light btn powerBtn" data-name="Wits" data-stat="witStat"
-                            data-display="#displayPowerThree" id="plusBtnWits">+</a>
+                        <a class="waves-effect waves-light btn powerBtn" data-name="Wits" data-stat="witStat" data-display="#displayPowerThree" id="minusBtnWits">-</a>
+                        <a class="waves-effect waves-light btn powerBtn" data-name="Wits" data-stat="witStat" data-display="#displayPowerThree" id="plusBtnWits">+</a>
                     </div>
                 </div>
                 <div class="row">
-                    <a class="waves-effect waves-orange btn" id="profileBtn">Save
+                    <a class="waves-effect waves-orange btn" id="profileBtn">Save/Next
                         <i class="material-icons left">save</i>
                     </a>
                 </div>
