@@ -14,72 +14,101 @@ var database = firebase.database();
 var fireChat = database.ref("/chat");
 var fireAccounts = database.ref("accounts/");
 var connectionsRef = database.ref("/connections");
-var connectedRef = database.ref(".info/connected");
+var topTen = database.ref("/topten");
 //local variables
 var userName = "";
+var name;
 //init materialize
 M.AutoInit();
 firebase.auth().onAuthStateChanged(function (user) {
     if (user) {
         // User is signed in.
+        var displayName = user.displayName;
+        name = displayName;
+        var isAnonymous = user.isAnonymous;
+        var uid = user.uid;
+        if (!displayName) {
+            user.updateProfile({
+                    displayName: userName,
+                }).then(function () {
+                    var displayName = user.displayName;
+                    console.log(displayName);
+                    fireAccounts.once("value", function (snap) {
+                            if (!snap.child(user.displayName).exists()) { //this way of identifying if the username is already in  use doesnt work
+                                database.ref(`accounts/${user.displayName}`).set({
+                                    wins: '',
+                                    losses: '',
+                                    dateAdded: firebase.database.ServerValue.TIMESTAMP
+                                });
+                            } else {
+                                console.log("That user is already here, so I won't add it");
+                            }
+                        }),
+                        function (errorObject) {
+                            console.log("Errors handled: " + errorObject.code);
+                        }
+                }),
+                function (error) {
+                    console.log("Errors handled with profile update: " + errorObject.code);
+                };
+        }
+        // Here we can just see what username is connected
+        var newConnection = database.ref("connections/").push(user.displayName);
+        newConnection.onDisconnect().remove();
+        console.log("logged in!");
+        //Toggle which button is displayed if you are logged in or not
+        $('#login1').attr('hidden', true);
+        $('#login2').removeAttr('hidden');
+        $('#loginMsg').text('Logout to play as another user or to disconnect!');
         var isAnonymous = user.isAnonymous;
         var uid = user.uid;
         // ...
     } else {
-        // User is signed out.
-        // ...
+        if(newConnection){
+            newConnection.remove();
+        }
+        console.log('Not Logged In!');
+        $('#login1').removeAttr('hidden');
+        $('#login2').attr('hidden', true);
+        $('#loginMsg').text('Enter your name to get started!');
     }
 });
 //Anonymous authentication
 function login() {
-    firebase.auth().signInAnonymously().catch(function (error) {
-        // Handle Errors here.
-        var errorCode = error.code;
-        var errorMessage = error.message;
-        // ...
-    });
-    //
-    var user = firebase.auth().currentUser;
-    if (user) {
-        userName = $("#userID").val().trim();
-        user.updateProfile({
-            displayName: userName,
-        }).then(function () {
-            var displayName = user.displayName;
-            console.log(displayName);
-            if (user.displayName.length > 0) { //firebase still being called when string is empty
-                fireAccounts.once("value", function (snap) {
-                    if (!snap.child(user.displayName).exists()) { //this way of identifying if the username is already in  use doesnt work
-                        database.ref(`accounts/${user.displayName}`).set({
-                            wins: '',
-                            losses: '',
-                            dateAdded: firebase.database.ServerValue.TIMESTAMP
-                        });
-                    } else {
-                        console.log("That user is already here, so I won't add it");
-                    }
-                    // Here we can just see what username is connected
-                    var newConnection = database.ref("connections/").push(user.displayName);
-                    newConnection.onDisconnect().remove();
-
-                }, function (errorObject) {
-                    console.log("Errors handled: " + errorObject.code);
-                });
-                $("#userID").val("");
-            } else {
-                $("#loginMsg").html("<i class=\"red-text errorAlert text-darken-2 loginAlert material-icons\">" + "error" + "</i>You've left it blank.");
-            }
-        }, function (error) {
-            console.log("Errors handled with profile update: " + errorObject.code);
+    userName = $("#userID").val().trim();
+    if (userName.length > 0) {
+        firebase.auth().signInAnonymously().catch(function (error) {
+            // Handle Errors here.
+            var errorCode = error.code;
+            var errorMessage = error.message;
+            // ...
+            
         });
+        
+    } else {
+        $("#loginMsg").html("<i class=\"red-text errorAlert text-darken-2 loginAlert material-icons\">" + "error" + "</i>You've left it blank.");
     }
+};
+
+function logout() {
+    firebase.auth().signOut().then(function () {
+        
+    }).catch(function (error) {
+        // An error happened.
+    });
 }
 
-//login info for firebase
-$("#loginButton").on("click keypress", function (e) { //this ID will be used in the login screen at the start of the game
+
+//CLick the Login Button to Log In!
+$("#loginButton").on("click", function (e) { //this ID will be used in the login screen at the start of the game
     e.preventDefault();
     login();
 });
+//To Log out of the database or log in as another player
+$("#logoutButton").on("click keypress", function (e) {
+    e.preventDefault();
+    logout();
+})
 //chat functions
 $("#chat-submit").on("click keypress", function (e) {
     e.preventDefault();
