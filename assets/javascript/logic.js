@@ -96,13 +96,13 @@ fireChat.on("child_added", function (snap) {
 //Jacob's AJAX Calls
 var APIKey = "166a433c57516f51dfab1f7edaed8413";
 var cityArray = ["Houston,Texas", "Dallas,Texas", "Buffalo,New York", "Seattle,Washington", "Miami,Florida", "Philadelphia,Pennsylvania", "Boston,Massachusetts", "Atlanta,Georgia"];
-var cityNames = ["Houston", "Dallas", "Buffalo", "Seattle", "Miami", "Philadelphia", "Boston", "Atlanta"]
+var cityNames = ["Houston", "Dallas", "Buffalo", "Seattle", "Miami", "Philadelphia", "Boston", "Atlanta"];
 var nameArray = [];
 var locationSelected; //this will need to be updated once we have locations to select from
 var i = 0;
 
 // API to find weather for each city and update html
-for ( i = 0; i < cityArray.length; i++) {
+for (i = 0; i < cityArray.length; i++) {
     var queryURL = "https://api.openweathermap.org/data/2.5/weather?" +
         "q=" + cityArray[i] + " &units=imperial&appid=" + APIKey;
 
@@ -120,32 +120,32 @@ for ( i = 0; i < cityArray.length; i++) {
 }
 
 // API to randomly generate names for each city
-for ( i = 0; i < cityArray.length; i++) {
-    var queryURL = "https://randomuser.me/api/"
+for (i = 0; i < cityArray.length; i++) {
+    var queryURL = "https://randomuser.me/api/";
 
     $.ajax({
-        url: queryURL,
-        dataType: 'json',
-    })
-        .then(function(data) {
+            url: queryURL,
+            dataType: 'json',
+        })
+        .then(function (data) {
             var randomName = data.results[0].name.first;
             randomName.toString();
-            nameArray.push(randomName.substr(0,1).toUpperCase()+randomName.substr(1));
-        })
+            nameArray.push(randomName.substr(0, 1).toUpperCase() + randomName.substr(1));
+        });
     // Needs timeout before displays names so API can complete
-    if(i === (cityArray.length-1))  {
-        setTimeout(giveNames,1500);
+    if (i === (cityArray.length - 1)) {
+        setTimeout(giveNames, 1500);
     }
 }
 
 // Updates cards to show Name from API & sets oppponent attribute for card
 function giveNames() {
-    for ( i= 0; i < cityNames.length; i++ ){
+    for (i = 0; i < cityNames.length; i++) {
         var nameHolder = "name" + cityNames[i];
         $(`#${nameHolder}`).html("Opponent: " + nameArray[i]);
         $(`#${nameHolder}`).parent().attr("data-opponent", nameArray[i]);
     }
-};
+}
 
 
 //Jacob's card-title Click grabs City and Name
@@ -223,9 +223,20 @@ $("#profileBtn").on("click", function () {
     console.log(`Health: ${healthStat}`);
     console.log(`Strength: ${strengthStat}`);
     console.log(`Wit: ${witStat}`);
+    var user = firebase.auth().currentUser;
+    if (user) {
+        database.ref(`accounts/${user.displayName}`).set({
+            health: healthStat,
+            strength: strengthStat,
+            wits: witStat
+        });
+    } else {
+        console.log("You are not Logged In!");
+    }
+
 });
 //trying to DRY jacobs stuff result unsuccessful
-$("#").on("click", function () { // this doesnt do anything 
+$("").on("click", function () { // this doesnt do anything 
     var direction = $(this).attr("id");
     var stat = $(this).attr("data-stat");
     var display = $(this).attr("data-display");
@@ -235,7 +246,6 @@ $("#").on("click", function () { // this doesnt do anything
     console.log("display: " + display);
     powerDisplay(stat, display, direction, name);
 });
-
 
 function powerDisplay(stat, display, direction, name) {
     if (totalPower <= 30 && totalPower > 0 && direction.indexOf("plus") !== -1) {
@@ -257,7 +267,7 @@ var baseDodge = 0.1;
 var userDodge = 0; // 1 - (attackerAccuracy/(attackerAccuracy + (defenderWits/100)^0.985))
 var userHealth = 10; //10 * vitality;
 
-var attacks = {
+var abilities = {
     "kick": {
         damage: baseKick * userStr + Math.round(Math.random() * (userStr * baseKick) / 5),
         accuracy: userAcc - 0.35
@@ -272,6 +282,26 @@ var attacks = {
 
     }
 };
+//battle commands
+
+var battle = {
+    attack: function (attackType) {
+        var roll = Math.random();
+        if (roll > battle.evadeCheck(wits)) {
+            enemyHP = enemyHP - abilities.attackType.damage;
+            $("").html(`You attacked ${enemyName} for ${abilities.attackType.damage} damage!`); //enemyname is placeholder
+        } else {
+            //you missed
+        }
+    },
+    evadeCheck: function (wits, attackType) {
+        return 1 - (abilities.attackType.accuracy / (abilities.attackType.accuracy + (wits / 100) ^ 0.985));
+    },
+};
+$(document).on("click", ".combatBtns", function () {
+
+})
+
 //ignore, math testing
 var test = 0;
 var baseKick = 2;
@@ -293,20 +323,5 @@ var userAcc = 3.677 - (23 / Math.pow((10 + enemyWits), 0.7));
 
 $(document).ready(function () {
     kickTwenty = baseKick * 20 + Math.round(Math.random() * (20 * baseKick) / 5);
-    console.log(kickTwenty);
+    console.log("Testing Math:" + kickTwenty);
 });
-//battle commands
-var battle = {
-    attack: function (attackType) {
-        var roll = Math.random();
-        if (roll > battle.evadeCheck(wits)) {
-            enemyHP = enemyHP - attacks.attackType.damage;
-        } else {
-            //you missed
-        }
-    },
-    evadeCheck: function (wits, attackType) {
-        return 1 - (attacks.attackType.accuracy / (attacks.attackType.accuracy + (wits / 100) ^ 0.985));
-    },
-};
-
