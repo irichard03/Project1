@@ -239,3 +239,31 @@ h7 {
     top: 20%;
     right: 0%;
     left: 0%; } }
+
+    #nameLabel {
+        font-weight: 900;
+    }
+.card-title:hover{
+    background-color: #424242;
+    color: white;
+}
+
+.card-title{
+    border: 2px solid #424242;
+    border-radius: 8px;
+    margin-right: 10px;
+}
+
+.cityOptions{
+    margin: 0;
+    left: 50%;
+    margin-right: -50%;
+}
+
+#selectOpponentText{
+    font-weight: 900;
+    margin: auto;
+    width: 40%;
+    padding-bottom: 25px;
+    padding-top: 25px;
+}

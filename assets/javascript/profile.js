@@ -135,3 +135,5 @@ $("#profileBtn").on("click", function () {
     }
     location.replace("opponent.html");
 });
+
+
