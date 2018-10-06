@@ -27,11 +27,10 @@ var baseKick = 2;
 var basePunch = 1;
 var baseThrow = 0.6;
 var throwAccBonus = 0.2;
-var userStr = 10;
 var damagePlaceHolder = 80;
 var giphApiKey = "Y3h4ksc22JmMFoYTKH2XUYmRwrnYL8Gd";
 var computerHealth = 200;
-var playerHealth = userHeath * 10;
+var playerHealth = userHealth * 10;
 var baseAcc = 0.9; // 3.677 - (23/(10+wits)^.7)
 var baseDodge = 0.1;
 var userDodge = 0; // 1 - (attackerAccuracy/(attackerAccuracy + (defenderWits/100)^0.985))
@@ -41,15 +40,15 @@ var wits = 10;
 var userAcc = 3.677 - (23/Math.pow((10+wits), 0.7));
 var abilities = {
     "kick": {
-        damage: baseKick * userStr + Math.round(Math.random() * (userStr * baseKick) / 5),
+        damage: baseKick * userStrenth + Math.round(Math.random() * (userStrength * baseKick) / 5),
         accuracy: userAcc - 0.35
     },
     "punch": {
-        damage: basePunch * userStr + Math.round(Math.random() * (userStr * basePunch) / 10),
+        damage: basePunch * userStrength + Math.round(Math.random() * (userStrength * basePunch) / 10),
         accuracy: userAcc
     },
     "throw": {
-        damage: baseThrow * userStr + Math.round(Math.random() * (userStr * baseThrow) / 15),
+        damage: baseThrow * userStrength + Math.round(Math.random() * (userStrength * baseThrow) / 15),
         accuracy: userAcc + 0.35
     }
 };
@@ -57,7 +56,7 @@ var battle = {
     attack: function (attackType, toast) {
         var roll = Math.random();
         if (actionPoints >= 2) {
-            if (roll > battle.evadeCheck(wits, attackType)) {
+            if (roll > battle.evadeCheck(userWit, attackType)) {
                 computerHealth = computerHealth - abilities[attackType].damage;
                 if (computerHealth > 0){
                      callAPI(attackType);
@@ -122,17 +121,10 @@ var battle = {
     evadeCheck: function (wits, attackType) {
         var dodgeChance = 1 - (abilities[attackType].accuracy / (abilities[attackType].accuracy + Math.pow((wits / 100), 0.985)));
         if ((typeof dodgeChance) === "number" && isNaN(dodgeChance) === false) {
-            console.log("dodgechance: " + dodgeChance);
-            console.log(abilities[attackType].damage);
-            console.log("userStr: " + userStr);
-            console.log("basepunch: " + basePunch);
-            console.log(attackType);
-            console.log(abilities);
-            console.log(userAcc);
-            console.log(userStr);
+
             return dodgeChance;
         }else {
-            console.log("dogde else: " + dodgeChance);
+            console.log("dodgeChance: " + dodgeChance);
         }
     },
 };
@@ -145,11 +137,11 @@ firebase.auth().onAuthStateChanged(function (user) {
         console.log(user.displayName);
         fireAccounts.once("value", function (snap) {
             userHealth = snap.child(`${displayName}`).child('health').val();
-            console.log(userHealth);
+            console.log("health: " + userHealth);
             userWit = snap.child(`${displayName}`).child('wits').val();
-            console.log(userWit);
+            console.log("wits: " + userWit);
             userStrength = snap.child(`${displayName}`).child('strength').val();
-            console.log(userStrength);
+            console.log("strength: " + userStrength);
         }),
         function (errorObject) {
             console.log("Errors handled: " + errorObject.code);
@@ -173,7 +165,6 @@ function callAPI(buttonClicked) {
         if (response) {
             console.log("api call succeesfull");
             console.log(response);
-
             //if player wins    
             if (buttonClicked === 1) {
                 //need to increment players win count.
@@ -202,7 +193,6 @@ function getRandomInt(max) {
 $(document).ready(function () {
     //Combat Functions
     //battle commands
-
     $(document).on("click", ".combatBtns", function (action) {
         action = $(this).attr("data-action");
         switch (action) {
@@ -229,14 +219,6 @@ $(document).ready(function () {
                 break;
         }
     });
-
-
     //end of document on ready
 });
 //ignore, math testing
-
-
-$(document).ready(function () {
-    kickTwenty = baseKick * 20 + Math.round(Math.random() * (20 * baseKick) / 5);
-    console.log("Testing Math:" + kickTwenty);
-});
