@@ -200,3 +200,42 @@ h7 {
 .playerButtons{
     position: absolute;
 }
+.toast > span {
+    margin: auto;
+}
+.noTop > div > p {
+    margin-top: 0;
+}
+.noTop > div {
+    margin-top: 0;
+}
+.toast {
+    background-color: #424242;
+    color: white;
+    font-weight: bold;
+}
+@media only screen and (min-width : 601px) and (max-width : 1260px) {
+    .toast {
+    width: 100%;
+    border-radius: 0;} }
+    
+    @media only screen and (min-width : 1261px) {
+    .toast {
+    width: 100%;
+    border-radius: 0; } }
+    
+    @media only screen and (min-width : 601px) and (max-width : 1260px) {
+    #toast-container {
+    min-width: 100%;
+    bottom: 70%;
+    top: 20%;
+    right: 0%;
+    left: 0%;} }
+    
+    @media only screen and (min-width : 1261px) {
+    #toast-container {
+    min-width: 100%;
+    bottom: 70%;
+    top: 20%;
+    right: 0%;
+    left: 0%; } }

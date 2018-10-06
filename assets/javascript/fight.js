@@ -45,6 +45,7 @@ firebase.auth().onAuthStateChanged(function (user) {
         $('#nickName').text(displayName);
     }
 });
+
 //var to hold damage placeholder for testing, actual damage should be passed
 //in as an argument to the attack functions below.
 var damagePlaceHolder = 80;
@@ -207,8 +208,7 @@ $(document).ready(function () {
         }
 
     });
-    //ToDo Function Player Punch
-
+    
     //TODObutton Functions to modify cpu bars
 
     //ToDo Function for player winning, should increment wins and display gif.
