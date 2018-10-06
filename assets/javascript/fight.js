@@ -1,14 +1,59 @@
 /*jshint esversion: 6 */
+//Init Firebase
+var config = {
+    apiKey: "AIzaSyCzKFhnqEPr92D--fdoL7-hiYJvCB4tbDs",
+    authDomain: "project-1-331d0.firebaseapp.com",
+    databaseURL: "https://project-1-331d0.firebaseio.com",
+    projectId: "project-1-331d0",
+    storageBucket: "project-1-331d0.appspot.com",
+    messagingSenderId: "283963407754"
+};
+firebase.initializeApp(config);
+//firebase variables
+var database = firebase.database();
+var fireChat = database.ref("/chat");
+var fireAccounts = database.ref("accounts/");
+var connectionsRef = database.ref("/connections");
+var topTen = database.ref("/topten");
+var displayName;
+var isAnonymous;
+var uid;
+var userHealth;
+var userWit;
+var userStrength;
+//init materialize
+M.AutoInit();
+firebase.auth().onAuthStateChanged(function (user) {
+    if (user) {
+        // User is signed in.
+        console.log('signed in!');
+        displayName = user.displayName;
+        console.log(user.displayName);
+        fireAccounts.once("value", function (snap) {
+            userHealth = snap.child(`${displayName}`).child('health').val();
+            console.log(userHealth);
+            userWit = snap.child(`${displayName}`).child('wits').val();
+            console.log(userWit);
+            userStrength = snap.child(`${displayName}`).child('strength').val();
+            console.log(userStrength);
+        }),
+        function (errorObject) {
+            console.log("Errors handled: " + errorObject.code);
+        }
+        isAnonymous = user.isAnonymous;
+        uid = user.uid;
+        $('#nickName').text(displayName);
+    }
+});
 //var to hold damage placeholder for testing, actual damage should be passed
 //in as an argument to the attack functions below.
 var damagePlaceHolder = 80;
 var giphApiKey = "Y3h4ksc22JmMFoYTKH2XUYmRwrnYL8Gd";
 var computerHealth = 200;
-var playerHealth = 100;
+var playerHealth = userHealth * 10;
 var baseAcc = 0.9; // 3.677 - (23/(10+wits)^.7)
 var baseDodge = 0.1;
 var userDodge = 0; // 1 - (attackerAccuracy/(attackerAccuracy + (defenderWits/100)^0.985))
-var userHealth = 10; //10 * vitality;
 var abilities = {
     "kick": {
         damage: baseKick * userStr + Math.round(Math.random() * (userStr * baseKick) / 5),
@@ -155,7 +200,7 @@ $(document).ready(function () {
     }
 
 
-    //TODObutton Functions to modify player bars
+    //TODObutton Functions to modify computer bars
     $('.playerPunch').click(function () {
         callAPI("DOGS");
         computerHealth = computerHealth - damagePlaceHolder;
@@ -172,6 +217,7 @@ $(document).ready(function () {
         }
 
     });
+    //ToDo Function Player Punch
 
     //TODObutton Functions to modify cpu bars
 
