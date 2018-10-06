@@ -1,4 +1,6 @@
 /*jshint esversion: 6 */
+//var to hold damage placeholder for testing, actual damage should be passed
+//in as an argument to the attack functions below.
 //Init Firebase
 var config = {
     apiKey: "AIzaSyCzKFhnqEPr92D--fdoL7-hiYJvCB4tbDs",
@@ -8,7 +10,6 @@ var config = {
     storageBucket: "project-1-331d0.appspot.com",
     messagingSenderId: "283963407754"
 };
-firebase.initializeApp(config);
 //firebase variables
 var database = firebase.database();
 var fireChat = database.ref("/chat");
@@ -22,6 +23,119 @@ var userHealth;
 var userWit;
 var userStrength;
 //init materialize
+var baseKick = 2;
+var basePunch = 1;
+var baseThrow = 0.6;
+var throwAccBonus = 0.2;
+var userStr = 10;
+var damagePlaceHolder = 80;
+var giphApiKey = "Y3h4ksc22JmMFoYTKH2XUYmRwrnYL8Gd";
+var computerHealth = 200;
+var playerHealth = userHeath * 10;
+var baseAcc = 0.9; // 3.677 - (23/(10+wits)^.7)
+var baseDodge = 0.1;
+var userDodge = 0; // 1 - (attackerAccuracy/(attackerAccuracy + (defenderWits/100)^0.985))
+var userHealth = 10; //10 * vitality;
+var actionPoints = 999;
+var wits = 10;
+var userAcc = 3.677 - (23/Math.pow((10+wits), 0.7));
+var abilities = {
+    "kick": {
+        damage: baseKick * userStr + Math.round(Math.random() * (userStr * baseKick) / 5),
+        accuracy: userAcc - 0.35
+    },
+    "punch": {
+        damage: basePunch * userStr + Math.round(Math.random() * (userStr * basePunch) / 10),
+        accuracy: userAcc
+    },
+    "throw": {
+        damage: baseThrow * userStr + Math.round(Math.random() * (userStr * baseThrow) / 15),
+        accuracy: userAcc + 0.35
+    }
+};
+var battle = {
+    attack: function (attackType, toast) {
+        var roll = Math.random();
+        if (actionPoints >= 2) {
+            if (roll > battle.evadeCheck(wits, attackType)) {
+                computerHealth = computerHealth - abilities[attackType].damage;
+                if (computerHealth > 0){
+                     callAPI(attackType);
+                }
+                console.log(`You attacked the computer for ${abilities[attackType].damage} damage!`); //enemyname is placeholder
+                console.log(computerHealth);
+                M.toast({html: `<span>${toast}</span>`, classes: 'rounded'});
+                if (computerHealth < 0) {
+                    computerHealth = 0;
+                    $('#cpuHealth').css('width', '0px');
+                    callAPI(1);
+                } else {
+                    let cpuHealthString = computerHealth.toString();
+                    cpuHealthString += 'px';
+                    console.log(cpuHealthString);
+                    $('#cpuHealth').css('width', cpuHealthString);
+                }
+            } else {
+                M.toast({html:"YOU MISSED!", classes: "rounded"});
+                console.log(battle.evadeCheck(wits, attackType));
+            }
+            actionPoints = actionPoints - 2;
+        }
+    },
+    drink: function () {
+        if (actionPoints >= 2) {
+            if (health > 0) {
+                strengthStat = strengthStat + strengthStat * 0.5;
+                witStat = witStat - witStat * 0.5;
+                M.toast({html: "GULP!", classes: "rounded"});
+            }
+        }
+    },
+    moveLeft: function () {
+        if (actionPoints >= 1) {
+            $('.playerFighter').css("float", "left");
+            actionPoints--;
+        }
+        //if there is space available to the left,
+        //move to the left
+        //consume one action point
+        //else senda  message that there is no room to the left
+        //subtract an action piont
+    },
+    moveRight: function () {
+        if (actionPoints >= 1) {
+            $('.playerFighter').css("float", "right");
+        }
+        //if there is at least 1 action point left
+        //if there is space to the right,
+        //move to the right
+        //consume one action piont
+        //else send a message that there is no room to the right
+        //subtract an action point
+    },
+    guard: function () {
+        //if there is at least one action point left
+        //set the guard status
+        //temporarily increase wits and health by 25% for the next opponents next turn
+        //subtract 2 actoin points
+    },
+    evadeCheck: function (wits, attackType) {
+        var dodgeChance = 1 - (abilities[attackType].accuracy / (abilities[attackType].accuracy + Math.pow((wits / 100), 0.985)));
+        if ((typeof dodgeChance) === "number" && isNaN(dodgeChance) === false) {
+            console.log("dodgechance: " + dodgeChance);
+            console.log(abilities[attackType].damage);
+            console.log("userStr: " + userStr);
+            console.log("basepunch: " + basePunch);
+            console.log(attackType);
+            console.log(abilities);
+            console.log(userAcc);
+            console.log(userStr);
+            return dodgeChance;
+        }else {
+            console.log("dogde else: " + dodgeChance);
+        }
+    },
+};
 M.AutoInit();
 firebase.auth().onAuthStateChanged(function (user) {
     if (user) {
@@ -45,78 +159,49 @@ firebase.auth().onAuthStateChanged(function (user) {
         $('#nickName').text(displayName);
     }
 });
-//var to hold damage placeholder for testing, actual damage should be passed
-//in as an argument to the attack functions below.
-var damagePlaceHolder = 80;
-var giphApiKey = "Y3h4ksc22JmMFoYTKH2XUYmRwrnYL8Gd";
-var computerHealth = 200;
-var playerHealth = userHealth * 10;
-var baseAcc = 0.9; // 3.677 - (23/(10+wits)^.7)
-var baseDodge = 0.1;
-var userDodge = 0; // 1 - (attackerAccuracy/(attackerAccuracy + (defenderWits/100)^0.985))
-var abilities = {
-    "kick": {
-        damage: baseKick * userStr + Math.round(Math.random() * (userStr * baseKick) / 5),
-        accuracy: userAcc - 0.35
-    },
-    "punch": {
-        damage: basePunch * userStr + Math.round(Math.random() * (userStr * basePunch) / 10),
-        accuracy: userAcc
-    },
-    "throw": {
-        damage: baseThrow * userStr + Math.round(Math.random() * (userStr * baseThrow) / 15),
-        accuracy: userAcc + 0.35
-    }
-};
-var battle = {
-    attack: function (attackType) {
-        var roll = Math.random();
-        if (actionPoints >= 2) {
-            if (roll > battle.evadeCheck(wits)) {
-                enemyHP = enemyHP - abilities[attackType].damage;
-                $("").html(`You attacked ${enemyName} for ${abilities[attackType].damage} damage!`); //enemyname is placeholder
+
+
+//Giphy call pass in string to change search parameter for gif results.
+function callAPI(buttonClicked) {
+    $('.displayBox').css('visibility', 'visible');
+    let x = getRandomInt(10);
+    giphyUrl = "https://api.giphy.com/v1/gifs/search?q=" + buttonClicked + "&key=" + giphApiKey;
+    $.ajax({
+        url: giphyUrl,
+        method: "GET"
+    }).then(function (response) {
+        if (response) {
+            console.log("api call succeesfull");
+            console.log(response);
+
+            //if player wins    
+            if (buttonClicked === 1) {
+                //need to increment players win count.
+                $('.displayBox').append(`<img src="${response.data[x].images.original.url}" width="360px" height="360px">`);
+                setTimeout(function () {
+                    $('.displayBox').empty();
+                    $('.displayBox').css('visibility', 'hidden');
+                }, 20000);
             } else {
-                //you missed
+
+                $('.displayBox').append(`<img src="${response.data[x].images.original.url}" width="360px" height="360px">`);
+                setTimeout(function () {
+                    $('.displayBox').empty();
+                    $('.displayBox').css('visibility', 'hidden');
+                }, 3000);
             }
-            actionPoints = actionPoints - 2;
+        } else {
+            console.log("FAILED API CALL");
         }
-    },
-    drink: function () {
-        if (actionPoints >= 2) {
-            if (health > 0) {
-                strengthStat = strengthStat + strengthStat * 0.5;
-                witStat = witStat - witStat * 0.5;
-            }
-        }
-    },
-    moveLeft: function () {
-        //if there is at least 1 action point left
-        //if there is space available to the left,
-        //move to the left
-        //consume one action point
-        //else senda  message that there is no room to the left
-        //subtract an action piont
-    },
-    moveRight: function () {
-        //if there is at least 1 action point left
-        //if there is space to the right,
-        //move to the right
-        //consume one action piont
-        //else send a message that there is no room to the right
-        //subtract an action point
-    },
-    guard: function () {
-        //if there is at least one action point left
-        //set the guard status
-        //temporarily increase wits and health by 25% for the next opponents next turn
-        //subtract 2 actoin points
-    },
-    evadeCheck: function (wits, attackType) {
-        return 1 - (abilities[attackType].accuracy / (abilities[attackType].accuracy + (wits / 100) ^ 0.985));
-    },
-};
+    });
+}
+function getRandomInt(max) {
+    return Math.floor(Math.random() * Math.floor(max));
+}
 //On ready function, do stuff when page loads.
 $(document).ready(function () {
+    //set background
+    callUnsplash();
     //Combat Functions
     //battle commands
 
@@ -124,13 +209,13 @@ $(document).ready(function () {
         action = $(this).attr("data-action");
         switch (action) {
             case "punch":
-                battle.attack("punch");
+                battle.attack("punch", "POW!");
                 break;
             case "kick":
-                battle.attack("kick");
+                battle.attack("kick", "SNIKT!");
                 break;
             case "throw":
-                battle.attack("throw");
+                battle.attack("throw", "BANG!");
                 break;
             case "drink":
                 battle.drink();
@@ -141,7 +226,7 @@ $(document).ready(function () {
             case "right":
                 battle.moveRight();
                 break;
-            case "down":
+            case "guard":
                 battle.guard();
                 break;
         }
@@ -183,12 +268,13 @@ $(document).ready(function () {
 
     //
     function callUnsplash(city){ 
-            GET /search/photos
             $.ajax({
-                url: "https://api.unsplash.com/photos/?client_id=" + dc4f0ac1d6e2910a31732c07707ad95d9007b76159823b3845da8705b8d9542a +"",
-                method: "GET /search/photos"
+                url: "https://api.unsplash.com/photos/random/?client_id=dc4f0ac1d6e2910a31732c07707ad95d9007b76159823b3845da8705b8d9542&query=" + city +"",
+                method: "GET"
             }).then(function (response) {
-    });
+                $('.main').css("background-color","red");
+                console.log(response);
+        });
 
 
 
@@ -223,46 +309,6 @@ $(document).ready(function () {
     //ToDo Function for player winning, should increment wins and display gif.
 
 
-    //Button Functions to move player and cpu back/forward by switching float values.
-    $('.playerForward').click(function () {
-        $('.playerFighter').css("float", "right");
-    });
-
-    $('.playerBackward').click(function () {
-        $('.playerFighter').css("float", "left");
-    });
-
-    $('.cpuForward').click(function () {
-        $('.cpuFighter').css("float", "right");
-    });
-
-    $('.cpuBackward').click(function () {
-        //git;
-        $('.cpuFighter').css("float", "left");
-    });
-
     //end of document on ready
-});
 //ignore, math testing
-var test = 0;
-var baseKick = 2;
-var kickAccPenalty = 0.2;
-var basePunch = 1;
-var baseThrow = 0.6;
-var throwAccBonus = 0.2;
-var baseLevelFactor = 1; //increase by 0.1 per lvl
-var tenStr = 10;
-var fifteenStr = 15;
-var twentyStr = 20;
-
-var userStr;
-var enemyStr;
-var userWits;
-var enemyWits;
-var enemyAcc;
-var userAcc = 3.677 - (23 / Math.pow((10 + enemyWits), 0.7));
-
-$(document).ready(function () {
-    kickTwenty = baseKick * 20 + Math.round(Math.random() * (20 * baseKick) / 5);
-    console.log("Testing Math:" + kickTwenty);
-});
+    });
