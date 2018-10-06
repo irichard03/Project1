@@ -22,7 +22,6 @@ var uid;
 var userHealth;
 var userWit;
 var userStrength;
-//init materialize
 var baseKick = 2;
 var basePunch = 1;
 var baseThrow = 0.6;
@@ -244,6 +243,7 @@ $(document).ready(function () {
                 console.log("api call succeesfull");
                 console.log(response);
 
+<<<<<<< HEAD
                 //if player wins    
                 if (buttonClicked === 1) {
                     //need to increment players win count.
@@ -265,6 +265,11 @@ $(document).ready(function () {
             }
         });
     }
+=======
+    //end of document on ready
+});
+//ignore, math testing
+>>>>>>> 68a9419ab5e399b8fd2019fb85064400be3a2d65
 
     //
     function callUnsplash(city){ 
