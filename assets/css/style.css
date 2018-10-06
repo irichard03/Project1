@@ -186,10 +186,9 @@ h7 {
     position: absolute;
     height: 360px;
     width: 360px;
-    background-color: greenyellow;
     margin-left: 38%;
     margin-top: -40%;
-    display: none;
+    visibility: hidden;
     
 }
 
