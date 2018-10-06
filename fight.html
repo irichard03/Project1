@@ -50,14 +50,14 @@
                 <div class="right cpuReadOut ">
                     <!---cpu readout-->
                     <div class="col cpuBarCol z-depth-4">
-                        <h7 id="cpuNickName">ChowderHead</h7>
+                        <h7 id="cpuNickName"></h7>
                         <h7 id="cpuHealth">Health</h7>
                         <h7 id="cpuStrength">Strength</h7>
                         <h7 id="cpuWit">Wit</h7>
                         <h7 id="cpuBooze">Booze</h7>
                     </div>
                     <div class="col cpuCol">
-                        <img class="cpu" src="assets/images/YellowPlayer.png">
+                        <img id="opponentFightImg" class="cpu" src="">
                     </div>
                 </div>
             </div>
@@ -90,7 +90,7 @@
                                 <a data-action="drink" class="btn-floating btn-large waves-effect waves-light orange lighten-3 playerDrink" onclick="M.toast({html: 'GULP!', classes: 'rounded'})"><i class="fas fa-beer"></i></a>
                                 <a data-action="right" class="btn-floating btn-large waves-effect waves-light orange lighten-3 cpuForward"><i class="far fa-arrow-alt-circle-right"></i></a>
                             </div>
-                            <img class="cpuFighter" src="assets/images/YellowPlayer.png">
+                            <img id="opponentFightImg2" class="cpuFighter" src="">
                         </div>
             </div>
             </div>

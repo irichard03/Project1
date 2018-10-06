@@ -30,7 +30,7 @@ var userStr = 10;
 var damagePlaceHolder = 80;
 var giphApiKey = "Y3h4ksc22JmMFoYTKH2XUYmRwrnYL8Gd";
 var computerHealth = 200;
-var playerHealth = userHeath * 10;
+var playerHealth = userHealth * 10;
 var baseAcc = 0.9; // 3.677 - (23/(10+wits)^.7)
 var baseDodge = 0.1;
 var userDodge = 0; // 1 - (attackerAccuracy/(attackerAccuracy + (defenderWits/100)^0.985))
@@ -199,8 +199,15 @@ function getRandomInt(max) {
 }
 //On ready function, do stuff when page loads.
 $(document).ready(function () {
-    //set background
-    callUnsplash();
+
+    // set opponent
+    $("#cpuNickName").text(localStorage.getItem("opponent"));
+    $("#opponentFightImg").attr("src", localStorage.getItem("image") );
+    $("#opponentFightImg2").attr("src", localStorage.getItem("image") );
+
+    console.log(localStorage.getItem("opponent"));
+    console.log(localStorage.getItem("image"));
+
     //Combat Functions
     //battle commands
 
@@ -243,7 +250,6 @@ $(document).ready(function () {
                 console.log("api call succeesfull");
                 console.log(response);
 
-<<<<<<< HEAD
                 //if player wins    
                 if (buttonClicked === 1) {
                     //need to increment players win count.
@@ -265,21 +271,9 @@ $(document).ready(function () {
             }
         });
     }
-=======
-    //end of document on ready
-});
-//ignore, math testing
->>>>>>> 68a9419ab5e399b8fd2019fb85064400be3a2d65
 
     //
-    function callUnsplash(city){ 
-            $.ajax({
-                url: "https://api.unsplash.com/photos/random/?client_id=dc4f0ac1d6e2910a31732c07707ad95d9007b76159823b3845da8705b8d9542&query=" + city +"",
-                method: "GET"
-            }).then(function (response) {
-                $('.main').css("background-color","red");
-                console.log(response);
-        });
+  
 
 
 

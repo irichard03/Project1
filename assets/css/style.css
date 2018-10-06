@@ -10,7 +10,6 @@
     font-size: 24px;
 }
 
-
 .main {
     background-image: url("../images/kevin-hernandez-446780-unsplash.jpg");
     background-size: cover;
@@ -19,8 +18,6 @@
 .player,.cpu {
     border: 4px solid #ff9100;
 }
-
-
 
 .player2,.flipMe {
     -webkit-transform: scaleX(-1);
@@ -200,7 +197,7 @@ h7 {
 .playerButtons{
     position: absolute;
 }
-<<<<<<< HEAD
+
 
 .actionPoints{
     position: absolute;
@@ -210,7 +207,7 @@ h7 {
     margin-top: -34%;
     padding: 2px;
 }
-=======
+
 .toast > span {
     margin: auto;
 }
@@ -250,4 +247,34 @@ h7 {
     top: 20%;
     right: 0%;
     left: 0%; } }
+<<<<<<< HEAD
 >>>>>>> 68a9419ab5e399b8fd2019fb85064400be3a2d65
+=======
+
+    #nameLabel {
+        font-weight: 900;
+    }
+.card-title:hover{
+    background-color: #424242;
+    color: white;
+}
+
+.card-title{
+    border: 2px solid #424242;
+    border-radius: 8px;
+    margin-right: 10px;
+}
+
+.cityOptions{
+    margin: 0;
+    left: 50%;
+    margin-right: -50%;
+}
+
+#selectOpponentText{
+    font-weight: 900;
+    margin: auto;
+    width: 40%;
+    padding-bottom: 25px;
+    padding-top: 25px;
+}
