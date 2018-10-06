@@ -183,10 +183,9 @@ $(document).ready(function () {
 
     //
     function callUnsplash(city){ 
-            
             GET /search/photos
             $.ajax({
-                url: "https://api.unsplash.com/photos/?client_id=" + dc4f0ac1d6e2910a31732c07707ad95d9007b76159823b3845da8705b8d9542a;
+                url: "https://api.unsplash.com/photos/?client_id=" + dc4f0ac1d6e2910a31732c07707ad95d9007b76159823b3845da8705b8d9542a +"",
                 method: "GET /search/photos"
             }).then(function (response) {
     });
