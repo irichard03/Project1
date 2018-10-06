@@ -125,7 +125,7 @@ $("#profileBtn").on("click", function () {
             strength: strengthStat,
             wits: witStat,
             prefCity: team,
-        })
+        });
         
     }
 });
