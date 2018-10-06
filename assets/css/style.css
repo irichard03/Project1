@@ -200,3 +200,12 @@ h7 {
 .playerButtons{
     position: absolute;
 }
+
+.actionPoints{
+    position: absolute;
+    height: 20px;
+    width: 100px;
+    margin-left: 25%;
+    margin-top: -34%;
+    padding: 2px;
+}
