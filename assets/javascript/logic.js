@@ -24,7 +24,6 @@ firebase.auth().onAuthStateChanged(function (user) {
     if (user) {
         // User is signed in.
         var displayName = user.displayName;
-        name = displayName;
         var isAnonymous = user.isAnonymous;
         var uid = user.uid;
         if (!displayName) {
@@ -182,113 +181,6 @@ $('.card-title').on("click", function () {
     console.log($(this).attr("data-city"));
     console.log($(this).attr("data-opponent"));
 });
-
-// Jacob's Profile Page JS
-
-var totalPower = 30;
-var healthStat = 0;
-var witStat = 0;
-var strengthStat = 0;
-
-$("#minusBtnHealth").on("click", function () {
-    if (totalPower < 30 && totalPower >= 0) {
-        healthStat--;
-        totalPower++;
-        $("#displayPowerOne").html(`Health: ${healthStat}`);
-        $("#pointsAvailable").html(`Points Avaialble: ${totalPower}`);
-    }
-});
-
-$("#plusBtnHealth").on("click", function () {
-    if (totalPower <= 30 && totalPower > 0) {
-        healthStat++;
-        totalPower--;
-        $("#displayPowerOne").html(`Health: ${healthStat}`);
-        $("#pointsAvailable").html(`Points Avaialble: ${totalPower}`);
-    }
-});
-$("#minusBtnStrength").on("click", function () {
-    if (totalPower < 30 && totalPower >= 0) {
-        strengthStat--;
-        totalPower++;
-        $("#displayPowerTwo").html(`Strength: ${strengthStat}`);
-        $("#pointsAvailable").html(`Points Avaialble: ${totalPower}`);
-    }
-});
-
-$("#plusBtnStrength").on("click", function () {
-    if (totalPower <= 30 && totalPower > 0) {
-        strengthStat++;
-        totalPower--;
-        $("#displayPowerTwo").html(`Strength: ${strengthStat}`);
-        $("#pointsAvailable").html(`Points Avaialble: ${totalPower}`);
-    }
-});
-$("#minusBtnWits").on("click", function () {
-    if (totalPower < 30 && totalPower >= 0) {
-        witStat--;
-        totalPower++;
-        $("#displayPowerThree").html(`Wits: ${witStat}`);
-        $("#pointsAvailable").html(`Points Avaialble: ${totalPower}`);
-    }
-});
-
-$("#plusBtnWits").on("click", function () {
-    if (totalPower <= 30 && totalPower > 0) {
-        witStat++;
-        totalPower--;
-        $("#displayPowerThree").html(`Wits: ${witStat}`);
-        $("#pointsAvailable").html(`Points Avaialble: ${totalPower}`);
-    }
-});
-
-$("#profileBtn").on("click", function () {
-    var nickName = $("#nameField").val().trim();
-    var prefCity = $("#prefTeam").val().trim();
-    var strengthInput = $("#powerOneSlide").val();
-    var witInput = $("#powerTwoSlide").val();
-    console.log(`Nick Name: ${nickName}`);
-    console.log(`Favorite Team: ${prefCity}`);
-    console.log(`Health: ${healthStat}`);
-    console.log(`Strength: ${strengthStat}`);
-    console.log(`Wit: ${witStat}`);
-    var user = firebase.auth().currentUser;
-    if (user) {
-        database.ref(`accounts/${user.displayName}`).set({
-            health: healthStat,
-            strength: strengthStat,
-            wits: witStat
-        });
-    } else {
-        console.log("You are not Logged In!");
-    }
-
-});
-//trying to DRY jacobs stuff result unsuccessful
-$("").on("click", function () { // this doesnt do anything 
-    var direction = $(this).attr("id");
-    var stat = $(this).attr("data-stat");
-    var display = $(this).attr("data-display");
-    var name = $(this).attr("data-name");
-    console.log("direction: " + direction);
-    console.log("stat: " + stat);
-    console.log("display: " + display);
-    powerDisplay(stat, display, direction, name);
-});
-
-function powerDisplay(stat, display, direction, name) {
-    if (totalPower <= 30 && totalPower > 0 && direction.indexOf("plus") !== -1) {
-        stat++;
-        totalPower--;
-    } else if (totalPower < 30 && totalPower >= 0 && direction.indexOf("minus") !== -1) {
-        stat--;
-        totalPower++;
-    }
-    $(display).html(name + ":" + stat);
-    $("#pointsAvailable").html(`Points Avaialble: ${totalPower}`);
-    console.log(stat);
-}
-
 //Combat Functions
 var baseAcc = 0.9; // 3.677 - (23/(10+wits)^.7)
 var baseDodge = 0.1;
