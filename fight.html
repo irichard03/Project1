@@ -37,7 +37,7 @@
             <div class="row top">
                 <div class="left playerReadOut">
                     <div class="col playerCol">
-                        <img class="player z-depth-4" src="assets/images/CharacterBASE.jpeg">
+                        <img class="player z-depth-4" src="assets/images/SmurfPlayer.png">
                     </div>
                     <div class="col playerBarCol">
                         <h7 id="nickName">ChowderHead</h7>
@@ -57,7 +57,7 @@
                         <h7 id="cpuBooze">Booze</h7>
                     </div>
                     <div class="col cpuCol">
-                        <img class="cpu" src="assets/images/CharacterBASE.jpeg">
+                        <img class="cpu" src="assets/images/YellowPlayer.png">
                     </div>
                 </div>
             </div>
@@ -66,17 +66,15 @@
                 <div class="col left playerZone">
                         <div class="playerButtons">
                             
-                            
-                            
                             <a class="btn-floating btn-large waves-effect waves-light orange lighten-3 playerBackward"><i class="far fa-arrow-alt-circle-left"></i></a>
                             <a class="btn-floating btn-large waves-effect waves-light orange lighten-3 playerDrink" onclick="M.toast({html: 'GULP!', classes: 'rounded'})"><i class="fas fa-beer"></i></a>
                             <a class="btn-floating btn-large waves-effect waves-light orange lighten-3 playerForward"><i class="far fa-arrow-alt-circle-right"></i></a>
                             <a class="btn-floating btn-large waves-effect waves-light orange lighten-2 playerThrow" onclick="M.toast({html: 'BANG!', classes: 'rounded'})"><i class="fas fa-trash-alt"></i></a>
                             <a class="btn-floating btn-large waves-effect waves-light orange lighten-1 playerStab" onclick="M.toast({html: 'SNIKT!', classes: 'rounded'})"><i class="fas fa-screwdriver"></i></a>
-                            <a class="btn-floating btn-large waves-effect waves-light orange playerunch" onclick="M.toast({html: 'POW!', classes: 'rounded'})"><i class="fas fa-hand-rock"></i></a>   
+                            <a class="btn-floating btn-large waves-effect waves-light orange playerPunch" onclick="M.toast({html: 'POW!', classes: 'rounded'})"><i class="fas fa-hand-rock"></i></a>   
                             
                         </div>
-                        <img class="playerFighter" src="assets/images/CharacterBASE.jpeg">
+                        <img class="playerFighter" src="assets/images/SmurfPlayer.png">
                         
                 </div>
             
@@ -93,7 +91,7 @@
                                 <a class="btn-floating btn-large waves-effect waves-light orange lighten-3 playerDrink" onclick="M.toast({html: 'GULP!', classes: 'rounded'})"><i class="fas fa-beer"></i></a>
                                 <a class="btn-floating btn-large waves-effect waves-light orange lighten-3 cpuForward"><i class="far fa-arrow-alt-circle-right"></i></a>
                             </div>
-                            <img class="cpuFighter" src="assets/images/CharacterBASE.jpeg">
+                            <img class="cpuFighter" src="assets/images/YellowPlayer.png">
                         </div>
             </div>
             </div>
@@ -112,8 +110,8 @@
 
 
     <script src="https://www.gstatic.com/firebasejs/5.5.1/firebase.js"></script>
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
-        crossorigin="anonymous"></script>
+    <script  src="https://code.jquery.com/jquery-3.3.1.js"  integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="  crossorigin="anonymous"></script>
+      
     <!--replace bootstrap js link with materialize link-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
     <script src="assets/javascript/logic.js"></script>
