@@ -33,7 +33,8 @@ firebase.auth().onAuthStateChanged(function (user) {
         var newConnection = database.ref("connections/").push(user.displayName);
         newConnection.onDisconnect().remove();
     }else{
-        M.toast({html: 'Please go to the previous page and login!'});
+        var toastNoAuth = '<span>Please go to the login page and login!</span>';
+        M.toast({html: toastNoAuth});
     }
 
 });
@@ -45,7 +46,7 @@ var witStat = 0;
 var strengthStat = 0;
 
 $("#minusBtnHealth").on("click", function () {
-    if (totalPower < 30 && totalPower >= 0) {
+    if (totalPower < 30 && totalPower >= 0 && ((healthStat - 1) > 0)) {
         healthStat--;
         totalPower++;
         $("#displayPowerOne").html(`Health: ${healthStat}`);
@@ -62,7 +63,7 @@ $("#plusBtnHealth").on("click", function () {
     }
 });
 $("#minusBtnStrength").on("click", function () {
-    if (totalPower < 30 && totalPower >= 0) {
+    if (totalPower < 30 && totalPower >= 0 && ((strengthStat - 1) > 0)) {
         strengthStat--;
         totalPower++;
         $("#displayPowerTwo").html(`Strength: ${strengthStat}`);
@@ -79,7 +80,7 @@ $("#plusBtnStrength").on("click", function () {
     }
 });
 $("#minusBtnWits").on("click", function () {
-    if (totalPower < 30 && totalPower >= 0) {
+    if (totalPower < 30 && totalPower >= 0 && ((hwitStat - 1) > 0)) {
         witStat--;
         totalPower++;
         $("#displayPowerThree").html(`Wits: ${witStat}`);
@@ -107,6 +108,9 @@ function powerDisplay(stat, display, direction, name) {
     $("#pointsAvailable").html(`Points Avaialble: ${totalPower}`);
     console.log(stat);
 }
+var toastNoTeam = '<span>Please choose a team!</span>';
+var toastNoPower = '<span>Make sure to use all of your power!</span>'
+
 $("#profileBtn").on("click", function () {
     var team = $('#prefTeam :selected').text();
     console.log(`Favorite Team: ${team}`);
@@ -115,10 +119,10 @@ $("#profileBtn").on("click", function () {
     console.log(`Wit: ${witStat}`);
     if(team === 'Choose your Team' || totalPower > 0) {
         if(team === 'Choose your Team') {
-            M.toast({html: "Please choose a team!"});
+            M.toast({html: toastNoTeam});
         }
         if(totalPower > 0) {
-            M.toast({html: "Make sure to use all of your power!"});
+            M.toast({html: toastNoPower});
         }
     }else{
         database.ref(`accounts/${displayName}`).update({
