@@ -117,6 +117,11 @@ var battle = {
 };
 //On ready function, do stuff when page loads.
 $(document).ready(function () {
+    // set opponent
+    $("#cpuNickName").text(localStorage.getItem("opponent"));
+    $("#opponentFightImg").attr("src", localStorage.getItem("image") );
+    $("#opponentFightImg2").attr("src", localStorage.getItem("image") );
+
     //Combat Functions
     //battle commands
 

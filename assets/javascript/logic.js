@@ -131,6 +131,9 @@ var cityNames = ["Houston", "Dallas", "Buffalo", "Seattle", "Miami", "Philadelph
 var nameArray = [];
 var locationSelected; //this will need to be updated once we have locations to select from
 var i = 0;
+var opponentChoosen;
+var opponentCity;
+var opponentImage;
 
 // API to find weather for each city and update html
 for (i = 0; i < cityArray.length; i++) {
@@ -161,16 +164,14 @@ for (i = 0; i < cityArray.length; i++) {
             var randomName = data.results[0].name.first;
             randomName.toString();
             nameArray.push(randomName.substr(0, 1).toUpperCase() + randomName.substr(1));
-        });
-    // Needs timeout before displays names so API can complete
-    if (i === (cityArray.length - 1)) {
-        setTimeout(giveNames, 1500);
-    }
+        }).then(function(){
+            giveNames();
+        })
 }
 
 // Updates cards to show Name from API & sets oppponent attribute for card
 function giveNames() {
-    for (i = 0; i < cityNames.length; i++) {
+    for (i = 0; i < nameArray.length; i++) {
         var nameHolder = "name" + cityNames[i];
         $(`#${nameHolder}`).html("Opponent: " + nameArray[i]);
         $(`#${nameHolder}`).parent().attr("data-opponent", nameArray[i]);
@@ -182,4 +183,15 @@ function giveNames() {
 $('.card-title').on("click", function () {
     console.log($(this).attr("data-city"));
     console.log($(this).attr("data-opponent"));
+    console.log($(this).attr("data-image"));
+
+    var opponentChoosen = $(this).attr("data-opponent");
+    var opponentCity = $(this).attr("data-city");
+    var opponentImage = $(this).attr("data-image");
+
+    localStorage.setItem("opponent", opponentChoosen);
+    localStorage.setItem("city", opponentCity);
+    localStorage.setItem("image", opponentImage);
+
+    location.replace("fight.html");
 });
