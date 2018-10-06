@@ -22,7 +22,6 @@ var uid;
 var userHealth;
 var userWit;
 var userStrength;
-//init materialize
 var baseKick = 2;
 var basePunch = 1;
 var baseThrow = 0.6;
