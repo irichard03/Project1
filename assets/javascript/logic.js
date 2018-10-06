@@ -48,7 +48,7 @@ firebase.auth().onAuthStateChanged(function (user) {
                         }
                 }),
                 function (error) {
-                    console.log("Errors handled with profile update: " + errorObject.code);
+                    console.log("Errors handled with profile update: " + error.code);
                 };
         }
         // Here we can just see what username is connected
@@ -59,6 +59,7 @@ firebase.auth().onAuthStateChanged(function (user) {
         $('#login1').attr('hidden', true);
         $('#login2').removeAttr('hidden');
         $('#loginMsg').text('Logout to play as another user or to disconnect!');
+        $("#profileNavBtn").removeClass("disabled");
         var isAnonymous = user.isAnonymous;
         var uid = user.uid;
         // ...
@@ -70,6 +71,8 @@ firebase.auth().onAuthStateChanged(function (user) {
         $('#login1').removeAttr('hidden');
         $('#login2').attr('hidden', true);
         $('#loginMsg').text('Enter your name to get started!');
+        $("#profileNavBtn").addClass("disabled");
+
     }
 });
 //Anonymous authentication
@@ -87,7 +90,7 @@ function login() {
     } else {
         $("#loginMsg").html("<i class=\"red-text errorAlert text-darken-2 loginAlert material-icons\">" + "error" + "</i>You've left it blank.");
     }
-};
+}
 
 function logout() {
     firebase.auth().signOut().then(function () {
@@ -107,7 +110,7 @@ $("#loginButton").on("click", function (e) { //this ID will be used in the login
 $("#logoutButton").on("click keypress", function (e) {
     e.preventDefault();
     logout();
-})
+});
 //chat functions
 $("#chat-submit").on("click keypress", function (e) {
     e.preventDefault();
@@ -133,7 +136,6 @@ var i = 0;
 for (i = 0; i < cityArray.length; i++) {
     var queryURL = "https://api.openweathermap.org/data/2.5/weather?" +
         "q=" + cityArray[i] + " &units=imperial&appid=" + APIKey;
-
     $.ajax({
             url: queryURL,
             method: "GET"
@@ -180,136 +182,4 @@ function giveNames() {
 $('.card-title').on("click", function () {
     console.log($(this).attr("data-city"));
     console.log($(this).attr("data-opponent"));
-});
-//Combat Functions
-var baseAcc = 0.9; // 3.677 - (23/(10+wits)^.7)
-var baseDodge = 0.1;
-var userDodge = 0; // 1 - (attackerAccuracy/(attackerAccuracy + (defenderWits/100)^0.985))
-var userHealth = 10; //10 * vitality;
-
-var abilities = {
-    "kick": {
-        damage: baseKick * userStr + Math.round(Math.random() * (userStr * baseKick) / 5),
-        accuracy: userAcc - 0.35
-    },
-    "punch": {
-        damage: basePunch * userStr + Math.round(Math.random() * (userStr * basePunch) / 10),
-        accuracy: userAcc
-    },
-    "throw": {
-        damage: baseThrow * userStr + Math.round(Math.random() * (userStr * baseThrow) / 15),
-        accuracy: userAcc + 0.35
-    }
-};
-//battle commands
-// $(document).on("click", ".movementBtns", function () {
-//     var direction = $(this).attr("data-direction");
-//     switch (direction) {
-//         case "left":
-//             battle.moveLeft();
-//             break;
-//         case "right":
-//             battle.moveRight();
-//             break;
-//         case "down":
-//             battle.guard();
-//             break;
-//     }
-// });
-var battle = {
-    attack: function (attackType) {
-        var roll = Math.random();
-        if (actionPoints >= 2) {
-            if (roll > battle.evadeCheck(wits)) {
-                enemyHP = enemyHP - abilities[attackType].damage;
-                $("").html(`You attacked ${enemyName} for ${abilities[attackType].damage} damage!`); //enemyname is placeholder
-            } else {
-                //you missed
-            }
-            actionPoints = actionPoints - 2;
-        }
-    },
-    drink: function () {
-        if (actionPoints >= 2) {
-            if (health > 0) {
-                strengthStat = strengthStat + strengthStat * 0.5;
-                witStat = witStat - witStat * 0.5;
-            }
-        }
-    },
-    moveLeft: function () {
-        //if there is at least 1 action point left
-        //if there is space available to the left,
-        //move to the left
-        //consume one action point
-        //else senda  message that there is no room to the left
-        //subtract an action piont
-    },
-    moveRight: function () {
-        //if there is at least 1 action point left
-        //if there is space to the right,
-        //move to the right
-        //consume one action piont
-        //else send a message that there is no room to the right
-        //subtract an action point
-    },
-    guard: function () {
-        //if there is at least one action point left
-        //set the guard status
-        //temporarily increase wits and health by 25% for the next opponents next turn
-        //subtract 2 actoin points
-    },
-    evadeCheck: function (wits, attackType) {
-        return 1 - (abilities[attackType].accuracy / (abilities[attackType].accuracy + (wits / 100) ^ 0.985));
-    },
-};
-$(document).on("click", ".combatBtns", function (action) {
-    action = $(this).attr("data-action");
-    switch (action) {
-        case "punch":
-            battle.attack("punch");
-            break;
-        case "kick":
-            battle.attack("kick");
-            break;
-        case "throw":
-            battle.attack("throw");
-            break;
-        case "drink":
-            battle.drink();
-            break;
-        case "left":
-            battle.moveLeft();
-            break;
-        case "right":
-            battle.moveRight();
-            break;
-        case "down":
-            battle.guard();
-            break;
-    }
-});
-
-//ignore, math testing
-var test = 0;
-var baseKick = 2;
-var kickAccPenalty = 0.2;
-var basePunch = 1;
-var baseThrow = 0.6;
-var throwAccBonus = 0.2;
-var baseLevelFactor = 1; //increase by 0.1 per lvl
-var tenStr = 10;
-var fifteenStr = 15;
-var twentyStr = 20;
-
-var userStr;
-var enemyStr;
-var userWits;
-var enemyWits;
-var enemyAcc;
-var userAcc = 3.677 - (23 / Math.pow((10 + enemyWits), 0.7));
-
-$(document).ready(function () {
-    kickTwenty = baseKick * 20 + Math.round(Math.random() * (20 * baseKick) / 5);
-    console.log("Testing Math:" + kickTwenty);
 });
