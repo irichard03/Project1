@@ -28,7 +28,8 @@ firebase.auth().onAuthStateChanged(function (user) {
         console.log(user.displayName);
         isAnonymous = user.isAnonymous;
         uid = user.uid;
-        $('#nameLabel').text(`Nickname: ${displayName}`);
+        $('#nameLabel').text(`Nickname:  ${displayName}`);
+        $("#profileNavBtn").removeClass("disabled");
         var newConnection = database.ref("connections/").push(user.displayName);
         newConnection.onDisconnect().remove();
     }else{

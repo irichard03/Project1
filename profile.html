@@ -19,11 +19,13 @@
     <!--Navbar: contains instructions and more-->
     <nav>
         <div class="nav-wrapper orange darken-3">
+            <ul id="nav-mobile" class="left hide-on-med-and-down">
+                <li><a class="waves-effect waves-light btn modal-trigger" href="#modal1">Instructions</a></li>
+            </ul>
             <a class="center brand-logo">HARSHMELLOWGANS</a>
             <ul id="nav-mobile" class="right hide-on-med-and-down">
-                <li>
-                    <a class="waves-effect waves-light btn modal-trigger" href="#modal1">Instructions</a>
-                </li>
+                <li><a id="profileNavBtn" class="waves-effect waves-light btn disabled" href="index.html">Login</a></li>
+                <li><a id="fightNavBtn" class="waves-effect waves-light btn disabled" href="fight.html">Fight</a></li>
             </ul>
         </div>
     </nav>
@@ -109,7 +111,7 @@
     <!--FireBase-->
     <script src="https://www.gstatic.com/firebasejs/5.5.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/5.5.1/firebase-database.js"></script>
-    
+
     <script src="https://www.gstatic.com/firebasejs/5.5.1/firebase-auth.js"></script>
     <!--jQuery-->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"

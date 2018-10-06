@@ -59,6 +59,7 @@ firebase.auth().onAuthStateChanged(function (user) {
         $('#login1').attr('hidden', true);
         $('#login2').removeAttr('hidden');
         $('#loginMsg').text('Logout to play as another user or to disconnect!');
+        $("#profileNavBtn").removeClass("disabled");
         var isAnonymous = user.isAnonymous;
         var uid = user.uid;
         // ...
@@ -70,6 +71,8 @@ firebase.auth().onAuthStateChanged(function (user) {
         $('#login1').removeAttr('hidden');
         $('#login2').attr('hidden', true);
         $('#loginMsg').text('Enter your name to get started!');
+        $("#profileNavBtn").addClass("disabled");
+
     }
 });
 //Anonymous authentication
