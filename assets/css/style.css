@@ -172,39 +172,13 @@ h7 {
     
 }
 
-.playerPunch{
+.cpuButtons{
     position: absolute;
-    margin-left: 388px;
-    
+    margin-left: 44px;
+    background-color: purple;
 }
 
-.playerStab{
+.playerButtons{
     position: absolute;
-    margin-left: 328px  ;
-    
-}
-
-.playerThrow{
-    position: absolute;
-    margin-left: 268px;
-}
-.cpuPunch{
-    position: absolute;
-    margin-left: -40px;
-    -webkit-transform: scaleX(-1);
-    transform: scaleX(-1);
-}
-
-.cpuStab{
-    position: absolute;
-    margin-left: 20px;
-    -webkit-transform: scaleX(-1);
-    transform: scaleX(-1);
-}
-
-.cpuThrow{
-    position: absolute;
-    margin-left: 80px;
-    -webkit-transform: scaleX(-1);
-    transform: scaleX(-1);
+    background-color: purple;
 }

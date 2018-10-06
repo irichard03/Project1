@@ -64,11 +64,20 @@
             <!--Players and player controls here-->
             <div class="row bottom">
                 <div class="col left playerZone">
-                        <a class="btn-floating btn-large waves-effect waves-light teal playerPunch" onclick="M.toast({html: 'POW!', classes: 'rounded'})"><i class="fas fa-hand-rock"></i></i></a>
-                        <a class="btn-floating btn-large waves-effect waves-light teal playerStab" onclick="M.toast({html: 'SNIKT!', classes: 'rounded'})"><i class="fas fa-screwdriver"></i></a>
-                        <a class="btn-floating btn-large waves-effect waves-light teal playerThrow" onclick="M.toast({html: 'BANG!', classes: 'rounded'})"><i class="fas fa-trash-alt"></i></a>
-                    
+                        <div class="playerButtons">
+                            
+                            
+                            
+                            <a class="btn-floating btn-large waves-effect waves-light teal playerBack"><i class="far fa-arrow-alt-circle-left"></i></a>
+                            <a class="btn-floating btn-large waves-effect waves-light teal playerDrink" onclick="M.toast({html: 'GULP!', classes: 'rounded'})"><i class="fas fa-beer"></i></a>
+                            <a class="btn-floating btn-large waves-effect waves-light teal playerForward"><i class="far fa-arrow-alt-circle-right"></i></a>
+                            <a class="btn-floating btn-large waves-effect waves-light teal playerThrow" onclick="M.toast({html: 'BANG!', classes: 'rounded'})"><i class="fas fa-trash-alt"></i></a>
+                            <a class="btn-floating btn-large waves-effect waves-light teal playerStab" onclick="M.toast({html: 'SNIKT!', classes: 'rounded'})"><i class="fas fa-screwdriver"></i></a>
+                            <a class="btn-floating btn-large waves-effect waves-light teal playerunch" onclick="M.toast({html: 'POW!', classes: 'rounded'})"><i class="fas fa-hand-rock"></i></a>   
+                            
+                        </div>
                         <img class="playerFighter" src="assets/images/CharacterBASE.jpeg">
+                        
                 </div>
             
 
@@ -76,9 +85,14 @@
                         
                 </div>
                         <div class="col right cpuZone">
-                            <a class="btn-floating btn-large waves-effect waves-light teal cpuPunch" onclick="M.toast({html: 'POW!', classes: 'rounded'})"><i class="fas fa-hand-rock"></i></i></a>   
-                            <a class="btn-floating btn-large waves-effect waves-light teal cpuStab" onclick="M.toast({html: 'SNIKT!', classes: 'rounded'})"><i class="fas fa-screwdriver"></i></a>
-                            <a class="btn-floating btn-large waves-effect waves-light teal cpuThrow" onclick="M.toast({html: 'BANG!', classes: 'rounded'})"><i class="fas fa-trash-alt"></i></a>
+                            <div class="cpuButtons">
+                                <a class="btn-floating btn-large waves-effect waves-light teal cpuPunch" onclick="M.toast({html: 'POW!', classes: 'rounded'})"><i class="fas fa-hand-rock"></i></a>   
+                                <a class="btn-floating btn-large waves-effect waves-light teal cpuStab" onclick="M.toast({html: 'SNIKT!', classes: 'rounded'})"><i class="fas fa-screwdriver"></i></a>
+                                <a class="btn-floating btn-large waves-effect waves-light teal cpuThrow" onclick="M.toast({html: 'BANG!', classes: 'rounded'})"><i class="fas fa-trash-alt"></i></a>
+                                <a class="btn-floating btn-large waves-effect waves-light teal cpuBack"><i class="far fa-arrow-alt-circle-left"></i></a>
+                                <a class="btn-floating btn-large waves-effect waves-light teal playerDrink" onclick="M.toast({html: 'GULP!', classes: 'rounded'})"><i class="fas fa-beer"></i></a>
+                                <a class="btn-floating btn-large waves-effect waves-light teal cpuForward"><i class="far fa-arrow-alt-circle-right"></i></a>
+                            </div>
                             <img class="cpuFighter" src="assets/images/CharacterBASE.jpeg">
                         </div>
             </div>
@@ -103,6 +117,7 @@
     <!--replace bootstrap js link with materialize link-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
     <script src="assets/javascript/logic.js"></script>
+    <script src="assets/javascript/fight.js"></script>
 </body>
 
 </html>
