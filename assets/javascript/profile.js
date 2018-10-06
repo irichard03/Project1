@@ -18,6 +18,12 @@ var topTen = database.ref("/topten");
 var displayName;
 var isAnonymous;
 var uid;
+// Setting User's Attributes
+var team;
+var totalPower = 30;
+var healthStat = 0;
+var witStat = 0;
+var strengthStat = 0;
 //init materialize
 M.AutoInit();
 firebase.auth().onAuthStateChanged(function (user) {
@@ -30,20 +36,33 @@ firebase.auth().onAuthStateChanged(function (user) {
         uid = user.uid;
         $('#nameLabel').text(`Nickname:  ${displayName}`);
         $("#profileNavBtn").removeClass("disabled");
+        fireAccounts.once("value", function (snap) {
+            healthStat = snap.child(`${displayName}`).child('health').val();
+            console.log("health: " + healthStat);
+            witStat = snap.child(`${displayName}`).child('wits').val();
+            console.log("wits: " + witStat);
+            strengthStat = snap.child(`${displayName}`).child('strength').val();
+            console.log("strength: " + strengthStat);
+            team = snap.child(`${displayName}`).child('prefCity').val();
+        }).then(function(){
+            console.log(team);
+            team = $('#prefTeam :selected').text();
+            totalPower = totalPower - (healthStat + witStat + strengthStat);
+            $("#displayPowerOne").html(`Health: ${healthStat}`);
+            $("#displayPowerTwo").html(`Strength: ${strengthStat}`);
+            $("#displayPowerThree").html(`Wits: ${witStat}`);
+            $("#pointsAvailable").html(`Points Avaialble: ${totalPower}`);
+        });
         var newConnection = database.ref("connections/").push(user.displayName);
         newConnection.onDisconnect().remove();
-    }else{
+    } else {
         var toastNoAuth = '<span>Please go to the login page and login!</span>';
-        M.toast({html: toastNoAuth});
+        M.toast({
+            html: toastNoAuth
+        });
     }
 
 });
-// Setting User's Attributes
-
-var totalPower = 30;
-var healthStat = 0;
-var witStat = 0;
-var strengthStat = 0;
 
 $("#minusBtnHealth").on("click", function () {
     if (totalPower < 30 && totalPower >= 0 && ((healthStat - 1) > 0)) {
@@ -80,7 +99,7 @@ $("#plusBtnStrength").on("click", function () {
     }
 });
 $("#minusBtnWits").on("click", function () {
-    if (totalPower < 30 && totalPower >= 0 && ((hwitStat - 1) > 0)) {
+    if (totalPower < 30 && totalPower >= 0 && ((witStat - 1) > 0)) {
         witStat--;
         totalPower++;
         $("#displayPowerThree").html(`Wits: ${witStat}`);
@@ -96,6 +115,7 @@ $("#plusBtnWits").on("click", function () {
         $("#pointsAvailable").html(`Points Avaialble: ${totalPower}`);
     }
 });
+
 function powerDisplay(stat, display, direction, name) {
     if (totalPower <= 30 && totalPower > 0 && direction.indexOf("plus") !== -1) {
         stat++;
@@ -112,25 +132,30 @@ var toastNoTeam = '<span>Please choose a team!</span>';
 var toastNoPower = '<span>Make sure to use all of your power!</span>'
 
 $("#profileBtn").on("click", function () {
-    var team = $('#prefTeam :selected').text();
+    team = $('#prefTeam :selected').text();
     console.log(`Favorite Team: ${team}`);
     console.log(`Health: ${healthStat}`);
     console.log(`Strength: ${strengthStat}`);
     console.log(`Wit: ${witStat}`);
-    if(team === 'Choose your Team' || totalPower > 0) {
-        if(team === 'Choose your Team') {
-            M.toast({html: toastNoTeam});
+    if (team === 'Choose your Team' || totalPower > 0) {
+        if (team === 'Choose your Team') {
+            M.toast({
+                html: toastNoTeam
+            });
         }
-        if(totalPower > 0) {
-            M.toast({html: toastNoPower});
+        if (totalPower > 0) {
+            M.toast({
+                html: toastNoPower
+            });
         }
-    }else{
+    } else {
         database.ref(`accounts/${displayName}`).update({
             health: healthStat,
             strength: strengthStat,
             wits: witStat,
-            prefCity: team,
+            prefCity: team
         });
-        
+        $("#fightNavBtn").removeClass("disabled");
+
     }
 });
