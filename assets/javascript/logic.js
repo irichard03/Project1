@@ -260,7 +260,6 @@ function powerDisplay(stat, display, direction, name) {
     console.log(stat);
 }
 
-
 //Combat Functions
 var baseAcc = 0.9; // 3.677 - (23/(10+wits)^.7)
 var baseDodge = 0.1;
@@ -279,28 +278,96 @@ var abilities = {
     "throw": {
         damage: baseThrow * userStr + Math.round(Math.random() * (userStr * baseThrow) / 15),
         accuracy: userAcc + 0.35
-
     }
 };
 //battle commands
-
+// $(document).on("click", ".movementBtns", function () {
+//     var direction = $(this).attr("data-direction");
+//     switch (direction) {
+//         case "left":
+//             battle.moveLeft();
+//             break;
+//         case "right":
+//             battle.moveRight();
+//             break;
+//         case "down":
+//             battle.guard();
+//             break;
+//     }
+// });
 var battle = {
     attack: function (attackType) {
         var roll = Math.random();
-        if (roll > battle.evadeCheck(wits)) {
-            enemyHP = enemyHP - abilities.attackType.damage;
-            $("").html(`You attacked ${enemyName} for ${abilities.attackType.damage} damage!`); //enemyname is placeholder
-        } else {
-            //you missed
+        if (actionPoints >= 2) {
+            if (roll > battle.evadeCheck(wits)) {
+                enemyHP = enemyHP - abilities[attackType].damage;
+                $("").html(`You attacked ${enemyName} for ${abilities[attackType].damage} damage!`); //enemyname is placeholder
+            } else {
+                //you missed
+            }
+            actionPoints = actionPoints - 2;
         }
     },
+    drink: function () {
+        if (actionPoints >= 2) {
+            if (health > 0) {
+                strengthStat = strengthStat + strengthStat * 0.5;
+                witStat = witStat - witStat * 0.5;
+            }
+        }
+    },
+    moveLeft: function () {
+        //if there is at least 1 action point left
+        //if there is space available to the left,
+        //move to the left
+        //consume one action point
+        //else senda  message that there is no room to the left
+        //subtract an action piont
+    },
+    moveRight: function () {
+        //if there is at least 1 action point left
+        //if there is space to the right,
+        //move to the right
+        //consume one action piont
+        //else send a message that there is no room to the right
+        //subtract an action point
+    },
+    guard: function () {
+        //if there is at least one action point left
+        //set the guard status
+        //temporarily increase wits and health by 25% for the next opponents next turn
+        //subtract 2 actoin points
+    },
     evadeCheck: function (wits, attackType) {
-        return 1 - (abilities.attackType.accuracy / (abilities.attackType.accuracy + (wits / 100) ^ 0.985));
+        return 1 - (abilities[attackType].accuracy / (abilities[attackType].accuracy + (wits / 100) ^ 0.985));
     },
 };
-$(document).on("click", ".combatBtns", function () {
-
-})
+$(document).on("click", ".combatBtns", function (action) {
+    action = $(this).attr("data-action");
+    switch (action) {
+        case "punch":
+            battle.attack("punch");
+            break;
+        case "kick":
+            battle.attack("kick");
+            break;
+        case "throw":
+            battle.attack("throw");
+            break;
+        case "drink":
+            battle.drink();
+            break;
+        case "left":
+            battle.moveLeft();
+            break;
+        case "right":
+            battle.moveRight();
+            break;
+        case "down":
+            battle.guard();
+            break;
+    }
+});
 
 //ignore, math testing
 var test = 0;
