@@ -346,6 +346,7 @@ $(document).ready(function () {
                 $('.main').css('background-image', "url(" + cityImage + ")");
         }
     }
+    
     function winGame() {
         console.log("winGame Called");
         //Just bringing the scope of this outside promise function
@@ -413,7 +414,7 @@ $(document).ready(function () {
                     wins: wins,
                 });
                 database.ref(`topten/${displayName}`).update({
-                    winsNet:winsNet,
+                    winsNet: winsNet,
                 });
             }),
             function (errorObject) {
@@ -445,10 +446,28 @@ $(document).ready(function () {
         console.log("end modal called");
         var modal = $('#endModal');
         modal.css("display", "block");
+        buildTable();
     }
+    //end of endmodal function
+
+    function buildTable(){
+        topTen.once("value", function (snapshot) {
+            var latestSnapshot = snapshot.val();
+            for(var iterator in latestSnapshot){
+                var x = latestSnapshot[iterator].key
+                console.log(x);
+                $('#topTen').prepend(`"<p>Player ${x} has a net win loss record of: ${latestSnapshot[iterator].winsNet}</p>"`);
+                console.log(latestSnapshot);
+            }
+            
+        });
+    }
+
     
+
+
     //uncomment below to test end modal dsiplay see style.css line #300 to configure.
-    //endModal();
+    endModal();
     //end of document on ready
 });
 
