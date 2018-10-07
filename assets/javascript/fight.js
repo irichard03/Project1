@@ -284,23 +284,7 @@ $(document).ready(function () {
     }
 
 
-    //button Functions to modify computer bars
-    $('.playerPunch').click(function () {
-        callAPI("Punch");
-        computerHealth = computerHealth - damagePlaceHolder;
-        console.log(computerHealth);
-        if (computerHealth < 0) {
-            computerHealth = 0;
-            $('#cpuHealth').css('width', '0px');
-            callAPI(1);
-        } else {
-            let cpuHealthString = computerHealth.toString();
-            cpuHealthString += 'px';
-            console.log(cpuHealthString);
-            $('#cpuHealth').css('width', cpuHealthString);
-        }
-
-    });
+   
 
     //read local storage and set the background.
     var myCity = localStorage.getItem("city", opponentCity);
