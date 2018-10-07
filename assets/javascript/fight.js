@@ -199,6 +199,7 @@ function getRandomInt(max) {
 }
 //On ready function, do stuff when page loads.
 $(document).ready(function () {
+
     // set opponent
     $("#cpuNickName").text(localStorage.getItem("opponent"));
     $("#opponentFightImg").attr("src", localStorage.getItem("image") );
@@ -236,13 +237,100 @@ $(document).ready(function () {
                 break;
         }
     });
+    //Giphy call pass in string to change search parameter for gif results.
+    function callAPI(buttonClicked) {
+        $('.displayBox').css('visibility', 'visible');
+        let x = getRandomInt(10);
+        giphyUrl = "https://api.giphy.com/v1/gifs/search?q=" + buttonClicked + "&key=" + giphApiKey;
+        $.ajax({
+            url: giphyUrl,
+            method: "GET"
+        }).then(function (response) {
+            if (response) {
+                console.log("api call succeesfull");
+                console.log(response);
+
+                //if player wins    
+                if (buttonClicked === 1) {
+                    //need to increment players win count.
+                    $('.displayBox').append(`<img src="${response.data[x].images.original.url}" width="360px" height="360px">`);
+                    setTimeout(function () {
+                        $('.displayBox').empty();
+                        $('.displayBox').css('visibility', 'hidden');
+                    }, 20000);
+                } else {
+
+                    $('.displayBox').append(`<img src="${response.data[x].images.original.url}" width="360px" height="360px">`);
+                    setTimeout(function () {
+                        $('.displayBox').empty();
+                        $('.displayBox').css('visibility', 'hidden');
+                    }, 3000);
+                }
+            } else {
+                console.log("FAILED API CALL");
+            }
+        });
+    }
+
+    //
+  
+
+
+
+
+    //random function for giphs.
+    function getRandomInt(max) {
+        return Math.floor(Math.random() * Math.floor(max));
+    }
+
+
+   
+
+    //read local storage and set the background.
+    var myCity = localStorage.getItem("city", opponentCity);
+    console.log("my city is" + myCity);
+    getCity(myCity);
+
+    //set background based on city passed into it.
+    function getCity(myCity){
+        switch(myCity) {
+            case "Houston":
+                var cityImage = "assets/images/Astrodome.jpg";
+                $('.main').css('background-image', "url(" + cityImage + ")");
+                break;
+            case "Seattle":
+                var cityImage = "assets/images/Seattle.jpg";
+                $('.main').css('background-image', "url(" + cityImage + ")");
+                break;
+            case "Buffalo":
+                var cityImage = "assets/images/Buffalo.jpg";
+                $('.main').css('background-image', "url(" + cityImage + ")");
+                break;
+            case "Miami":
+                var cityImage = "assets/images/Miami.jpg";
+                $('.main').css('background-image', "url(" + cityImage + ")");
+                break; 
+            case "Philadelphia":
+                var cityImage = "assets/images/Philadelphia.jpg";
+                $('.main').css('background-image', "url(" + cityImage + ")");
+                break;   
+            case "Boston":
+                var cityImage = "assets/images/Boston.jpg";
+                $('.main').css('background-image', "url(" + cityImage + ")");
+                break;  
+            case "Atlanta":
+                var cityImage = "assets/images/Atlanta.jpg";
+                $('.main').css('background-image', "url(" + cityImage + ")");
+                break; 
+            case "Dallas":
+                var cityImage = "assets/images/Dallas.jpg";
+                $('.main').css('background-image', "url(" + cityImage + ")");
+                break;      
+            default:
+                var cityImage = "assets/images/Astrodome.jpg";
+                $('.main').css('background-image', "url(" + cityImage + ")");
+        }
+    }
 
     //end of document on ready
-});
-//ignore, math testing
-
-
-$(document).ready(function () {
-    kickTwenty = baseKick * 20 + Math.round(Math.random() * (20 * baseKick) / 5);
-    console.log("Testing Math:" + kickTwenty);
-});
+    });
