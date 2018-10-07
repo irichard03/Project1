@@ -347,6 +347,7 @@ $(document).ready(function () {
         }
     }
     function winGame() {
+        console.log("winGame Called");
         //Just bringing the scope of this outside promise function
         var newDiv;
         //Promise function to get values of accounts
@@ -389,7 +390,8 @@ $(document).ready(function () {
             })
             $('#topTen').html(newDiv);
         });
-        $('#modalEnd').modal('show');
+        //call to end game, endModalmodal will only give ption to play again.
+        endModal();
     }
     function loseGame() {
         //Just bringing the scope of this outside promise function
@@ -434,9 +436,19 @@ $(document).ready(function () {
             })
             $('#topTen').html(newDiv);
         });
-    }
-    winGame();
 
+        
+    }
+
+    //function to display custom end modal style is controlled in css, does not disappear, only option is to pick another opponent.
+    function endModal(){
+        console.log("end modal called");
+        var modal = $('#endModal');
+        modal.css("display", "block");
+    }
+    
+    //uncomment below to test end modal dsiplay see style.css line #300 to configure.
+    //endModal();
     //end of document on ready
 });
 
