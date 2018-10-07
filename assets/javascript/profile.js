@@ -18,6 +18,12 @@ var topTen = database.ref("/topten");
 var displayName;
 var isAnonymous;
 var uid;
+// Setting User's Attributes
+var totalPower = 30;
+var healthStat = 0;
+var witStat = 0;
+var strengthStat = 0;
+var team;
 //init materialize
 M.AutoInit();
 firebase.auth().onAuthStateChanged(function (user) {
@@ -32,18 +38,34 @@ firebase.auth().onAuthStateChanged(function (user) {
         $("#profileNavBtn").removeClass("disabled");
         var newConnection = database.ref("connections/").push(user.displayName);
         newConnection.onDisconnect().remove();
+        fireAccounts.once("value", function (snap) {
+            if(snap.child(`${displayName}`).child('health').exists()) {
+                healthStat = snap.child(`${displayName}`).child('health').val();
+                witStat = snap.child(`${displayName}`).child('wits').val();
+                strengthStat = snap.child(`${displayName}`).child('strength').val();
+                team = snap.child(`${displayName}`).child('prefCity').val()
+                totalPower = 0;
+                $(`#prefTeam option[value=${team}`).prop('selected',true);
+                $("#pointsAvailable").html(`Points Avaialble: ${totalPower}`);
+                $("#displayPowerOne").html(`Health: ${healthStat}`);
+                $("#displayPowerTwo").html(`Strength: ${strengthStat}`);
+                $("#displayPowerThree").html(`Wits: ${witStat}`);
+            }
+            console.log(healthStat);
+            console.log(witStat);
+            console.log(strengthStat);
+            console.log(team);
+        }),
+        function (errorObject) {
+            console.log("Errors handled: " + errorObject.code);
+        }
+
     }else{
         var toastNoAuth = '<span>Please go to the login page and login!</span>';
         M.toast({html: toastNoAuth});
     }
 
 });
-// Setting User's Attributes
-
-var totalPower = 30;
-var healthStat = 0;
-var witStat = 0;
-var strengthStat = 0;
 
 $("#minusBtnHealth").on("click", function () {
     if (totalPower < 30 && totalPower >= 0 && ((healthStat - 1) > 0)) {
@@ -112,7 +134,7 @@ var toastNoTeam = '<span>Please choose a team!</span>';
 var toastNoPower = '<span>Make sure to use all of your power!</span>'
 
 $("#profileBtn").on("click", function () {
-    var team = $('#prefTeam :selected').text();
+    team = $('#prefTeam :selected').text();
     console.log(`Favorite Team: ${team}`);
     console.log(`Health: ${healthStat}`);
     console.log(`Strength: ${strengthStat}`);
