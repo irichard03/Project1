@@ -11,6 +11,7 @@ var config = {
     messagingSenderId: "283963407754"
 };
 //firebase variables
+firebase.initializeApp(config);
 var database = firebase.database();
 var fireChat = database.ref("/chat");
 var fireAccounts = database.ref("accounts/");
@@ -37,7 +38,9 @@ var userDodge = 0; // 1 - (attackerAccuracy/(attackerAccuracy + (defenderWits/10
 var userHealth = 10; //10 * vitality;
 var actionPoints = 999;
 var wits = 10;
-var userAcc = 3.677 - (23/Math.pow((10+wits), 0.7));
+var userAcc = 3.677 - (23 / Math.pow((10 + wits), 0.7));
+var wins;
+var losses;
 var abilities = {
     "kick": {
         damage: baseKick * userStr + Math.round(Math.random() * (userStr * baseKick) / 5),
@@ -58,12 +61,15 @@ var battle = {
         if (actionPoints >= 2) {
             if (roll > battle.evadeCheck(wits, attackType)) {
                 computerHealth = computerHealth - abilities[attackType].damage;
-                if (computerHealth > 0){
-                     callAPI(attackType);
+                if (computerHealth > 0) {
+                    callAPI(attackType);
                 }
                 console.log(`You attacked the computer for ${abilities[attackType].damage} damage!`); //enemyname is placeholder
                 console.log(computerHealth);
-                M.toast({html: `<span>${toast}</span>`, classes: 'rounded'});
+                M.toast({
+                    html: `<span>${toast}</span>`,
+                    classes: 'rounded'
+                });
                 if (computerHealth < 0) {
                     computerHealth = 0;
                     $('#cpuHealth').css('width', '0px');
@@ -75,7 +81,10 @@ var battle = {
                     $('#cpuHealth').css('width', cpuHealthString);
                 }
             } else {
-                M.toast({html:"YOU MISSED!", classes: "rounded"});
+                M.toast({
+                    html: "YOU MISSED!",
+                    classes: "rounded"
+                });
                 console.log(battle.evadeCheck(wits, attackType));
             }
             actionPoints = actionPoints - 2;
@@ -86,7 +95,10 @@ var battle = {
             if (health > 0) {
                 strengthStat = strengthStat + strengthStat * 0.5;
                 witStat = witStat - witStat * 0.5;
-                M.toast({html: "GULP!", classes: "rounded"});
+                M.toast({
+                    html: "GULP!",
+                    classes: "rounded"
+                });
             }
         }
     },
@@ -130,7 +142,7 @@ var battle = {
             console.log(userAcc);
             console.log(userStr);
             return dodgeChance;
-        }else {
+        } else {
             console.log("dogde else: " + dodgeChance);
         }
     },
@@ -142,17 +154,19 @@ firebase.auth().onAuthStateChanged(function (user) {
         console.log('signed in!');
         displayName = user.displayName;
         console.log(user.displayName);
+        var newConnection = database.ref("connections/").push(user.displayName);
+        newConnection.onDisconnect().remove();
         fireAccounts.once("value", function (snap) {
-            userHealth = snap.child(`${displayName}`).child('health').val();
-            console.log(userHealth);
-            userWit = snap.child(`${displayName}`).child('wits').val();
-            console.log(userWit);
-            userStrength = snap.child(`${displayName}`).child('strength').val();
-            console.log(userStrength);
-        }),
-        function (errorObject) {
-            console.log("Errors handled: " + errorObject.code);
-        }
+                userHealth = snap.child(`${displayName}`).child('health').val();
+                console.log(userHealth);
+                userWit = snap.child(`${displayName}`).child('wits').val();
+                console.log(userWit);
+                userStrength = snap.child(`${displayName}`).child('strength').val();
+                console.log(userStrength);
+            }),
+            function (errorObject) {
+                console.log("Errors handled: " + errorObject.code);
+            }
         isAnonymous = user.isAnonymous;
         uid = user.uid;
         $('#nickName').text(displayName);
@@ -194,6 +208,7 @@ function callAPI(buttonClicked) {
         }
     });
 }
+
 function getRandomInt(max) {
     return Math.floor(Math.random() * Math.floor(max));
 }
@@ -202,8 +217,8 @@ $(document).ready(function () {
 
     // set opponent
     $("#cpuNickName").text(localStorage.getItem("opponent"));
-    $("#opponentFightImg").attr("src", localStorage.getItem("image") );
-    $("#opponentFightImg2").attr("src", localStorage.getItem("image") );
+    $("#opponentFightImg").attr("src", localStorage.getItem("image"));
+    $("#opponentFightImg2").attr("src", localStorage.getItem("image"));
 
     console.log(localStorage.getItem("opponent"));
     console.log(localStorage.getItem("image"));
@@ -331,6 +346,97 @@ $(document).ready(function () {
                 $('.main').css('background-image', "url(" + cityImage + ")");
         }
     }
+    function winGame() {
+        //Just bringing the scope of this outside promise function
+        var newDiv;
+        //Promise function to get values of accounts
+        fireAccounts.once("value")
+            .then(function (snap) {
+                wins = snap.child(`${displayName}`).child('wins').val();
+                losses = snap.child(`${displayName}`).child('losses').val();
+                //adding to wins
+                wins++;
+                //setting text for info at game end
+                var endText = `${displayname} you won!  You have ${wins} wins and ${losses} losses!`;
+                $('#winsAndLosses').html(`<p>${endText}<p>`);
+                //wins net is your net wins
+                var winsNet = wins - losses;
+                //update database for player and for topten
+                database.ref(`accounts/${displayName}`).update({
+                    wins: wins,
+                });
+                database.ref(`topten/${displayName}`).update({
+                    winsNet:winsNet,
+                });
+            }),
+            function (errorObject) {
+                console.log("Errors handled: " + errorObject.code);
+            }
+        //Promise function for top ten, getting info from to display
+        var search = database.ref('/topten').orderByChild('winsNet').limitToFirst(10);
+        search.once('value')
+            .then(function (snapshot) {
+            snapshot.forEach(function (childsnap) {
+                var newKey = childsnap.key;
+                var newVal = childsnap.child('winsNet').val()
+                console.log(newKey);
+                console.log(newVal);
+                newDiv = $('<div>');
+                var newP = $('<p>');
+                newP.text(`${newKey}: ${childsnap.child('winsNet').val()} wins!`);
+                newDiv.append(newP);
+                
+            })
+            $('#topTen').html(newDiv);
+        });
+    }
+    function loseGame() {
+        //Just bringing the scope of this outside promise function
+        var newDiv;
+        //Promise function to get values of accounts
+        fireAccounts.once("value")
+            .then(function (snap) {
+                wins = snap.child(`${displayName}`).child('wins').val();
+                losses = snap.child(`${displayName}`).child('losses').val();
+                //adding to losses
+                losses++;
+                //setting info to display at game end
+                var endText = `${displayname} you lost!  You have ${wins} wins and ${losses} losses!`;
+                $('#winsAndLosses').html(`<p>${endText}<p>`);
+                //net wins
+                var winsNet = wins - losses;
+                //update database for wins and net wins, account and top ten
+                database.ref(`accounts/${displayName}`).update({
+                    wins: wins,
+                });
+                database.ref(`topten/${displayName}`).update({
+                    winsNet:winsNet,
+                });
+            }),
+            function (errorObject) {
+                console.log("Errors handled: " + errorObject.code);
+            }
+        //Promise function for top ten to display on game end modal
+        var search = database.ref('/topten').orderByChild('winsNet').limitToFirst(10);
+        search.once('value')
+            .then(function (snapshot) {
+            snapshot.forEach(function (childsnap) {
+                var newKey = childsnap.key;
+                var newVal = childsnap.child('winsNet').val()
+                console.log(newKey);
+                console.log(newVal);
+                newDiv = $('<div>');
+                var newP = $('<p>');
+                newP.text(`${newKey}: ${childsnap.child('winsNet').val()} wins!`);
+                newDiv.append(newP);
+                
+            })
+            $('#topTen').html(newDiv);
+        });
+    }
+
 
     //end of document on ready
-    });
+});
+
+
