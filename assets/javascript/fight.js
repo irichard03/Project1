@@ -302,7 +302,7 @@ $(document).ready(function () {
    
 
     //read local storage and set the background.
-    var myCity = localStorage.getItem("city", opponentCity);
+    var myCity = localStorage.getItem("city");
     console.log("my city is" + myCity);
     getCity(myCity);
 
@@ -357,7 +357,7 @@ $(document).ready(function () {
                 //adding to wins
                 wins++;
                 //setting text for info at game end
-                var endText = `${displayname} you won!  You have ${wins} wins and ${losses} losses!`;
+                var endText = `${displayName} you won!  You have ${wins} wins and ${losses} losses!`;
                 $('#winsAndLosses').html(`<p>${endText}<p>`);
                 //wins net is your net wins
                 var winsNet = wins - losses;
@@ -389,6 +389,7 @@ $(document).ready(function () {
             })
             $('#topTen').html(newDiv);
         });
+        $('#modalEnd').modal('show');
     }
     function loseGame() {
         //Just bringing the scope of this outside promise function
@@ -434,9 +435,10 @@ $(document).ready(function () {
             $('#topTen').html(newDiv);
         });
     }
-
+    winGame();
 
     //end of document on ready
 });
+
 
 
