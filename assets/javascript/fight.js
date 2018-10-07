@@ -20,56 +20,46 @@ var topTen = database.ref("/topten");
 var displayName;
 var isAnonymous;
 var uid;
-var userHealth;
-var userWit;
-var userStrength;
 var baseKick = 5;
 var basePunch = 3.5;
 var baseThrow = 2.25;
 var giphApiKey = "Y3h4ksc22JmMFoYTKH2XUYmRwrnYL8Gd";
-var computerHealth = 200;
-var computerWit = 10;
-var actionPoints = 4;
-var computerActionPoints = 0;
-var userAcc;
 var cityImage;
-
-
-var battleStats = {
-    "playerAbilities": {
-
-    },
-    "playerStats": {
-
-    },
-    "cpuAbilities": {
-        "cpuKick": {
-            damage: baseKick * computerStrength + Math.round(Math.random() * (computerStrength * baseKick) / 5),
-            accuracy: cpuAcc - 0.35
-        },
-        "cpuPunch": {
-            damage: basePunch * computerStrength + Math.round(Math.random() * (computerStrength * baseKick) / 10),
-            accuracy: cpuAcc
-        },
-        "cpuThrow": {
-            damage: baseThrow * computerStrength + Math.round(Math.random() * (computerStrength * baskThrow) / 15),
-            accuracy: cpuAcc + 0.35
-        }
-    },
-    "cpuStats": {
-        health: randomBetween(1, 50 - 3),
-        computerHealth: battleStats[cpuStats].health * 10,
-        strength: randomBetween(1, 50 - 2 - computerHealth),
-        wits: 50 - battleStats[cpuStats].health - battleStats[cpuStats].strength,
-        accuracy: 3.677 - (23 / Math.pow((10 + battleStats[cpuStats].wits), 0.7))
-    }
+var cpuHealth = randomBetween(1, 50 - 3);
+var cpuStrength = randomBetween(1, 50 - 2 - cpuHealth);
+var cpuWits = 50 - cpuHealth - cpuStrength;
+var cpuAcc = 3.677 - (23 / Math.pow((10 + cpuWits), 0.7));
+var parameters = {
+    player: [{
+        "stats": {},
+        "attacks": {}
+    }],
+    cpu: [{
+        stats: [{
+            parsedHealth: cpuHealth * 10,
+            strength: cpuStrength,
+            wits: cpuWits,
+            accuracy: cpuAcc,
+            actionPoints: 0
+        }],
+        attacks: [{
+            "kick": [{
+                damage: baseKick * cpuStrength + Math.round(Math.random() * (cpuStrength * baseKick) / 5),
+                accuracy: cpuAcc - 0.35
+            }],
+            "punch": [{
+                damage: basePunch * cpuStrength + Math.round(Math.random() * (cpuStrength * baseKick) / 10),
+                accuracy: cpuAcc
+            }],
+            "throw": [{
+                damage: baseThrow * cpuStrength + Math.round(Math.random() * (cpuStrength * baseThrow) / 15),
+                accuracy: cpuAcc + 0.35
+            }]
+        }]
+    }],
 };
-var actionPoints = {
-    "user": 4,
-    "cpu": 0
-};
+
 //random computerstats end
-
 M.AutoInit();
 firebase.auth().onAuthStateChanged(function (user) {
     if (user) {
@@ -78,30 +68,30 @@ firebase.auth().onAuthStateChanged(function (user) {
         displayName = user.displayName;
         console.log(user.displayName);
         fireAccounts.once("value", function (snap) {
-                battleStats[playerStats] = {
+                var tempStr = snap.child(`${displayName}`).child('strength').val();
+                var tempAcc = 3.677 - 23 / Math.pow(10 + snap.child(`${displayName}`).child('wits').val(), 0.7);
+                parameters.player.stats = {
                     health: snap.child(`${displayName}`).child('health').val(),
-                    playerHealth: snap.child(`${displayName}`).child('health').val() * 10,
+                    parsedHealth: snap.child(`${displayName}`).child('health').val() * 10,
                     strength: snap.child(`${displayName}`).child('strength').val(),
                     wits: snap.child(`${displayName}`).child('wits').val(),
-                    accuracy: 3.677 - 23 / Math.pow((10 + snap.child(`${displayName}`).child('wits').val(), 0.7))
+                    accuracy: 3.677 - 23 / Math.pow(10 + snap.child(`${displayName}`).child('wits').val(), 0.7),
+                    actionPoints: 999
                 };
-            }).then(function () {
-                userAcc = 
-                battleStats[playerAbilities] = {
+                parameters.player.attacks = {
                     "kick": {
-                        damage: baseKick * battleStats[playerStats].strength + Math.round(Math.random() * (battleStats[playerStats].strength * baseKick) / 5),
-                        accuracy: userAcc - 0.35
+                        damage: baseKick * tempStr + Math.round(Math.random() * (tempStr * baseKick) / 5),
+                        accuracy: tempAcc - 0.35
                     },
                     "punch": {
-                        damage: basePunch * battleStats[playerStats].strength + Math.round(Math.random() * (battleStats[playerStats].strength * basePunch) / 10),
-                        accuracy: userAcc
+                        damage: basePunch * tempStr + Math.round(Math.random() * (tempStr * basePunch) / 10),
+                        accuracy: tempAcc
                     },
                     "throw": {
-                        damage: baseThrow * battleStats[playerStats].strength + Math.round(Math.random() * (battleStats[playerStats].strength * baseThrow) / 15),
-                        accuracy: userAcc + 0.35
+                        damage: baseThrow * tempStr + Math.round(Math.random() * (tempStr * baseThrow) / 15),
+                        accuracy: tempAcc + 0.35
                     }
                 };
-                battleStats[playerStats].push()
             }),
             function (errorObject) {
                 console.log("Errors handled: " + errorObject.code);
@@ -113,33 +103,33 @@ firebase.auth().onAuthStateChanged(function (user) {
 });
 
 var battle = {
-    attack: function (attackType, toast, attacker, target) {
+    attack: function (attacker, attack, defender, toast) {
         var roll = Math.random();
-        if (actionPoints[attacker] >= 2) {
-            if (roll > battle.evadeCheck(target.Wits, attackType)) {
-                target.Health = target.Health - abilities[attackType].damage;
-                console.log(`You attacked the computer for ${abilities[attackType].damage} damage!`); //enemyname is placeholder
+        if (parameters.attacker.stats.actionPoints >= 2) {
+            if (roll > battle.evadeCheck(attacker, attack, defender)) {
+                parameters.defender.stats.parsedHealth -= parameters.attacker.attacks.attack.damage;
+                console.log(`You attacked the computer for ${parameters.attacker.attacks.attack.damage} damage!`); //enemyname is placeholder
                 console.log("Your roll: " + roll);
                 console.log("cpu evade chance: " + battle.evadeCheck(computerWit, attackType));
-                if (computerHealth > 0) {
+                if (parameters.defender.stats.parsedHealth > 0) {
                     callAPI(attackType);
                 }
                 M.toast({
                     html: `<span>${toast}</span>`,
                     classes: 'rounded'
                 });
-                if (computerHealth < 0) {
-                    computerHealth = 0;
+                if (parameters.defender.stats.parsedHealth < 0) {
+                    parameters.defender.stats.parsedHealth = 0;
                     $('#cpuHealth').css('width', '0px');
                     callAPI(1);
                 } else {
-                    let cpuHealthString = computerHealth.toString();
+                    let cpuHealthString = parameters.defender.stats.parsedHealth.toString();
                     cpuHealthString += 'px';
                     console.log(cpuHealthString);
                     $('#cpuHealth').css('width', cpuHealthString);
                 }
             } else {
-                console.log(`You attacked the computer for ${abilities[attackType].damage} damage!`); //enemyname is placeholder
+                console.log(`You attacked the computer for ${parameters.attacker.attacks.attack.damage} damage!`); //enemyname is placeholder
                 console.log("Your roll: " + roll);
                 console.log("cpu evade chance: " + battle.evadeCheck(computerWit, attackType));
 
@@ -147,16 +137,16 @@ var battle = {
                     html: `<span>YOU MISSED!</span>`,
                     classes: "rounded"
                 });
-                console.log(battle.evadeCheck(userWit, attackType));
+                console.log(battle.evadeCheck(attacker, attack, defender));
             }
-            actionPoints = actionPoints - 2;
+            parameters.attacker.stats.actionPoints -= 2;
         }
     },
-    drink: function () {
-        if (actionPoints >= 2) {
+    drink: function (caster) {
+        if (parameters[caster].stats.actionPoints >= 2) {
             if (health > 0) {
-                strengthStat = strengthStat + strengthStat * 0.5;
-                witStat = witStat - witStat * 0.5;
+                parameters.caster.strength = parameters.caster.strength + parameters.caster.strength * 0.5;
+                parameters.caster.wits = parameters.caster.wits - parameters.caster.wits * 0.5;
                 M.toast({
                     html: `<span>GULP!</span>`,
                     classes: "rounded"
@@ -164,25 +154,25 @@ var battle = {
             }
         }
     },
-    moveLeft: function () {
-        if (actionPoints >= 1) {
+    moveLeft: function (caster) {
+        if (parameters[caster].stats.actionPoints >= 1) {
             $('.playerFighter').css("float", "left").attr("data-position", "left");
             actionPoints--;
         }
     },
-    moveRight: function () {
-        if (actionPoints >= 1) {
+    moveRight: function (caster) {
+        if (parameters[caster].stats.actionPoints >= 1) {
             $('.playerFighter').css("float", "right").attr("data-position", "right");
             actionPoints--;
         }
     },
-    evadeCheck: function (wits, attackType) {
-        var dodgeChance = 1 - (abilities[attackType].accuracy / (abilities[attackType].accuracy + Math.pow((wits / 100), 0.985)));
+    evadeCheck: function (attacker, attack, defender) {
+        var dodgeChance = 1 - (parameters[attacker].attacks[attack].accuracy / (parameters[attacker].attacks[attack].accuracy + Math.pow((parameters[defender].stats.wits / 100), 0.985)));
         if ((typeof dodgeChance) === "number" && isNaN(dodgeChance) === false) {
             return dodgeChance;
         } else {
             console.log("dodgeChance: " + dodgeChance);
-            console.log(abilities);
+            console.log(parameters[attacker].attacks);
         }
     },
 };
@@ -208,7 +198,6 @@ function callAPI(buttonClicked) {
                     $('.displayBox').css('visibility', 'hidden');
                 }, 20000);
             } else {
-
                 $('.displayBox').append(`<img src="${response.data[x].images.original.url}" width="360px" height="360px">`);
                 setTimeout(function () {
                     $('.displayBox').empty();
@@ -226,7 +215,7 @@ function getRandomInt(max) {
 }
 
 function computerChoice() {
-    
+
 }
 //Randomly generating computer Stats
 function randomBetween(min, max) {
@@ -250,7 +239,7 @@ $(document).ready(function () {
         switch (action) {
             case "punch":
                 if ($(".playerFighter").attr("data-position") === "right" && $(".cpuFighter").attr("data-position") === "left") {
-                    battle.attack("punch", "POW!");
+                    battle.attack("player", "punch", "cpu", "POW!");
                 } else {
                     M.toast({
                         html: "<span>You are too far away!</span>",
@@ -260,7 +249,7 @@ $(document).ready(function () {
                 break;
             case "kick":
                 if ($(".playerFighter").attr("data-position") === "right" && $(".cpuFighter").attr("data-position") === "left") {
-                    battle.attack("kick", "SNIKT!");
+                    battle.attack("player", "kick", "cpu", "SNIKT!");
                 } else {
                     M.toast({
                         html: "<span>You are too far away!</span>",
@@ -269,26 +258,23 @@ $(document).ready(function () {
                 }
                 break;
             case "throw":
-                battle.attack("throw", "BANG!");
+                battle.attack("player", "throw", "cpu", "BANG!");
                 break;
             case "drink":
-                battle.drink();
+                battle.drink("player");
                 break;
             case "left":
-                battle.moveLeft();
+                battle.moveLeft("player");
                 break;
             case "right":
-                battle.moveRight();
-                break;
-            case "guard":
-                battle.guard();
+                battle.moveRight("player");
                 break;
         }
     });
-    if (actionPoints === 0) {
-        computerActionPoints = 4;
+    if (parameters.player.stats.actionPoints === 0) {
+        parameters.cpu.stats.actionPoints = 4;
     }
-    if (computerActionPoints !== 0) {
+    if (parameters.cpu.stats.actionPoints !== 0) {
 
     }
 }); //end of document on ready
