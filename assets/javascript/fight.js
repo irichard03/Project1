@@ -284,9 +284,9 @@ $(document).ready(function () {
     }
 
 
-    //TODObutton Functions to modify computer bars
+    //button Functions to modify computer bars
     $('.playerPunch').click(function () {
-        callAPI("DOGS");
+        callAPI("Punch");
         computerHealth = computerHealth - damagePlaceHolder;
         console.log(computerHealth);
         if (computerHealth < 0) {
@@ -301,13 +301,52 @@ $(document).ready(function () {
         }
 
     });
-    //ToDo Function Player Punch
 
-    //TODObutton Functions to modify cpu bars
+    //read local storage and set the background.
+    var myCity = localStorage.getItem("city", opponentCity);
+    console.log("my city is" + myCity);
+    getCity(myCity);
 
-    //ToDo Function for player winning, should increment wins and display gif.
-
+    //set background based on city passed into it.
+    function getCity(myCity){
+        switch(myCity) {
+            case "Houston":
+                var cityImage = "assets/images/Astrodome.jpg";
+                $('.main').css('background-image', "url(" + cityImage + ")");
+                break;
+            case "Seattle":
+                var cityImage = "assets/images/Seattle.jpg";
+                $('.main').css('background-image', "url(" + cityImage + ")");
+                break;
+            case "Buffalo":
+                var cityImage = "assets/images/Buffalo.jpg";
+                $('.main').css('background-image', "url(" + cityImage + ")");
+                break;
+            case "Miami":
+                var cityImage = "assets/images/Miami.jpg";
+                $('.main').css('background-image', "url(" + cityImage + ")");
+                break; 
+            case "Philadelphia":
+                var cityImage = "assets/images/Philadelphia.jpg";
+                $('.main').css('background-image', "url(" + cityImage + ")");
+                break;   
+            case "Boston":
+                var cityImage = "assets/images/Boston.jpg";
+                $('.main').css('background-image', "url(" + cityImage + ")");
+                break;  
+            case "Atlanta":
+                var cityImage = "assets/images/Atlanta.jpg";
+                $('.main').css('background-image', "url(" + cityImage + ")");
+                break; 
+            case "Dallas":
+                var cityImage = "assets/images/Dallas.jpg";
+                $('.main').css('background-image', "url(" + cityImage + ")");
+                break;      
+            default:
+                var cityImage = "assets/images/Astrodome.jpg";
+                $('.main').css('background-image', "url(" + cityImage + ")");
+        }
+    }
 
     //end of document on ready
-//ignore, math testing
     });
