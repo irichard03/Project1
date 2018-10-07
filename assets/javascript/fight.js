@@ -156,7 +156,8 @@ firebase.auth().onAuthStateChanged(function (user) {
         console.log(user.displayName);
         var newConnection = database.ref("connections/").push(user.displayName);
         newConnection.onDisconnect().remove();
-        fireAccounts.once("value", function (snap) {
+        fireAccounts.once("value")
+            .then(function (snap) {
                 userHealth = snap.child(`${displayName}`).child('health').val();
                 console.log(userHealth);
                 userWit = snap.child(`${displayName}`).child('wits').val();
@@ -286,13 +287,6 @@ $(document).ready(function () {
             }
         });
     }
-
-    //
-  
-
-
-
-
     //random function for giphs.
     function getRandomInt(max) {
         return Math.floor(Math.random() * Math.floor(max));
@@ -389,7 +383,7 @@ $(document).ready(function () {
             })
             $('#topTen').html(newDiv);
         });
-        $('#modalEnd').modal('show');
+        
     }
     function loseGame() {
         //Just bringing the scope of this outside promise function
@@ -433,6 +427,7 @@ $(document).ready(function () {
                 
             })
             $('#topTen').html(newDiv);
+            $('#modalEnd').modal();
         });
     }
     winGame();
