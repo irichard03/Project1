@@ -19,7 +19,7 @@ var displayName;
 var isAnonymous;
 var uid;
 // Setting User's Attributes
-var totalPower = 30;
+var totalPower = 50;
 var healthStat = 0;
 var witStat = 0;
 var strengthStat = 0;
@@ -69,7 +69,7 @@ firebase.auth().onAuthStateChanged(function (user) {
 });
 
 $("#minusBtnHealth").on("click", function () {
-    if (totalPower < 30 && totalPower >= 0 && ((healthStat - 1) > 0)) {
+    if (totalPower < 50 && totalPower >= 0 && ((healthStat - 1) > 0)) {
         healthStat--;
         totalPower++;
         $("#displayPowerOne").html(`Health: ${healthStat}`);
@@ -78,7 +78,7 @@ $("#minusBtnHealth").on("click", function () {
 });
 
 $("#plusBtnHealth").on("click", function () {
-    if (totalPower <= 30 && totalPower > 0) {
+    if (totalPower <= 50 && totalPower > 0) {
         healthStat++;
         totalPower--;
         $("#displayPowerOne").html(`Health: ${healthStat}`);
@@ -86,7 +86,7 @@ $("#plusBtnHealth").on("click", function () {
     }
 });
 $("#minusBtnStrength").on("click", function () {
-    if (totalPower < 30 && totalPower >= 0 && ((strengthStat - 1) > 0)) {
+    if (totalPower < 50 && totalPower >= 0 && ((strengthStat - 1) > 0)) {
         strengthStat--;
         totalPower++;
         $("#displayPowerTwo").html(`Strength: ${strengthStat}`);
@@ -95,7 +95,7 @@ $("#minusBtnStrength").on("click", function () {
 });
 
 $("#plusBtnStrength").on("click", function () {
-    if (totalPower <= 30 && totalPower > 0) {
+    if (totalPower <= 50 && totalPower > 0) {
         strengthStat++;
         totalPower--;
         $("#displayPowerTwo").html(`Strength: ${strengthStat}`);
@@ -103,7 +103,7 @@ $("#plusBtnStrength").on("click", function () {
     }
 });
 $("#minusBtnWits").on("click", function () {
-    if (totalPower < 30 && totalPower >= 0 && ((hwitStat - 1) > 0)) {
+    if (totalPower < 50 && totalPower >= 0 && ((hwitStat - 1) > 0)) {
         witStat--;
         totalPower++;
         $("#displayPowerThree").html(`Wits: ${witStat}`);
@@ -112,7 +112,7 @@ $("#minusBtnWits").on("click", function () {
 });
 
 $("#plusBtnWits").on("click", function () {
-    if (totalPower <= 30 && totalPower > 0) {
+    if (totalPower <= 50 && totalPower > 0) {
         witStat++;
         totalPower--;
         $("#displayPowerThree").html(`Wits: ${witStat}`);
@@ -120,10 +120,10 @@ $("#plusBtnWits").on("click", function () {
     }
 });
 function powerDisplay(stat, display, direction, name) {
-    if (totalPower <= 30 && totalPower > 0 && direction.indexOf("plus") !== -1) {
+    if (totalPower <= 50 && totalPower > 0 && direction.indexOf("plus") !== -1) {
         stat++;
         totalPower--;
-    } else if (totalPower < 30 && totalPower >= 0 && direction.indexOf("minus") !== -1) {
+    } else if (totalPower < 50 && totalPower >= 0 && direction.indexOf("minus") !== -1) {
         stat--;
         totalPower++;
     }
