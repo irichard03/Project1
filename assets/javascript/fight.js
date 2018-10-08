@@ -21,6 +21,7 @@ var displayName;
 var isAnonymous;
 var uid;
 //combat variables
+var cpuTurn = false;
 var tempAcc;
 var opponentName = localStorage.getItem("opponent");
 var baseKick = 5;
@@ -296,10 +297,14 @@ function randomBetween(min, max) {
 }
 
 function checkTurn() {
-    if (parameters.player.stats.actionPoints === 0) {
-        computerChoice();
-    } else if (parameters.cpu.stats.actionPoints === 0) {
+    if (parameters.player.stats.actionPoints === 0 && cpuTurn === false) {
+        parameters.cpu.stats.actionPoints = 4;
+        cpuTurn = true;
+    } else if (parameters.cpu.stats.actionPoints === 0 && cpuTurn === false) {
         parameters.player.stats.actionPoints = 4;
+        cpuTurn = false;
+    } else if (parameters.cpu.stats.actionPoints > 0 && cpuTurn === true){
+        computerChoice();
     }
 }
 
@@ -308,7 +313,6 @@ function computerChoice() {
     var humanEvadePunch = battle.evadeCheck("cpu", "punch", "player");
     var kickDPS = (1 - humanEvadeKick) * parameters.cpu.attacks.kick.damage;
     var punchDPS = (1 - humanEvadePunch) * parameters.cpu.attacks.punch.damage;
-    parameters.cpu.stats.actionPoints = 4;
     while (parameters.cpu.stats.actionPoints > 0) {
         if ($(".playerFighter").attr("data-position") === "left") {
             setTimeout(battle.attack("cpu", "throw", "player", "BANG!"), 3500);
