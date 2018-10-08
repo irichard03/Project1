@@ -529,7 +529,7 @@ function loseGame() {
                 newP.text(`${newKey}: ${childsnap.child('winsNet').val()} wins!`);
                 $('#topTen').prepend(newP);
             });
-            //endmodal();
+            endmodal();
         });
 }
 //function to display custom end modal style is controlled in css, does not disappear, only option is to pick another opponent.
