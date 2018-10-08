@@ -506,13 +506,13 @@ $(document).ready(function () {
             .then(function (snapshot) {
                 snapshot.forEach(function (childsnap) {
                     var newKey = childsnap.key;
-                    var newVal = childsnap.child('winsNet').val()
+                    var newVal = childsnap.child('winsNet').val();
                     console.log(newKey);
                     console.log(newVal);
                     //(`${newKey}: ${childsnap.child('winsNet').val()} wins!`);
                     $('#tableTopTen').prepend(`"<tr><td>${newKey}</td><td>${childsnap.child('winsNet').val()}</td></tr>"`);
 
-                })
+                });
                 endModal();
             });
 
@@ -545,21 +545,21 @@ $(document).ready(function () {
             }),
             function (errorObject) {
                 console.log("Errors handled: " + errorObject.code);
-            }
+            };
         //Promise function for top ten to display on game end modal
         var search = database.ref('/topten').orderByChild('winsNet').limitToFirst(10);
         search.once('value')
             .then(function (snapshot) {
                 snapshot.forEach(function (childsnap) {
                     var newKey = childsnap.key;
-                    var newVal = childsnap.child('winsNet').val()
+                    var newVal = childsnap.child('winsNet').val();
                     console.log(newKey);
                     console.log(newVal);
                     var newP = $('<p>');
                     newP.text(`${newKey}: ${childsnap.child('winsNet').val()} wins!`);
                     $('#topTen').prepend(newP);
 
-                })
+                });
                 endmodal();
             });
 

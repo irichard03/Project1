@@ -44,7 +44,7 @@ firebase.auth().onAuthStateChanged(function (user) {
                 healthStat = snap.child(`${displayName}`).child('health').val();
                 witStat = snap.child(`${displayName}`).child('wits').val();
                 strengthStat = snap.child(`${displayName}`).child('strength').val();
-                team = snap.child(`${displayName}`).child('prefCity').val()
+                team = snap.child(`${displayName}`).child('prefCity').val();
                 totalPower = 0;
                 $(`#prefTeam option[value=${team}`).prop('selected',true);
                 $("#pointsAvailable").html(`Points Avaialble: ${totalPower}`);
@@ -59,7 +59,7 @@ firebase.auth().onAuthStateChanged(function (user) {
         }),
         function (errorObject) {
             console.log("Errors handled: " + errorObject.code);
-        }
+        };
 
     }else{
         var toastNoAuth = '<span>Please go to the login page and login!</span>';
@@ -132,7 +132,7 @@ function powerDisplay(stat, display, direction, name) {
     console.log(stat);
 }
 var toastNoTeam = '<span>Please choose a team!</span>';
-var toastNoPower = '<span>Make sure to use all of your power!</span>'
+var toastNoPower = '<span>Make sure to use all of your power!</span>';
 
 $("#profileBtn").on("click", function () {
     team = $('#prefTeam :selected').text();
