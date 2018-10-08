@@ -349,6 +349,9 @@ $(document).ready(function () {
             .then(function (snap) {
                 wins = snap.child(`${displayName}`).child('wins').val();
                 losses = snap.child(`${displayName}`).child('losses').val();
+                if(!losses) {
+                    losses = 0;
+                }
                 //adding to wins
                 wins++;
                 //setting text for info at game end
@@ -376,9 +379,8 @@ $(document).ready(function () {
                 var newVal = childsnap.child('winsNet').val()
                 console.log(newKey);
                 console.log(newVal);
-                var newP = $('<p>');
-                newP.text(`${newKey}: ${childsnap.child('winsNet').val()} wins!`);
-                $('#topTen').prepend(newP);
+                //(`${newKey}: ${childsnap.child('winsNet').val()} wins!`);
+                $('#tableTopTen').prepend(`"<tr><td>${newKey}</td><td>${childsnap.child('winsNet').val()}</td></tr>"`);
                 
             })
             endModal();
@@ -437,32 +439,11 @@ $(document).ready(function () {
         console.log("end modal called");
         var modal = $('#endModal');
         modal.css("display", "block");
-        buildTable();
     }
     //end of endmodal function
 
-    function buildTable(){
-        topTen.once("value", function (snapshot) {
-            var latestSnapshot = snapshot.val();
-            for(var iterator in latestSnapshot){
-                var x = latestSnapshot[iterator].key
-                console.log(x);
-                $('#topTen').prepend(`"<p>Player ${x} has a net win loss record of: ${latestSnapshot[iterator].winsNet}</p>"`);
-                console.log(latestSnapshot);
-            }
-            
-        });
-    }
-
-    
-
-
     //uncomment below to test end modal dsiplay see style.css line #300 to configure.
-<<<<<<< HEAD
-    endModal();
-=======
-   // winGame();
->>>>>>> 8828fee3b738d9a7e1b647013bb7a21d751e29b5
+    //winGame();
     //end of document on ready
 });
 
