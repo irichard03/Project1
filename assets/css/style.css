@@ -328,3 +328,14 @@ h7 {
     
     
     
+#selectOpponentText{
+    font-weight: 900;
+    margin: auto;
+    width: 40%;
+    padding-bottom: 25px;
+    padding-top: 25px;
+}
+
+#loginContainer{
+    margin-top: 15%;
+}
