@@ -156,7 +156,8 @@ firebase.auth().onAuthStateChanged(function (user) {
         console.log(user.displayName);
         var newConnection = database.ref("connections/").push(user.displayName);
         newConnection.onDisconnect().remove();
-        fireAccounts.once("value", function (snap) {
+        fireAccounts.once("value")
+            .then(function (snap) {
                 userHealth = snap.child(`${displayName}`).child('health').val();
                 console.log(userHealth);
                 userWit = snap.child(`${displayName}`).child('wits').val();
@@ -286,13 +287,6 @@ $(document).ready(function () {
             }
         });
     }
-
-    //
-  
-
-
-
-
     //random function for giphs.
     function getRandomInt(max) {
         return Math.floor(Math.random() * Math.floor(max));
@@ -348,9 +342,8 @@ $(document).ready(function () {
     }
     
     function winGame() {
-        console.log("winGame Called");
-        //Just bringing the scope of this outside promise function
-        var newDiv;
+        $('#topTen').empty();
+        $('#windAndLosses').empty();
         //Promise function to get values of accounts
         fireAccounts.once("value")
             .then(function (snap) {
@@ -383,20 +376,20 @@ $(document).ready(function () {
                 var newVal = childsnap.child('winsNet').val()
                 console.log(newKey);
                 console.log(newVal);
-                newDiv = $('<div>');
                 var newP = $('<p>');
                 newP.text(`${newKey}: ${childsnap.child('winsNet').val()} wins!`);
-                newDiv.append(newP);
+                $('#topTen').prepend(newP);
                 
             })
-            $('#topTen').html(newDiv);
+            endModal();
         });
-        //call to end game, endModalmodal will only give ption to play again.
-        endModal();
+
+        //call to end game, endModalmodal will only give option to play again.
+     //   endModal();
     }
     function loseGame() {
-        //Just bringing the scope of this outside promise function
-        var newDiv;
+        $('#topTen').empty();
+        $('#windAndLosses').empty();
         //Promise function to get values of accounts
         fireAccounts.once("value")
             .then(function (snap) {
@@ -429,18 +422,16 @@ $(document).ready(function () {
                 var newVal = childsnap.child('winsNet').val()
                 console.log(newKey);
                 console.log(newVal);
-                newDiv = $('<div>');
                 var newP = $('<p>');
                 newP.text(`${newKey}: ${childsnap.child('winsNet').val()} wins!`);
-                newDiv.append(newP);
+                $('#topTen').prepend(newP);
                 
             })
-            $('#topTen').html(newDiv);
+            endmodal();
         });
 
         
     }
-
     //function to display custom end modal style is controlled in css, does not disappear, only option is to pick another opponent.
     function endModal(){
         console.log("end modal called");
@@ -467,7 +458,11 @@ $(document).ready(function () {
 
 
     //uncomment below to test end modal dsiplay see style.css line #300 to configure.
+<<<<<<< HEAD
     endModal();
+=======
+   // winGame();
+>>>>>>> 8828fee3b738d9a7e1b647013bb7a21d751e29b5
     //end of document on ready
 });
 

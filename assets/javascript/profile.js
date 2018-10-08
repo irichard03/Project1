@@ -38,7 +38,8 @@ firebase.auth().onAuthStateChanged(function (user) {
         $("#profileNavBtn").removeClass("disabled");
         var newConnection = database.ref("connections/").push(user.displayName);
         newConnection.onDisconnect().remove();
-        fireAccounts.once("value", function (snap) {
+        fireAccounts.once("value")
+        .then(function (snap) {
             if(snap.child(`${displayName}`).child('health').exists()) {
                 healthStat = snap.child(`${displayName}`).child('health').val();
                 witStat = snap.child(`${displayName}`).child('wits').val();
@@ -153,9 +154,8 @@ $("#profileBtn").on("click", function () {
             wits: witStat,
             prefCity: team,
         });
-        
+        location.replace("opponent.html");
     }
-    location.replace("opponent.html");
 });
 
 
