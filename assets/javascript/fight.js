@@ -235,6 +235,12 @@ var battle = {
         }
     },
 };
+//Audio Playlist
+var playlist = ["./assets/audio/music1.mp3",
+"./assets/audio/music2.mp3",
+"./assets/audio/music3.mp3",
+"./assets/audio/music4.mp3",
+"./assets/audio/music5.mp3"];
 //Giphy call pass in string to change search parameter for gif results.
 function callAPI(buttonClicked) {
     $('.displayBox').css('visibility', 'visible');
@@ -357,6 +363,7 @@ $(document).ready(function () {
                 case "punch":
                     if ($(".playerFighter").attr("data-position") === "right" && $(".cpuFighter").attr("data-position") === "left") {
                         battle.attack("player", "punch", "cpu", "POW!");
+                        kickPunchSound.play();
                     } else {
                         M.toast({
                             html: "<span>You are too far away!</span>",
@@ -367,6 +374,7 @@ $(document).ready(function () {
                 case "kick":
                     if ($(".playerFighter").attr("data-position") === "right" && $(".cpuFighter").attr("data-position") === "left") {
                         battle.attack("player", "kick", "cpu", "SNIKT!");
+                        kickPunchSound.play();
                     } else {
                         M.toast({
                             html: "<span>You are too far away!</span>",
@@ -376,15 +384,19 @@ $(document).ready(function () {
                     break;
                 case "throw":
                     battle.attack("player", "throw", "cpu", "BANG!");
+                    throwSound.play();
                     break;
                 case "drink":
                     battle.drink("player");
+                    beerSound.play();
                     break;
                 case "left":
                     battle.moveLeft("player");
+                    stepSound.play();
                     break;
                 case "right":
                     battle.moveRight("player");
+                    stepSound.play();
                     break;
             }
         } else if (user === "cpu") {
@@ -392,21 +404,26 @@ $(document).ready(function () {
                 case "punch":
                     if ($(".playerFighter").attr("data-position") === "right" && $(".cpuFighter").attr("data-position") === "left") {
                         battle.attack("cpu", "punch", "player", "POW!");
+                        kickPunchSound.play();
                     }
                     break;
                 case "kick":
                     if ($(".playerFighter").attr("data-position") === "right" && $(".cpuFighter").attr("data-position") === "left") {
                         battle.attack("cpu", "kick", "player", "SNIKT!");
+                        kickPunchSound.play();
                     }
                     break;
                 case "throw":
                     battle.attack("cpu", "throw", "player", "BANG!");
+                    throwSound.play();
                     break;
                 case "drink":
                     battle.drink("cpu");
+                    kickPunchSound.play();
                     break;
                 case "left":
                     battle.moveLeft("cpu");
+                    stepSound.play();
                     M.toast({
                         html: `<span>${opponentName} moved forwards!</span>`,
                         classes: "rounded"
@@ -414,6 +431,7 @@ $(document).ready(function () {
                     break;
                 case "right":
                     battle.moveRight("cpu");
+                    stepSound.play();
                     M.toast({
                         html: `<span>${opponentName} moved backwards!</span>`,
                         classes: "rounded"
@@ -572,13 +590,56 @@ $(document).ready(function () {
         modal.css("display", "block");
     }
     //end of endmodal function
-
-    //uncomment below to test end modal dsiplay see style.css line #300 to configure.
-    //winGame();
-    //end of document on ready
+    //Audio
+    function sound(src) {
+        this.sound = document.createElement("audio");
+        this.sound.src = src;
+        this.sound.setAttribute("preload", "auto");
+        this.sound.setAttribute("controls", "none");
+        this.sound.style.display = "none";
+        document.body.appendChild(this.sound);
+        this.play = function(){
+            this.sound.play();
+        }
+        this.stop = function(){
+            this.sound.pause();
+        }
+    }
+    var loginSound = new sound ("./assets/audio/login.wav");
+    var happySound = new sound ("./assets/audio/happysound.wav");
+    var happySound2 = new sound ("./assets/audio/happysound2.wav");
+    var beerSound = new sound ("./assets/audio/beer.wav");
+    var winSound = new sound ("./assets/audio/gameWin.wav");
+    var loseSound = new sound ("./assets/audio/gameLose.wav");
+    var kickPunchSound = new sound ("./assets/audio/kickpunch.wav");
+    var stepSound = new sound ("./assets/audio/step.wav");
+    var throwSound = new sound ("./assets/audio/throw.wav");
+    //Music playlist loop
+    function bgAudio() {
+        var playlist_index;
+        playlist_index = 0;
+        audio = new Audio();
+        audio.src = playlist[0];
+        audio.loop = false;
+        audio.volume = 0.25;
+        audio.play();
+        audio.addEventListener('ended', function() {
+            switchTrack();
+        });
+        function switchTrack() {
+            if(playlist_index == (playlist.length -1)) {
+                playlist_index = 0;
+            }
+            else {
+                playlist_index++;
+            }
+            audio.src = playlist[playlist_index];
+            audio.play();
+        }
+    }
 });
 
 
 //uncomment below to test end modal dsiplay see style.css line #300 to configure.
-//endModal();
+
 //end of document on ready
