@@ -457,16 +457,18 @@ $(document).ready(function () {
                 $('.main').css('background-image', "url(" + cityImage + ")");
         }
     }
-
+    
     function winGame() {
-        console.log("winGame Called");
-        //Just bringing the scope of this outside promise function
-        var newDiv;
+        $('#topTen').empty();
+        $('#windAndLosses').empty();
         //Promise function to get values of accounts
         fireAccounts.once("value")
             .then(function (snap) {
                 wins = snap.child(`${displayName}`).child('wins').val();
                 losses = snap.child(`${displayName}`).child('losses').val();
+                if(!losses) {
+                    losses = 0;
+                }
                 //adding to wins
                 wins++;
                 //setting text for info at game end
@@ -489,28 +491,25 @@ $(document).ready(function () {
         var search = database.ref('/topten').orderByChild('winsNet').limitToFirst(10);
         search.once('value')
             .then(function (snapshot) {
-                snapshot.forEach(function (childsnap) {
-                    var newKey = childsnap.key;
-                    var newVal = childsnap.child('winsNet').val();
-                    console.log(newKey);
-                    console.log(newVal);
-                    newDiv = $('<div>');
-                    var newP = $('<p>');
-                    newP.text(`${newKey}: ${childsnap.child('winsNet').val()} wins!`);
-                    newDiv.append(newP);
+            snapshot.forEach(function (childsnap) {
+                var newKey = childsnap.key;
+                var newVal = childsnap.child('winsNet').val()
+                console.log(newKey);
+                console.log(newVal);
+                //(`${newKey}: ${childsnap.child('winsNet').val()} wins!`);
+                $('#tableTopTen').prepend(`"<tr><td>${newKey}</td><td>${childsnap.child('winsNet').val()}</td></tr>"`);
+                
+            })
+            endModal();
+        });
 
-                });
-                $('#topTen').html(newDiv);
-            });
-
-        //call to end game, endModalmodal will only give ption to play again.
-        endModal();
-
+        //call to end game, endModalmodal will only give option to play again.
+     //   endModal();
     }
 
     function loseGame() {
-        //Just bringing the scope of this outside promise function
-        var newDiv;
+        $('#topTen').empty();
+        $('#windAndLosses').empty();
         //Promise function to get values of accounts
         fireAccounts.once("value")
             .then(function (snap) {
@@ -538,27 +537,32 @@ $(document).ready(function () {
         var search = database.ref('/topten').orderByChild('winsNet').limitToFirst(10);
         search.once('value')
             .then(function (snapshot) {
-                snapshot.forEach(function (childsnap) {
-                    var newKey = childsnap.key;
-                    var newVal = childsnap.child('winsNet').val();
-                    console.log(newKey);
-                    console.log(newVal);
-                    newDiv = $('<div>');
-                    var newP = $('<p>');
-                    newP.text(`${newKey}: ${childsnap.child('winsNet').val()} wins!`);
-                    newDiv.append(newP);
-                });
-                $('#topTen').html(newDiv);
-                $('#modalEnd').modal();
-            });
-    }
+            snapshot.forEach(function (childsnap) {
+                var newKey = childsnap.key;
+                var newVal = childsnap.child('winsNet').val()
+                console.log(newKey);
+                console.log(newVal);
+                var newP = $('<p>');
+                newP.text(`${newKey}: ${childsnap.child('winsNet').val()} wins!`);
+                $('#topTen').prepend(newP);
+                
+            })
+            endmodal();
+        });
 
+        
+    }
     //function to display custom end modal style is controlled in css, does not disappear, only option is to pick another opponent.
     function endModal() {
         console.log("end modal called");
         var modal = $('#endModal');
         modal.css("display", "block");
     }
+    //end of endmodal function
+
+    //uncomment below to test end modal dsiplay see style.css line #300 to configure.
+    //winGame();
+    //end of document on ready
 });
 
 
