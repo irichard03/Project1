@@ -222,7 +222,7 @@ var battle = {
                 checkTurn();
             }
         }
-    checkTurn();
+        checkTurn();
     },
     evadeCheck: function (attacker, attack, defender) {
         var dodgeChance = 1 - (parameters[attacker].attacks[attack].accuracy / (parameters[attacker].attacks[attack].accuracy + Math.pow((parameters[defender].stats.wits / 100), 0.985)));
@@ -294,13 +294,15 @@ function getRandomInt(max) {
 function randomBetween(min, max) {
     return Math.floor(Math.random() * (max - min + 1) + min);
 }
+
 function checkTurn() {
     if (parameters.player.stats.actionPoints === 0) {
         computerChoice();
-    } else if (parameters.cpu.stats.actionPoints === 0){
+    } else if (parameters.cpu.stats.actionPoints === 0) {
         parameters.player.stats.actionPoints = 4;
     }
 }
+
 function computerChoice() {
     var humanEvadeKick = battle.evadeCheck("cpu", "kick", "player");
     var humanEvadePunch = battle.evadeCheck("cpu", "punch", "player");
@@ -318,7 +320,7 @@ function computerChoice() {
             } else if (kickDPS > punchDPS) {
                 setTimeout(battle.attack("cpu", "kick", "player", "POW!"), 3500);
             }
-        }else{
+        } else {
             console.log("Failed");
             parameters.cpu.stats.actionPoints = 0;
         }
@@ -410,154 +412,155 @@ $(document).ready(function () {
             }
         }
     });
+    //random function for giphs.
+    //read local storage and set the background.
+    var myCity = localStorage.getItem("city");
+    //console.log("my city is" + myCity);
+    getCity(myCity);
+    //set background based on city passed into it.
+    function getCity(myCity) {
+        switch (myCity) {
+            case "Houston":
+                cityImage = "assets/images/Astrodome.jpg";
+                $('.main').css('background-image', "url(" + cityImage + ")");
+                break;
+            case "Seattle":
+                cityImage = "assets/images/Seattle.jpg";
+                $('.main').css('background-image', "url(" + cityImage + ")");
+                break;
+            case "Buffalo":
+                cityImage = "assets/images/Buffalo.jpg";
+                $('.main').css('background-image', "url(" + cityImage + ")");
+                break;
+            case "Miami":
+                cityImage = "assets/images/Miami.jpg";
+                $('.main').css('background-image', "url(" + cityImage + ")");
+                break;
+            case "Philadelphia":
+                cityImage = "assets/images/Philadelphia.jpg";
+                $('.main').css('background-image', "url(" + cityImage + ")");
+                break;
+            case "Boston":
+                cityImage = "assets/images/Boston.jpg";
+                $('.main').css('background-image', "url(" + cityImage + ")");
+                break;
+            case "Atlanta":
+                cityImage = "assets/images/Atlanta.jpg";
+                $('.main').css('background-image', "url(" + cityImage + ")");
+                break;
+            case "Dallas":
+                cityImage = "assets/images/Dallas.jpg";
+                $('.main').css('background-image', "url(" + cityImage + ")");
+                break;
+            default:
+                cityImage = "assets/images/Astrodome.jpg";
+                $('.main').css('background-image', "url(" + cityImage + ")");
+        }
+    }
+
+    function winGame() {
+        console.log("winGame Called");
+        //Just bringing the scope of this outside promise function
+        var newDiv;
+        //Promise function to get values of accounts
+        fireAccounts.once("value")
+            .then(function (snap) {
+                wins = snap.child(`${displayName}`).child('wins').val();
+                losses = snap.child(`${displayName}`).child('losses').val();
+                //adding to wins
+                wins++;
+                //setting text for info at game end
+                var endText = `${displayName} you won!  You have ${wins} wins and ${losses} losses!`;
+                $('#winsAndLosses').html(`<p>${endText}<p>`);
+                //wins net is your net wins
+                var winsNet = wins - losses;
+                //update database for player and for topten
+                database.ref(`accounts/${displayName}`).update({
+                    wins: wins,
+                });
+                database.ref(`topten/${displayName}`).update({
+                    winsNet: winsNet,
+                });
+            }),
+            function (errorObject) {
+                console.log("Errors handled: " + errorObject.code);
+            };
+        //Promise function for top ten, getting info from to display
+        var search = database.ref('/topten').orderByChild('winsNet').limitToFirst(10);
+        search.once('value')
+            .then(function (snapshot) {
+                snapshot.forEach(function (childsnap) {
+                    var newKey = childsnap.key;
+                    var newVal = childsnap.child('winsNet').val();
+                    console.log(newKey);
+                    console.log(newVal);
+                    newDiv = $('<div>');
+                    var newP = $('<p>');
+                    newP.text(`${newKey}: ${childsnap.child('winsNet').val()} wins!`);
+                    newDiv.append(newP);
+
+                });
+                $('#topTen').html(newDiv);
+            });
+
+        //call to end game, endModalmodal will only give ption to play again.
+        endModal();
+
+    }
+
+    function loseGame() {
+        //Just bringing the scope of this outside promise function
+        var newDiv;
+        //Promise function to get values of accounts
+        fireAccounts.once("value")
+            .then(function (snap) {
+                wins = snap.child(`${displayName}`).child('wins').val();
+                losses = snap.child(`${displayName}`).child('losses').val();
+                //adding to losses
+                losses++;
+                //setting info to display at game end
+                var endText = `${displayname} you lost!  You have ${wins} wins and ${losses} losses!`;
+                $('#winsAndLosses').html(`<p>${endText}<p>`);
+                //net wins
+                var winsNet = wins - losses;
+                //update database for wins and net wins, account and top ten
+                database.ref(`accounts/${displayName}`).update({
+                    wins: wins,
+                });
+                database.ref(`topten/${displayName}`).update({
+                    winsNet: winsNet,
+                });
+            }),
+            function (errorObject) {
+                console.log("Errors handled: " + errorObject.code);
+            }
+        //Promise function for top ten to display on game end modal
+        var search = database.ref('/topten').orderByChild('winsNet').limitToFirst(10);
+        search.once('value')
+            .then(function (snapshot) {
+                snapshot.forEach(function (childsnap) {
+                    var newKey = childsnap.key;
+                    var newVal = childsnap.child('winsNet').val();
+                    console.log(newKey);
+                    console.log(newVal);
+                    newDiv = $('<div>');
+                    var newP = $('<p>');
+                    newP.text(`${newKey}: ${childsnap.child('winsNet').val()} wins!`);
+                    newDiv.append(newP);
+                });
+                $('#topTen').html(newDiv);
+                $('#modalEnd').modal();
+            });
+    }
+
+    //function to display custom end modal style is controlled in css, does not disappear, only option is to pick another opponent.
+    function endModal() {
+        console.log("end modal called");
+        var modal = $('#endModal');
+        modal.css("display", "block");
+    }
 });
 
-//random function for giphs.
-//read local storage and set the background.
-var myCity = localStorage.getItem("city");
-//console.log("my city is" + myCity);
-getCity(myCity);
-//set background based on city passed into it.
-function getCity(myCity) {
-    switch (myCity) {
-        case "Houston":
-            cityImage = "assets/images/Astrodome.jpg";
-            $('.main').css('background-image', "url(" + cityImage + ")");
-            break;
-        case "Seattle":
-            cityImage = "assets/images/Seattle.jpg";
-            $('.main').css('background-image', "url(" + cityImage + ")");
-            break;
-        case "Buffalo":
-            cityImage = "assets/images/Buffalo.jpg";
-            $('.main').css('background-image', "url(" + cityImage + ")");
-            break;
-        case "Miami":
-            cityImage = "assets/images/Miami.jpg";
-            $('.main').css('background-image', "url(" + cityImage + ")");
-            break;
-        case "Philadelphia":
-            cityImage = "assets/images/Philadelphia.jpg";
-            $('.main').css('background-image', "url(" + cityImage + ")");
-            break;
-        case "Boston":
-            cityImage = "assets/images/Boston.jpg";
-            $('.main').css('background-image', "url(" + cityImage + ")");
-            break;
-        case "Atlanta":
-            cityImage = "assets/images/Atlanta.jpg";
-            $('.main').css('background-image', "url(" + cityImage + ")");
-            break;
-        case "Dallas":
-            cityImage = "assets/images/Dallas.jpg";
-            $('.main').css('background-image', "url(" + cityImage + ")");
-            break;
-        default:
-            cityImage = "assets/images/Astrodome.jpg";
-            $('.main').css('background-image', "url(" + cityImage + ")");
-    }
-}
-function winGame() {
-    console.log("winGame Called");
-    //Just bringing the scope of this outside promise function
-    var newDiv;
-    //Promise function to get values of accounts
-    fireAccounts.once("value")
-        .then(function (snap) {
-            wins = snap.child(`${displayName}`).child('wins').val();
-            losses = snap.child(`${displayName}`).child('losses').val();
-            //adding to wins
-            wins++;
-            //setting text for info at game end
-            var endText = `${displayName} you won!  You have ${wins} wins and ${losses} losses!`;
-            $('#winsAndLosses').html(`<p>${endText}<p>`);
-            //wins net is your net wins
-            var winsNet = wins - losses;
-            //update database for player and for topten
-            database.ref(`accounts/${displayName}`).update({
-                wins: wins,
-            });
-            database.ref(`topten/${displayName}`).update({
-                winsNet: winsNet,
-            });
-        }),
-        function (errorObject) {
-            console.log("Errors handled: " + errorObject.code);
-        };
-    //Promise function for top ten, getting info from to display
-    var search = database.ref('/topten').orderByChild('winsNet').limitToFirst(10);
-    search.once('value')
-        .then(function (snapshot) {
-            snapshot.forEach(function (childsnap) {
-                var newKey = childsnap.key;
-                var newVal = childsnap.child('winsNet').val();
-                console.log(newKey);
-                console.log(newVal);
-                newDiv = $('<div>');
-                var newP = $('<p>');
-                newP.text(`${newKey}: ${childsnap.child('winsNet').val()} wins!`);
-                newDiv.append(newP);
-
-            });
-            $('#topTen').html(newDiv);
-        });
-
-    //call to end game, endModalmodal will only give ption to play again.
-    endModal();
-
-}
-
-function loseGame() {
-    //Just bringing the scope of this outside promise function
-    var newDiv;
-    //Promise function to get values of accounts
-    fireAccounts.once("value")
-        .then(function (snap) {
-            wins = snap.child(`${displayName}`).child('wins').val();
-            losses = snap.child(`${displayName}`).child('losses').val();
-            //adding to losses
-            losses++;
-            //setting info to display at game end
-            var endText = `${displayname} you lost!  You have ${wins} wins and ${losses} losses!`;
-            $('#winsAndLosses').html(`<p>${endText}<p>`);
-            //net wins
-            var winsNet = wins - losses;
-            //update database for wins and net wins, account and top ten
-            database.ref(`accounts/${displayName}`).update({
-                wins: wins,
-            });
-            database.ref(`topten/${displayName}`).update({
-                winsNet: winsNet,
-            });
-        }),
-        function (errorObject) {
-            console.log("Errors handled: " + errorObject.code);
-        }
-    //Promise function for top ten to display on game end modal
-    var search = database.ref('/topten').orderByChild('winsNet').limitToFirst(10);
-    search.once('value')
-        .then(function (snapshot) {
-            snapshot.forEach(function (childsnap) {
-                var newKey = childsnap.key;
-                var newVal = childsnap.child('winsNet').val();
-                console.log(newKey);
-                console.log(newVal);
-                newDiv = $('<div>');
-                var newP = $('<p>');
-                newP.text(`${newKey}: ${childsnap.child('winsNet').val()} wins!`);
-                newDiv.append(newP);
-            });
-            $('#topTen').html(newDiv);
-            $('#modalEnd').modal();
-        });
-}
-
-//function to display custom end modal style is controlled in css, does not disappear, only option is to pick another opponent.
-function endModal() {
-    console.log("end modal called");
-    var modal = $('#endModal');
-    modal.css("display", "block");
-}
 
 //uncomment below to test end modal dsiplay see style.css line #300 to configure.
 //endModal();
