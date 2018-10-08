@@ -119,9 +119,9 @@ var battle = {
         if (parameters[attacker].stats.actionPoints >= 2) {
             if (roll > dodgeChance) {
                 parameters[defender].stats.parsedHealth -= parameters[attacker].attacks[attack].damage;
-                console.log(`You attacked the computer for ${parameters[attacker].attacks[attack].damage} damage!`); //enemyname is placeholder
-                console.log(attacker + " roll: " + roll);
-                console.log(defender + " dodge chance: " + dodgeChance);
+                //console.log(`You attacked the computer for ${parameters[attacker].attacks[attack].damage} damage!`); //enemyname is placeholder
+                //console.log(attacker + " roll: " + roll);
+                //console.log(defender + " dodge chance: " + dodgeChance);
                 if (parameters[defender].stats.parsedHealth > 0) {
                     callAPI(attack);
                 }
@@ -156,9 +156,9 @@ var battle = {
                 }
 
             } else {
-                console.log(`You attacked the computer for ${parameters[attacker].attacks[attack].damage} damage!`); //enemyname is placeholder
-                console.log("Your roll: " + roll);
-                console.log("cpu evade chance: " + battle.evadeCheck(attacker, attack, defender));
+                //console.log(`You attacked the computer for ${parameters[attacker].attacks[attack].damage} damage!`); //enemyname is placeholder
+                //console.log("Your roll: " + roll);
+                //console.log("cpu evade chance: " + battle.evadeCheck(attacker, attack, defender));
                 if (attacker === "player") {
                     M.toast({
                         html: `<span>YOU MISSED!</span>`,
@@ -178,14 +178,14 @@ var battle = {
     drink: function (caster) {
         if (parameters[caster].stats.actionPoints >= 2) {
             if (parameters[caster].stats.parsedHealth > 0) {
-                console.log("str before: " + parameters[caster].stats.strength);
-                console.log("wits before: " + parameters[caster].stats.strength);
+                //console.log("str before: " + parameters[caster].stats.strength);
+                //console.log("wits before: " + parameters[caster].stats.strength);
                 parameters[caster].stats.strength = parameters[caster].stats.strength + (parameters[caster].stats.strength * 0.5);
                 parameters[caster].stats.wits = parameters[caster].stats.wits - parameters[caster].stats.wits * 0.5;
                 parameters[caster].stats.actionPoints -= 2;
                 checkTurn();
-                console.log("str after: " + parameters[caster].stats.strength);
-                console.log("wits after: " + parameters[caster].stats.wits);
+                //console.log("str after: " + parameters[caster].stats.strength);
+                //console.log("wits after: " + parameters[caster].stats.wits);
                 M.toast({
                     html: `<span>GULP!</span>`,
                     classes: "rounded"
@@ -230,8 +230,8 @@ var battle = {
         if ((typeof dodgeChance) === "number" && isNaN(dodgeChance) === false) {
             return dodgeChance;
         } else {
-            console.log("dodgeChance: " + dodgeChance);
-            console.log(parameters[attacker].attacks);
+            //console.log("dodgeChance: " + dodgeChance);
+            //console.log(parameters[attacker].attacks);
         }
     },
 };
@@ -245,8 +245,8 @@ function callAPI(buttonClicked) {
         method: "GET"
     }).then(function (response) {
         if (response) {
-            console.log("api call succeesfull");
-            console.log(response);
+            //console.log("api call succeesfull");
+            //console.log(response);
             //if player wins    
             if (buttonClicked === 1) {
                 //need to increment players win count.
@@ -300,12 +300,11 @@ function checkTurn() {
     if (parameters.player.stats.actionPoints === 0 && cpuTurn === false) {
         parameters.cpu.stats.actionPoints = 4;
         cpuTurn = true;
-    } else if (parameters.cpu.stats.actionPoints === 0 && cpuTurn === false) {
+    } else if (parameters.cpu.stats.actionPoints === 0 && cpuTurn === true) {
         parameters.player.stats.actionPoints = 4;
         cpuTurn = false;
-    } else if (parameters.cpu.stats.actionPoints > 0 && cpuTurn === true){
-        computerChoice();
     }
+    computerChoice();
 }
 
 function computerChoice() {
@@ -313,16 +312,24 @@ function computerChoice() {
     var humanEvadePunch = battle.evadeCheck("cpu", "punch", "player");
     var kickDPS = (1 - humanEvadeKick) * parameters.cpu.attacks.kick.damage;
     var punchDPS = (1 - humanEvadePunch) * parameters.cpu.attacks.punch.damage;
-    while (parameters.cpu.stats.actionPoints > 0) {
+    while (parameters.cpu.stats.actionPoints > 0 && cpuTurn === true) {
         if ($(".playerFighter").attr("data-position") === "left") {
             setTimeout(battle.attack("cpu", "throw", "player", "BANG!"), 3500);
+            console.log("cpuBANG!");
+            checkTurn();
         } else if ($(".playerFighter").attr("data-position") === "right" && $(".cpuFighter").attr("data-position") === "right") {
             setTimeout(battle.moveLeft("cpu"), 3500);
+            console.log("CPUMOVE");
+            checkTurn();
         } else if ($(".playerFighter").attr("data-position") === "right" && $(".cpuFighter").attr("data-position") === "left") {
             if (punchDPS > kickDPS) {
                 setTimeout(battle.attack("cpu", "punch", "player", "POW!"), 3500);
+                console.log("CPUPUNCH");
+                checkTurn();
             } else if (kickDPS > punchDPS) {
-                setTimeout(battle.attack("cpu", "kick", "player", "POW!"), 3500);
+                setTimeout(battle.attack("cpu", "kick", "player", "SNIKT!"), 3500);
+                console.log("CPUKICK");
+                checkTurn();
             }
         } else {
             console.log("Failed");
@@ -340,7 +347,6 @@ $(document).ready(function () {
 
     //console.log(localStorage.getItem("opponent"));
     //console.log(localStorage.getItem("image"));
-
     //Combat Functions
     //battle commands
     $(document).on("click", ".combatBtns", function (action, user) {
@@ -415,6 +421,9 @@ $(document).ready(function () {
                     break;
             }
         }
+        console.log("playerAP: " + parameters.player.stats.actionPoints);
+        console.log("cpuAP: " + parameters.cpu.stats.actionPoints);
+        console.log("Computer Turn? " + cpuTurn);
     });
     //random function for giphs.
     //read local storage and set the background.
@@ -461,7 +470,7 @@ $(document).ready(function () {
                 $('.main').css('background-image', "url(" + cityImage + ")");
         }
     }
-    
+
     function winGame() {
         $('#topTen').empty();
         $('#windAndLosses').empty();
@@ -470,7 +479,7 @@ $(document).ready(function () {
             .then(function (snap) {
                 wins = snap.child(`${displayName}`).child('wins').val();
                 losses = snap.child(`${displayName}`).child('losses').val();
-                if(!losses) {
+                if (!losses) {
                     losses = 0;
                 }
                 //adding to wins
@@ -495,20 +504,20 @@ $(document).ready(function () {
         var search = database.ref('/topten').orderByChild('winsNet').limitToFirst(10);
         search.once('value')
             .then(function (snapshot) {
-            snapshot.forEach(function (childsnap) {
-                var newKey = childsnap.key;
-                var newVal = childsnap.child('winsNet').val()
-                console.log(newKey);
-                console.log(newVal);
-                //(`${newKey}: ${childsnap.child('winsNet').val()} wins!`);
-                $('#tableTopTen').prepend(`"<tr><td>${newKey}</td><td>${childsnap.child('winsNet').val()}</td></tr>"`);
-                
-            })
-            endModal();
-        });
+                snapshot.forEach(function (childsnap) {
+                    var newKey = childsnap.key;
+                    var newVal = childsnap.child('winsNet').val();
+                    console.log(newKey);
+                    console.log(newVal);
+                    //(`${newKey}: ${childsnap.child('winsNet').val()} wins!`);
+                    $('#tableTopTen').prepend(`"<tr><td>${newKey}</td><td>${childsnap.child('winsNet').val()}</td></tr>"`);
+
+                });
+                endModal();
+            });
 
         //call to end game, endModalmodal will only give option to play again.
-     //   endModal();
+        //   endModal();
     }
 
     function loseGame() {
@@ -536,25 +545,25 @@ $(document).ready(function () {
             }),
             function (errorObject) {
                 console.log("Errors handled: " + errorObject.code);
-            }
+            };
         //Promise function for top ten to display on game end modal
         var search = database.ref('/topten').orderByChild('winsNet').limitToFirst(10);
         search.once('value')
             .then(function (snapshot) {
-            snapshot.forEach(function (childsnap) {
-                var newKey = childsnap.key;
-                var newVal = childsnap.child('winsNet').val()
-                console.log(newKey);
-                console.log(newVal);
-                var newP = $('<p>');
-                newP.text(`${newKey}: ${childsnap.child('winsNet').val()} wins!`);
-                $('#topTen').prepend(newP);
-                
-            })
-            endmodal();
-        });
+                snapshot.forEach(function (childsnap) {
+                    var newKey = childsnap.key;
+                    var newVal = childsnap.child('winsNet').val();
+                    console.log(newKey);
+                    console.log(newVal);
+                    var newP = $('<p>');
+                    newP.text(`${newKey}: ${childsnap.child('winsNet').val()} wins!`);
+                    $('#topTen').prepend(newP);
 
-        
+                });
+                endmodal();
+            });
+
+
     }
     //function to display custom end modal style is controlled in css, does not disappear, only option is to pick another opponent.
     function endModal() {
