@@ -20,6 +20,8 @@ var topTen = database.ref("/topten");
 var displayName;
 var isAnonymous;
 var uid;
+//combat variables
+var opponentName = localStorage.getItem("opponent");
 var baseKick = 5;
 var basePunch = 3.5;
 var baseThrow = 2.25;
@@ -121,29 +123,54 @@ var battle = {
                 if (parameters[defender].stats.parsedHealth > 0) {
                     callAPI(attack);
                 }
-                M.toast({
-                    html: `<span>${toast}</span>`,
-                    classes: 'rounded'
-                });
-                if (parameters[defender].stats.parsedHealth < 0) {
-                    parameters[defender].stats.parsedHealth = 0;
-                    $('#cpuHealth').css('width', '0px');
-                    callAPI(1);
-                } else {
-                    let cpuHealthString = parameters[defender].stats.parsedHealth.toString();
-                    cpuHealthString += 'px';
-                    console.log(cpuHealthString);
-                    $('#cpuHealth').css('width', cpuHealthString);
+                if (attacker === "player") {
+                    if (parameters[defender].stats.parsedHealth < 0) {
+                        parameters[defender].stats.parsedHealth = 0;
+                        $('#cpuHealth').css('width', '0px');
+                        callAPI(1);
+                    } else {
+                        let cpuHealthString = parameters[defender].stats.parsedHealth.toString();
+                        cpuHealthString += 'px';
+                        console.log(cpuHealthString);
+                        $('#cpuHealth').css('width', cpuHealthString);
+                        M.toast({
+                            html: `<span>You hit ${opponentName} for ${parameters[attacker].attacks[attack].damage} damage! ${toast}</span>`,
+                            classes: 'rounded'
+                        });
+                    }
+                } else if (attacker === "cpu") {
+                    if (parameters[defender].stats.parsedHealth < 0) {
+                        parameters[defender].stats.parsedHealth = 0;
+                        $("#playerHealth").css("width", "0px");
+                        callAPI("lose");
+                    } else {
+                        let playerHealthString = parameters[defender].stats.parsedHealth.toString();
+                        playerHealthString += "px";
+                        console.log(playerHealthString);
+                        $("#playerHealth").css("width", playerHealthString);
+                        M.toast({
+                            html: `<span>${opponentName} hit you for ${parameters[attacker].attacks[attack].damage} damage! ${toast}</span>`,
+                            classes: 'rounded'
+                        });
+                    }
                 }
+
             } else {
                 console.log(`You attacked the computer for ${parameters[attacker].attacks[attack].damage} damage!`); //enemyname is placeholder
                 console.log("Your roll: " + roll);
                 console.log("cpu evade chance: " + battle.evadeCheck(attacker, attack, defender));
+                if (attacker === "player") {
+                    M.toast({
+                        html: `<span>YOU MISSED!</span>`,
+                        classes: "rounded"
+                    });
+                } else if (attacker === "cpu") {
+                    M.toast({
+                        html: `<span>${opponentName} MISSED!</span>`,
+                        classes: "rounded"
+                    });
+                }
 
-                M.toast({
-                    html: `<span>YOU MISSED!</span>`,
-                    classes: "rounded"
-                });
                 console.log(battle.evadeCheck(attacker, attack, defender));
             }
             parameters[attacker].stats.actionPoints -= 2;
@@ -299,11 +326,32 @@ $(document).ready(function () {
             }
         } else if (user === "cpu") {
             switch (action) {
+                case "punch":
+                    if ($(".playerFighter").attr("data-position") === "right" && $(".cpuFighter").attr("data-position") === "left") {
+                        battle.attack("cpu", "punch", "player", "POW!");
+                    }
+                    break;
+                case "kick":
+                    if ($(".playerFighter").attr("data-position") === "right" && $(".cpuFighter").attr("data-position") === "left") {
+                        battle.attack("cpu", "kick", "player", "SNIKT!");
+                    }
+                    break;
+                case "throw":
+                        battle.attack("cpu", "throw", "player", "BANG!");
+                    break;
                 case "left":
                     battle.moveLeft("cpu");
+                    M.toast({
+                        html: `<span>${opponentName} moved forwards!</span>`,
+                        classes: "rounded"
+                    });
                     break;
                 case "right":
                     battle.moveRight("cpu");
+                    M.toast({
+                        html: `<span>${opponentName} moved backwards!</span>`,
+                        classes: "rounded"
+                    });
                     break;
             }
         }
@@ -400,8 +448,10 @@ function winGame() {
             });
             $('#topTen').html(newDiv);
         });
+
     //call to end game, endModalmodal will only give ption to play again.
     endModal();
+
 }
 
 function loseGame() {
@@ -429,7 +479,7 @@ function loseGame() {
         }),
         function (errorObject) {
             console.log("Errors handled: " + errorObject.code);
-        };
+        }
     //Promise function for top ten to display on game end modal
     var search = database.ref('/topten').orderByChild('winsNet').limitToFirst(10);
     search.once('value')
@@ -446,6 +496,7 @@ function loseGame() {
 
             });
             $('#topTen').html(newDiv);
+            $('#modalEnd').modal();
         });
 
 

@@ -32,7 +32,8 @@ firebase.auth().onAuthStateChanged(function (user) {
                 }).then(function () {
                     var displayName = user.displayName;
                     console.log(displayName);
-                    fireAccounts.once("value", function (snap) {
+                    fireAccounts.once("value")
+                    .then(function (snap) {
                             if (!snap.child(user.displayName).exists()) { //this way of identifying if the username is already in  use doesnt work
                                 database.ref(`accounts/${user.displayName}`).set({
                                     wins: '',
