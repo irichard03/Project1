@@ -340,6 +340,7 @@ $(document).ready(function () {
                 $('.main').css('background-image', "url(" + cityImage + ")");
         }
     }
+    
     function winGame() {
         $('#topTen').empty();
         $('#windAndLosses').empty();
@@ -348,6 +349,9 @@ $(document).ready(function () {
             .then(function (snap) {
                 wins = snap.child(`${displayName}`).child('wins').val();
                 losses = snap.child(`${displayName}`).child('losses').val();
+                if(!losses) {
+                    losses = 0;
+                }
                 //adding to wins
                 wins++;
                 //setting text for info at game end
@@ -375,9 +379,8 @@ $(document).ready(function () {
                 var newVal = childsnap.child('winsNet').val()
                 console.log(newKey);
                 console.log(newVal);
-                var newP = $('<p>');
-                newP.text(`${newKey}: ${childsnap.child('winsNet').val()} wins!`);
-                $('#topTen').prepend(newP);
+                //(`${newKey}: ${childsnap.child('winsNet').val()} wins!`);
+                $('#tableTopTen').prepend(`"<tr><td>${newKey}</td><td>${childsnap.child('winsNet').val()}</td></tr>"`);
                 
             })
             endModal();
@@ -406,7 +409,7 @@ $(document).ready(function () {
                     wins: wins,
                 });
                 database.ref(`topten/${displayName}`).update({
-                    winsNet:winsNet,
+                    winsNet: winsNet,
                 });
             }),
             function (errorObject) {
@@ -437,9 +440,10 @@ $(document).ready(function () {
         var modal = $('#endModal');
         modal.css("display", "block");
     }
-    
+    //end of endmodal function
+
     //uncomment below to test end modal dsiplay see style.css line #300 to configure.
-   // winGame();
+    //winGame();
     //end of document on ready
 });
 
