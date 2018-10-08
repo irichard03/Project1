@@ -21,6 +21,7 @@ var displayName;
 var isAnonymous;
 var uid;
 //combat variables
+var tempAcc;
 var opponentName = localStorage.getItem("opponent");
 var baseKick = 5;
 var basePunch = 3.5;
@@ -42,7 +43,7 @@ var parameters = {
             strength: cpuStrength,
             wits: cpuWits,
             accuracy: cpuAcc,
-            actionPoints: 999
+            actionPoints: null
         },
         "attacks": {
             "kick": {
@@ -60,25 +61,23 @@ var parameters = {
         }
     },
 };
-
-//random computerstats end
 M.AutoInit();
 firebase.auth().onAuthStateChanged(function (user) {
     if (user) {
         // User is signed in.
-        console.log('signed in!');
+        //console.log('signed in!');
         displayName = user.displayName;
-        console.log(user.displayName);
+        //console.log(user.displayName);
         fireAccounts.once("value", function (snap) {
                 var tempStr = snap.child(`${displayName}`).child('strength').val();
-                var tempAcc = 3.677 - 23 / Math.pow(10 + snap.child(`${displayName}`).child('wits').val(), 0.7);
+                tempAcc = 3.677 - 23 / Math.pow(10 + snap.child(`${displayName}`).child('wits').val(), 0.7);
                 parameters.player.stats = {
                     health: snap.child(`${displayName}`).child('health').val(),
                     parsedHealth: snap.child(`${displayName}`).child('health').val() * 10,
                     strength: snap.child(`${displayName}`).child('strength').val(),
                     wits: snap.child(`${displayName}`).child('wits').val(),
                     accuracy: 3.677 - 23 / Math.pow(10 + snap.child(`${displayName}`).child('wits').val(), 0.7),
-                    actionPoints: 999
+                    actionPoints: 4
                 };
                 parameters.player.attacks = {
                     "kick": {
@@ -95,12 +94,13 @@ firebase.auth().onAuthStateChanged(function (user) {
                     }
                 };
             }).then(function () {
-                // if (parameters.player.stats.actionPoints === 0) {
-                //     parameters.cpu.stats.actionPoints = 4;
-                // }
-                // if (parameters.cpu.stats.actionPoints !== 0) {
-
-                // }
+                // console.log(parameters.player);
+                // console.log(parameters.cpu);
+                var humanEvadeKick = battle.evadeCheck("cpu", "kick", "player");
+                var humanEvadePunch = battle.evadeCheck("cpu", "punch", "player");
+                var kickDPS = (1 - humanEvadeKick) * parameters.cpu.attacks.kick.damage;
+                var punchDPS = (1 - humanEvadePunch) * parameters.cpu.attacks.punch.damage;
+                // console.log(humanEvadeKick);
             }),
             function (errorObject) {
                 console.log("Errors handled: " + errorObject.code);
@@ -114,12 +114,13 @@ firebase.auth().onAuthStateChanged(function (user) {
 var battle = {
     attack: function (attacker, attack, defender, toast) {
         var roll = Math.random();
+        var dodgeChance = battle.evadeCheck(attacker, attack, defender);
         if (parameters[attacker].stats.actionPoints >= 2) {
-            if (roll > battle.evadeCheck(attacker, attack, defender)) {
+            if (roll > dodgeChance) {
                 parameters[defender].stats.parsedHealth -= parameters[attacker].attacks[attack].damage;
                 console.log(`You attacked the computer for ${parameters[attacker].attacks[attack].damage} damage!`); //enemyname is placeholder
-                console.log("Your roll: " + roll);
-                console.log("cpu evade chance: " + battle.evadeCheck(attacker, attack, defender));
+                console.log(attacker + " roll: " + roll);
+                console.log(defender + " dodge chance: " + dodgeChance);
                 if (parameters[defender].stats.parsedHealth > 0) {
                     callAPI(attack);
                 }
@@ -131,7 +132,6 @@ var battle = {
                     } else {
                         let cpuHealthString = parameters[defender].stats.parsedHealth.toString();
                         cpuHealthString += 'px';
-                        console.log(cpuHealthString);
                         $('#cpuHealth').css('width', cpuHealthString);
                         M.toast({
                             html: `<span>You hit ${opponentName} for ${parameters[attacker].attacks[attack].damage} damage! ${toast}</span>`,
@@ -146,7 +146,6 @@ var battle = {
                     } else {
                         let playerHealthString = parameters[defender].stats.parsedHealth.toString();
                         playerHealthString += "px";
-                        console.log(playerHealthString);
                         $("#playerHealth").css("width", playerHealthString);
                         M.toast({
                             html: `<span>${opponentName} hit you for ${parameters[attacker].attacks[attack].damage} damage! ${toast}</span>`,
@@ -170,10 +169,9 @@ var battle = {
                         classes: "rounded"
                     });
                 }
-
-                console.log(battle.evadeCheck(attacker, attack, defender));
             }
             parameters[attacker].stats.actionPoints -= 2;
+            checkTurn();
         }
     },
     drink: function (caster) {
@@ -184,6 +182,7 @@ var battle = {
                 parameters[caster].stats.strength = parameters[caster].stats.strength + (parameters[caster].stats.strength * 0.5);
                 parameters[caster].stats.wits = parameters[caster].stats.wits - parameters[caster].stats.wits * 0.5;
                 parameters[caster].stats.actionPoints -= 2;
+                checkTurn();
                 console.log("str after: " + parameters[caster].stats.strength);
                 console.log("wits after: " + parameters[caster].stats.wits);
                 M.toast({
@@ -191,6 +190,7 @@ var battle = {
                     classes: "rounded"
                 });
             }
+            updateStats(caster);
         }
     },
     moveLeft: function (caster) {
@@ -198,11 +198,13 @@ var battle = {
             if (parameters[caster].stats.actionPoints >= 1) {
                 $('.playerFighter').css("float", "left").attr("data-position", "left");
                 parameters[caster].stats.actionPoints--;
+                checkTurn();
             }
         } else if (caster === "cpu") {
             if (parameters[caster].stats.actionPoints >= 1) {
                 $(".cpuFighter").css("float", "left").attr("data-position", "left");
                 parameters[caster].stats.actionPoints--;
+                checkTurn();
             }
         }
     },
@@ -211,13 +213,16 @@ var battle = {
             if (parameters[caster].stats.actionPoints >= 1) {
                 $('.playerFighter').css("float", "right").attr("data-position", "right");
                 parameters[caster].stats.actionPoints--;
+                checkTurn();
             }
         } else if (caster === "cpu") {
             if (parameters[caster].stats.actionPoints >= 1) {
                 $(".cpuFighter").css("float", "right").attr("data-position", "right");
                 parameters[caster].stats.actionPoints--;
+                checkTurn();
             }
         }
+    checkTurn();
     },
     evadeCheck: function (attacker, attack, defender) {
         var dodgeChance = 1 - (parameters[attacker].attacks[attack].accuracy / (parameters[attacker].attacks[attack].accuracy + Math.pow((parameters[defender].stats.wits / 100), 0.985)));
@@ -262,16 +267,62 @@ function callAPI(buttonClicked) {
     });
 }
 
+function updateStats(caster) {
+    parameters[caster].stats.accuracy = 3.677 - 23 / Math.pow(10 + parameters[caster].stats.wits, 0.7);
+    var updateAcc = parameters[caster].stats.accuracy;
+    parameters[caster].attacks = {
+        "kick": {
+            damage: baseKick * parameters[caster].stats.strength + Math.round(Math.random() * (parameters[caster].stats.strength * baseKick) / 5),
+            accuracy: updateAcc - 0.35
+        },
+        "punch": {
+            damage: basePunch * parameters[caster].stats.strength + Math.round(Math.random() * (parameters[caster].stats.strength * basePunch) / 10),
+            accuracy: updateAcc
+        },
+        "throw": {
+            damage: baseThrow * parameters[caster].stats.strength + Math.round(Math.random() * (parameters[caster].stats.strength * baseThrow) / 15),
+            accuracy: updateAcc + 0.35
+        }
+    };
+}
+
 function getRandomInt(max) {
     return Math.floor(Math.random() * Math.floor(max));
 }
 
-function computerChoice() {
-
-}
 //Randomly generating computer Stats
 function randomBetween(min, max) {
     return Math.floor(Math.random() * (max - min + 1) + min);
+}
+function checkTurn() {
+    if (parameters.player.stats.actionPoints === 0) {
+        computerChoice();
+    } else if (parameters.cpu.stats.actionPoints === 0){
+        parameters.player.stats.actionPoints = 4;
+    }
+}
+function computerChoice() {
+    var humanEvadeKick = battle.evadeCheck("cpu", "kick", "player");
+    var humanEvadePunch = battle.evadeCheck("cpu", "punch", "player");
+    var kickDPS = (1 - humanEvadeKick) * parameters.cpu.attacks.kick.damage;
+    var punchDPS = (1 - humanEvadePunch) * parameters.cpu.attacks.punch.damage;
+    parameters.cpu.stats.actionPoints = 4;
+    while (parameters.cpu.stats.actionPoints > 0) {
+        if ($(".playerFighter").attr("data-position") === "left") {
+            setTimeout(battle.attack("cpu", "throw", "player", "BANG!"), 3500);
+        } else if ($(".playerFighter").attr("data-position") === "right" && $(".cpuFighter").attr("data-position") === "right") {
+            setTimeout(battle.moveLeft("cpu"), 3500);
+        } else if ($(".playerFighter").attr("data-position") === "right" && $(".cpuFighter").attr("data-position") === "left") {
+            if (punchDPS > kickDPS) {
+                setTimeout(battle.attack("cpu", "punch", "player", "POW!"), 3500);
+            } else if (kickDPS > punchDPS) {
+                setTimeout(battle.attack("cpu", "kick", "player", "POW!"), 3500);
+            }
+        }else{
+            console.log("Failed");
+            parameters.cpu.stats.actionPoints = 0;
+        }
+    }
 }
 //On ready function, do stuff when page loads.
 $(document).ready(function () {
@@ -281,8 +332,8 @@ $(document).ready(function () {
     $("#opponentFightImg").attr("src", localStorage.getItem("image"));
     $("#opponentFightImg2").attr("src", localStorage.getItem("image"));
 
-    console.log(localStorage.getItem("opponent"));
-    console.log(localStorage.getItem("image"));
+    //console.log(localStorage.getItem("opponent"));
+    //console.log(localStorage.getItem("image"));
 
     //Combat Functions
     //battle commands
@@ -337,7 +388,10 @@ $(document).ready(function () {
                     }
                     break;
                 case "throw":
-                        battle.attack("cpu", "throw", "player", "BANG!");
+                    battle.attack("cpu", "throw", "player", "BANG!");
+                    break;
+                case "drink":
+                    battle.drink("cpu");
                     break;
                 case "left":
                     battle.moveLeft("cpu");
@@ -357,11 +411,11 @@ $(document).ready(function () {
         }
     });
 });
-//end of document on ready
+
 //random function for giphs.
 //read local storage and set the background.
 var myCity = localStorage.getItem("city");
-console.log("my city is" + myCity);
+//console.log("my city is" + myCity);
 getCity(myCity);
 //set background based on city passed into it.
 function getCity(myCity) {
@@ -403,7 +457,6 @@ function getCity(myCity) {
             $('.main').css('background-image', "url(" + cityImage + ")");
     }
 }
-
 function winGame() {
     console.log("winGame Called");
     //Just bringing the scope of this outside promise function
@@ -493,13 +546,10 @@ function loseGame() {
                 var newP = $('<p>');
                 newP.text(`${newKey}: ${childsnap.child('winsNet').val()} wins!`);
                 newDiv.append(newP);
-
             });
             $('#topTen').html(newDiv);
             $('#modalEnd').modal();
         });
-
-
 }
 
 //function to display custom end modal style is controlled in css, does not disappear, only option is to pick another opponent.
