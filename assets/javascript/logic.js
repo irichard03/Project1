@@ -102,9 +102,11 @@ function logout() {
 }
 
 
+
 //CLick the Login Button to Log In!
 $("#loginButton").on("click", function (e) { //this ID will be used in the login screen at the start of the game
     e.preventDefault();
+    loginSound.play();
     login();
 });
 //To Log out of the database or log in as another player
@@ -178,14 +180,31 @@ function giveNames() {
         $(`#${nameHolder}`).parent().attr("data-opponent", nameArray[i]);
     }
 }
-
+//Audio
+function sound(src) {
+    this.sound = document.createElement("audio");
+    this.sound.src = src;
+    this.sound.setAttribute("preload", "auto");
+    this.sound.setAttribute("controls", "none");
+    this.sound.style.display = "none";
+    document.body.appendChild(this.sound);
+    this.play = function(){
+        this.sound.play();
+    };
+    this.stop = function(){
+        this.sound.pause();
+    };
+}
+var loginSound = new sound ("./assets/audio/login.wav");
+var happySound = new sound ("./assets/audio/happysound.wav");
+var happySound2 = new sound ("./assets/audio/happysound2.wav");
 
 //Jacob's card-title Click grabs City and Name
 $('.card-title').on("click", function () {
     console.log($(this).attr("data-city"));
     console.log($(this).attr("data-opponent"));
     console.log($(this).attr("data-image"));
-
+    happySound.play();
     var opponentChoosen = $(this).attr("data-opponent");
     var opponentCity = $(this).attr("data-city");
     var opponentImage = $(this).attr("data-image");
