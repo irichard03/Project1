@@ -33,7 +33,7 @@ firebase.auth().onAuthStateChanged(function (user) {
                     var displayName = user.displayName;
                     console.log(displayName);
                     fireAccounts.once("value")
-                    .then(function (snap) {
+                        .then(function (snap) {
                             if (!snap.child(user.displayName).exists()) { //this way of identifying if the username is already in  use doesnt work
                                 database.ref(`accounts/${user.displayName}`).set({
                                     wins: '',
@@ -65,7 +65,7 @@ firebase.auth().onAuthStateChanged(function (user) {
         uid = user.uid;
         // ...
     } else {
-        if(newConnection){
+        if (newConnection) {
             newConnection.remove();
         }
         console.log('Not Logged In!');
@@ -85,9 +85,9 @@ function login() {
             var errorCode = error.code;
             var errorMessage = error.message;
             // ...
-            
+
         });
-        
+
     } else {
         $("#loginMsg").html("<i class=\"red-text errorAlert text-darken-2 loginAlert material-icons\">" + "error" + "</i>You've left it blank.");
     }
@@ -95,7 +95,7 @@ function login() {
 
 function logout() {
     firebase.auth().signOut().then(function () {
-        
+
     }).catch(function (error) {
         // An error happened.
     });
@@ -165,7 +165,7 @@ for (i = 0; i < cityArray.length; i++) {
             var randomName = data.results[0].name.first;
             randomName.toString();
             nameArray.push(randomName.substr(0, 1).toUpperCase() + randomName.substr(1));
-        }).then(function(){
+        }).then(function () {
             giveNames();
         });
 }
