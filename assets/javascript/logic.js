@@ -46,7 +46,7 @@ firebase.auth().onAuthStateChanged(function (user) {
                         }),
                         function (errorObject) {
                             console.log("Errors handled: " + errorObject.code);
-                        }
+                        };
                 }),
                 function (error) {
                     console.log("Errors handled with profile update: " + error.code);
@@ -61,8 +61,8 @@ firebase.auth().onAuthStateChanged(function (user) {
         $('#login2').removeAttr('hidden');
         $('#loginMsg').text('Logout to play as another user or to disconnect!');
         $("#profileNavBtn").removeClass("disabled");
-        var isAnonymous = user.isAnonymous;
-        var uid = user.uid;
+        isAnonymous = user.isAnonymous;
+        uid = user.uid;
         // ...
     } else {
         if(newConnection){
@@ -167,7 +167,7 @@ for (i = 0; i < cityArray.length; i++) {
             nameArray.push(randomName.substr(0, 1).toUpperCase() + randomName.substr(1));
         }).then(function(){
             giveNames();
-        })
+        });
 }
 
 // Updates cards to show Name from API & sets oppponent attribute for card
