@@ -741,37 +741,5 @@ $(document).ready(function () {
         }
     }
 });
-
-
-function winGame() {
-    $('#topTen').empty();
-    $('#windAndLosses').empty();
-    //Promise function to get values of accounts
-    fireAccounts.once("value")
-        .then(function (snap) {
-            wins = snap.child(`${displayName}`).child('wins').val();
-            losses = snap.child(`${displayName}`).child('losses').val();
-            if (!losses) {
-                losses = 0;
-            }
-            //adding to wins
-            wins++;
-            //setting text for info at game end
-            var endText = `${displayName} you won!  You have ${wins} wins and ${losses} losses!`;
-            $('#winsAndLosses').html(`<p>${endText}<p>`);
-            //wins net is your net wins
-            var winsNet = wins - losses;
-            //update database for player and for topten
-            database.ref(`accounts/${displayName}`).update({
-                wins: wins,
-            });
-            database.ref(`topten/${displayName}`).update({
-                winsNet: winsNet,
-            });
-        }),
-        function (errorObject) {
-            console.log("Errors handled: " + errorObject.code);
-        };
-}
 //uncomment below to test end modal dsiplay see style.css line #300 to configure.
 //endModal();
