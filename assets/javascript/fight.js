@@ -513,16 +513,19 @@ function loseGame() {
         .then(function (snap) {
             wins = snap.child(`${displayName}`).child('wins').val();
             losses = snap.child(`${displayName}`).child('losses').val();
+            if (!losses) {
+                losses = 0;
+            }
             //adding to losses
             losses++;
             //setting info to display at game end
-            var endText = `${displayname} you lost!  You have ${wins} wins and ${losses} losses!`;
+            var endText = `${displayName} you lost!  You have ${wins} wins and ${losses} losses!`;
             $('#winsAndLosses').html(`<p>${endText}<p>`);
             //net wins
             var winsNet = wins - losses;
             //update database for wins and net wins, account and top ten
             database.ref(`accounts/${displayName}`).update({
-                wins: wins,
+                losses: losses,
             });
             database.ref(`topten/${displayName}`).update({
                 winsNet: winsNet,
@@ -532,7 +535,7 @@ function loseGame() {
             console.log("Errors handled: " + errorObject.code);
         };
     //Promise function for top ten to display on game end modal
-    var search = database.ref('/topten').orderByChild('winsNet').limitToFirst(10);
+    var search = database.ref('/topten').orderByChild('winsNet').limitToLast(10);
     search.once('value')
         .then(function (snapshot) {
             snapshot.forEach(function (childsnap) {
@@ -542,7 +545,7 @@ function loseGame() {
                 console.log(newVal);
                 $('#tableTopTen').prepend(`"<tr><td>${newKey}</td><td>${childsnap.child('winsNet').val()}</td></tr>"`);
             });
-            endmodal();
+            endModal();
         });
 }
 //function to display custom end modal style is controlled in css, does not disappear, only option is to pick another opponent.

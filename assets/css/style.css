@@ -288,10 +288,8 @@ h7 {
 
 #selectOpponentText {
     font-weight: 900;
-    margin: auto;
-    width: 40%;
+    text-align: center;
     padding-bottom: 25px;
-    padding-top: 25px;
 }
 #endModal {
     display: none; 
@@ -404,8 +402,7 @@ margin: auto;
 
         #selectOpponentText {
             font-weight: 900;
-            margin: auto;
-            width: 45%;
+            text-align: center;
             padding-bottom: 25px;
         }
     }
@@ -443,8 +440,7 @@ margin: auto;
     
 #selectOpponentText{
     font-weight: 900;
-    margin: auto;
-    width: 45%;
+    text-align: center;
     padding-bottom: 25px;
 }
 
