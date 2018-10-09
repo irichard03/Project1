@@ -10,12 +10,13 @@
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU"
         crossorigin="anonymous">
     <link rel="stylesheet" href="assets/css/style.css">
+    <link href="https://fonts.googleapis.com/css?family=Bevan|Luckiest+Guy" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
     <title>Hooligans Fight!</title>
 </head>
 
-<body>
+<body id="bodyFight">
     <header>
         <nav>
             <div class="nav-wrapper orange darken-3">
@@ -44,6 +45,8 @@
                         <h7 id="playerStrength">Strength</h7>
                         <h7 id="playerWit">Wit</h7>
                         <h7 id="playerBooze">Booze</h7>
+                        <h7 id="thisLabel">Action Points:<span id="actionPoints">5</span></h7>
+                       
                     </div>
                 </div>
                 <div class="right cpuReadOut ">
@@ -64,17 +67,17 @@
             <div class="row bottom">
                 <div class="col left playerZone">
                     <div class="playerButtons">
-                        <a data-user="player" data-action="left" class="combatBtns btn-floating btn-large waves-effect waves-light orange lighten-3 playerBackward"><i
+                        <a data-user="player" data-action="left" data-hook="lockable" class="combatBtns btn-floating btn-large waves-effect waves-light orange lighten-3 playerBackward"><i
                                 class="far fa-arrow-alt-circle-left"></i></a>
-                        <a data-user="player" data-action="drink" data-toast="GULP!" class="combatBtns btn-floating btn-large waves-effect waves-light orange lighten-3 playerDrink"><i
+                        <a data-user="player" data-action="drink" data-hook="lockable" data-toast="GULP!" class="combatBtns btn-floating btn-large waves-effect waves-light orange lighten-3 playerDrink"><i
                                 class="fas fa-beer"></i></a>
-                        <a data-user="player" data-action="right" class="combatBtns btn-floating btn-large waves-effect waves-light orange lighten-3 playerForward"><i
+                        <a data-user="player" data-action="right" data-hook="lockable" class="combatBtns btn-floating btn-large waves-effect waves-light orange lighten-3 playerForward"><i
                                 class="far fa-arrow-alt-circle-right"></i></a>
-                        <a data-user="player" data-action="throw" data-toast="BANG!" class="combatBtns btn-floating btn-large waves-effect waves-light orange lighten-2 playerThrow"><i
+                        <a data-user="player" data-action="throw" data-hook="lockable" data-toast="BANG!" class="combatBtns btn-floating btn-large waves-effect waves-light orange lighten-2 playerThrow"><i
                                 class="fas fa-trash-alt"></i></a>
-                        <a data-user="player" data-action="kick" data-toast="SNIKT!" class="combatBtns btn-floating btn-large waves-effect waves-light orange lighten-1 playerStab"><i
+                        <a data-user="player" data-action="kick" data-hook="lockable" data-toast="SNIKT!" class="combatBtns btn-floating btn-large waves-effect waves-light orange lighten-1 playerStab"><i
                                 class="fas fa-screwdriver"></i></a>
-                        <a data-user="player" data-action="punch" data-toast="POW!" class="combatBtns btn-floating btn-large waves-effect waves-light orange playerPunch"><i
+                        <a data-user="player" data-action="punch" data-hook="lockable" data-toast="POW!" class="combatBtns btn-floating btn-large waves-effect waves-light orange playerPunch"><i
                                 class="fas fa-hand-rock"></i></a>
 
                     </div>
@@ -88,17 +91,17 @@
                 </div>
                 <div class="col right cpuZone">
                     <div class="cpuButtons">
-                        <a data-user="cpu" data-action="punch" class="combatBtns btn-floating btn-large waves-effect waves-light orange cpuPunch"><i
+                        <a data-user="cpu" data-action="punch" data-hook="lockable" class="combatBtns btn-floating btn-large waves-effect waves-light orange cpuPunch"><i
                                 data-toast="POW!" class="fas fa-hand-rock"></i></a>
-                        <a data-user="cpu" data-action="kick" class="combatBtns btn-floating btn-large waves-effect waves-light orange lighten-1 cpuStab"><i
+                        <a data-user="cpu" data-action="kick" data-hook="lockable" class="combatBtns btn-floating btn-large waves-effect waves-light orange lighten-1 cpuStab"><i
                                 data-toast="SNIKT!" class="fas fa-screwdriver"></i></a>
-                        <a data-user="cpu" data-action="throw" class="combatBtns btn-floating btn-large waves-effect waves-light orange lighten-2 cpuThrow"><i
+                        <a data-user="cpu" data-action="throw" data-hook="lockable" class="combatBtns btn-floating btn-large waves-effect waves-light orange lighten-2 cpuThrow"><i
                                 data-toast="BANG!" class="fas fa-trash-alt"></i></a>
-                        <a data-user="cpu" data-action="left" class="combatBtns btn-floating btn-large waves-effect waves-light orange lighten-3 cpuBackward"><i
+                        <a data-user="cpu" data-action="left" data-hook="lockable" class="combatBtns btn-floating btn-large waves-effect waves-light orange lighten-3 cpuBackward"><i
                                 class="far fa-arrow-alt-circle-left"></i></a>
-                        <a data-user="cpu" data-action="drink" class="combatBtns btn-floating btn-large waves-effect waves-light orange lighten-3 playerDrink"><i
+                        <a data-user="cpu" data-action="drink" data-hook="lockable" class="combatBtns btn-floating btn-large waves-effect waves-light orange lighten-3 cpuDrink"><i
                                 data-toast="GULP!" class="fas fa-beer"></i></a>
-                        <a data-user="cpu" data-action="right" class="combatBtns btn-floating btn-large waves-effect waves-light orange lighten-3 cpuForward"><i
+                        <a data-user="cpu" data-action="right" data-hook="lockable" class="combatBtns btn-floating btn-large waves-effect waves-light orange lighten-3 cpuForward"><i
                                 class="far fa-arrow-alt-circle-right"></i></a>
                     </div>
                     <img id="opponentFightImg2" class="cpuFighter" data-position="right" src="">
@@ -110,14 +113,6 @@
 
     <div class="displayBox">
         <!--gifs display in this area, initially hidden-->
-    </div>
-
-    <div class="actionPoints" id="playerPoints">
-        <div class="card blue-grey darken-1">
-            <div class="card-content white-text">
-                <p id="playerAP">AP: 5</p>
-            </div>
-        </div>
     </div>
 
     <!--modal for instructions -->
