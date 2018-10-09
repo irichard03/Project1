@@ -98,7 +98,7 @@ $("#plusBtnStrength").on("click", function () {
     }
 });
 $("#minusBtnWits").on("click", function () {
-    if (totalPower < 50 && totalPower >= 0 && ((hwitStat - 1) > 0)) {
+    if (totalPower < 50 && totalPower >= 0 && ((witStat - 1) > 0)) {
         witStat--;
         totalPower++;
         $("#displayPowerThree").html(`Wits: ${witStat}`);
