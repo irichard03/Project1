@@ -31,6 +31,8 @@ body {
 .modalPicture{
     width: 240px;
     height: 240px;
+    border: 2px solid black;
+    border-radius: 5px;
 }
 
 .main {
