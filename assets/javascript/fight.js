@@ -281,8 +281,6 @@ function callAPI(buttonClicked) {
         method: "GET"
     }).then(function (response) {
         if (response) {
-
-
             //console.log("api call succeesfull");
             //console.log(response);
             //if player wins    
@@ -672,7 +670,6 @@ $(document).ready(function () {
                         buttonTemp = $(".cpuPunch");
                         buttonClassTemp = $(buttonTemp).attr("class");
                         pulseButton(buttonTemp,buttonClassTemp);
-
                         kickPunchSound.play();
 
                     }
