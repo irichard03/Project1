@@ -659,8 +659,7 @@ $(document).ready(function () {
                 $('.main').css('background-image', "url(" + cityImage + ")");
         }
     }
-<<<<<<< HEAD
-<<<<<<< HEAD
+
 
     function winGame() {
         $('#topTen').empty();
@@ -763,25 +762,12 @@ $(document).ready(function () {
         modal.css("display", "block");
     }
     //end of endmodal function
-<<<<<<< HEAD
 
     //uncomment below to test end modal dsiplay see style.css line #300 to configure.
     //winGame();
-
-    //function to puls buttons for 3 seconds, then returnt them to previous state.
-    function pulseButton(buttonPressed,fullClass){
-        $(buttonPressed).attr('class', 'pulse' + fullClass + '');
-        setTimeout(function(){ 
-            $(buttonPressed).attr('class', button );
-        },1000);
-    }
-    
-
-
+ 
     //end of document on ready
-=======
-=======
->>>>>>> a321809d33f4452818f74aef7586c7953fb4c25c
+
     //Audio
     function sound(src) {
         this.sound = document.createElement("audio");
@@ -829,8 +815,28 @@ $(document).ready(function () {
             audio.play();
         }
     }
-=======
->>>>>>> 78192e92438308309b681bf7198503fc54075550
+
+    //function updateAction Points
+    function updateActionPoints(){
+        if (parameters.player.stats.actionPoints > 0){
+            paramerters.player.status.actionPoints --;
+            $('#actionPoints').text(parameters.player.status.actionPoints);
+        }else{
+            parametres.player.status.actionPoints = 5;
+            $('#actionPoints').text(parameters.player.status.actionPoints);
+        }
+
+    
+    }
+
+     //function to pulse buttons for 3 seconds, then returnt them to previous state.
+     function pulseButton(buttonPressed,fullClass){
+        $(buttonPressed).attr('class', 'pulse' + fullClass + '');
+        setTimeout(function(){ 
+            $(buttonPressed).attr('class', button );
+        },1000);
+    }
+
 });
 
 
