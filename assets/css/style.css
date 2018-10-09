@@ -287,9 +287,15 @@ h7 {
     height: auto; 
     overflow: auto; /* Enable scroll if needed */
     text-align: center;
-}    
+}  
+#modalFight div {
+    text-align: center;
+}
+#modalFight p {
+    text-align: center;
+}  
 #fightBtn {
-    
+    background-color: #ff9100 !important;
     text-align: center;
 }
 /* Modal Content Box */
@@ -301,6 +307,7 @@ border: 1px solid #888;
 text-align: center;
 margin: auto;
 }
+
 @media only screen and (min-width : 601px) and (max-width : 1260px) {
     .toast {
         width: 100%;

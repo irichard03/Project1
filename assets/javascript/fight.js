@@ -390,9 +390,6 @@ function winGame() {
             });
             endModal();
         });
-
-    //call to end game, endModalmodal will only give option to play again.
-    //   endModal();
 }
 
 function loseGame() {
@@ -444,13 +441,12 @@ function endModal() {
 }
 //modal to start fight (and music!!)
 function modalFight() {
-    console.log("end modal called");
+    console.log("fight modal called");
     var modalF = $('#modalFight');
     modalF.css("display", "block");
 }
 //On ready function, do stuff when page loads.
 $(document).ready(function () {
-    
     //pulls up modal to start fight (and music)
     modalFight();
     //controls button on modalFight to start game
@@ -597,9 +593,6 @@ $(document).ready(function () {
                 $('.main').css('background-image', "url(" + cityImage + ")");
         }
     }
-
-
-    //end of endmodal function
     //Audio
     function sound(src) {
         this.sound = document.createElement("audio");
