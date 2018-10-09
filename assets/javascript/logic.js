@@ -31,7 +31,6 @@ firebase.auth().onAuthStateChanged(function (user) {
                     displayName: userName,
                 }).then(function () {
                     var displayName = user.displayName;
-                    console.log(displayName);
                     fireAccounts.once("value")
                         .then(function (snap) {
                             if (!snap.child(user.displayName).exists()) { //this way of identifying if the username is already in  use doesnt work
@@ -41,7 +40,6 @@ firebase.auth().onAuthStateChanged(function (user) {
                                     dateAdded: firebase.database.ServerValue.TIMESTAMP
                                 });
                             } else {
-                                console.log("That user is already here, so I won't add it");
                             }
                         }),
                         function (errorObject) {
@@ -55,7 +53,6 @@ firebase.auth().onAuthStateChanged(function (user) {
         // Here we can just see what username is connected
         var newConnection = database.ref("connections/").push(user.displayName);
         newConnection.onDisconnect().remove();
-        console.log("logged in!");
         //Toggle which button is displayed if you are logged in or not
         $('#login1').attr('hidden', true);
         $('#login2').removeAttr('hidden');
@@ -68,7 +65,6 @@ firebase.auth().onAuthStateChanged(function (user) {
         if (newConnection) {
             newConnection.remove();
         }
-        console.log('Not Logged In!');
         $('#login1').removeAttr('hidden');
         $('#login2').attr('hidden', true);
         $('#loginMsg').text('Enter your name to get started!');
@@ -84,15 +80,12 @@ function login() {
             // Handle Errors here.
             var errorCode = error.code;
             var errorMessage = error.message;
-            // ...
-
+            // ...  
         });
-
     } else {
         $("#loginMsg").html("<i class=\"red-text errorAlert text-darken-2 loginAlert material-icons\">" + "error" + "</i>You've left it blank.");
     }
 }
-
 function logout() {
     firebase.auth().signOut().then(function () {
 
@@ -100,9 +93,6 @@ function logout() {
         // An error happened.
     });
 }
-
-
-
 //CLick the Login Button to Log In!
 $("#loginButton").on("click", function (e) { //this ID will be used in the login screen at the start of the game
     e.preventDefault();
@@ -113,19 +103,6 @@ $("#loginButton").on("click", function (e) { //this ID will be used in the login
 $("#logoutButton").on("click keypress", function (e) {
     e.preventDefault();
     logout();
-});
-//chat functions
-$("#chat-submit").on("click keypress", function (e) {
-    e.preventDefault();
-    var chatMessage = userName + ": " + $("#chat-input").val().trim();
-    if (chatMessage.length > 0) {
-        var chatKey = d.ref("/chat").push().key;
-        d.ref("chat/" + chatKey).set(chatMessage);
-    }
-    $("#chat-input").val("");
-});
-fireChat.on("child_added", function (snap) {
-    $("#chatLog").append("<div>" + snap.val() + "</div>").scrollTop($("#chatLog")[0].scrollHeight);
 });
 //Jacob's AJAX Calls
 var APIKey = "166a433c57516f51dfab1f7edaed8413";
@@ -154,11 +131,9 @@ for (i = 0; i < cityArray.length; i++) {
             $(`#${cityHumidity}`).html("Humidity: " + response.main.humidity + "%");
         });
 }
-
 // API to randomly generate names for each city
 for (i = 0; i < cityArray.length; i++) {
     var queryURL = "https://randomuser.me/api/";
-
     $.ajax({
             url: queryURL,
             dataType: 'json',
@@ -171,7 +146,6 @@ for (i = 0; i < cityArray.length; i++) {
             giveNames();
         });
 }
-
 // Updates cards to show Name from API & sets oppponent attribute for card
 function giveNames() {
     for (i = 0; i < nameArray.length; i++) {
@@ -199,19 +173,15 @@ var loginSound = new sound ("./assets/audio/login.wav");
 var happySound = new sound ("./assets/audio/happysound.wav");
 var happySound2 = new sound ("./assets/audio/happysound2.wav");
 
+//For opponent.html
 //Jacob's card-title Click grabs City and Name
 $('.card-title').on("click", function () {
-    console.log($(this).attr("data-city"));
-    console.log($(this).attr("data-opponent"));
-    console.log($(this).attr("data-image"));
     happySound.play();
     var opponentChoosen = $(this).attr("data-opponent");
     var opponentCity = $(this).attr("data-city");
     var opponentImage = $(this).attr("data-image");
-
     localStorage.setItem("opponent", opponentChoosen);
     localStorage.setItem("city", opponentCity);
     localStorage.setItem("image", opponentImage);
-
     location.replace("fight.html");
 });

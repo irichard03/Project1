@@ -310,6 +310,9 @@ h7 {
 #endModal p {
     text-align: center;
 }
+#endModal a {
+    background-color: #ff9100 !important;
+}
 #modalFight {
     display: none; 
     position: fixed; 
@@ -330,6 +333,9 @@ h7 {
 #fightBtn {
     background-color: #ff9100 !important;
     text-align: center;
+}
+#modalCol {
+    margin-left: 35%;
 }
 /* Modal Content Box */
 .modal-content {
