@@ -787,12 +787,6 @@ $(document).ready(function () {
                 $('.main').css('background-image', "url(" + cityImage + ")");
         }
     }
-
-
-
-    //uncomment below to test end modal dsiplay see style.css line #300 to configure.
-    //winGame();
-
     //function to pulse buttons for 3 seconds, then returnt them to previous state.
     function pulseButton(buttonPressed,fullClass){
         $(buttonPressed).attr('class', 'pulse' + fullClass + '');
