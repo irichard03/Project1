@@ -250,7 +250,8 @@ var battle = {
     },
     endTurn: function (caster) {
         parameters[caster].stats.actionPoints = 0;
-        $('#actionPoints').text(parameters.player.status.actionPoints);
+        $('#actionPoints').text(parameters.player.stats.actionPoints);
+        checkTurn();
     },
     evadeCheck: function (attacker, attack, defender) {
         var dodgeChance = 1 - (parameters[attacker].attacks[attack].accuracy / (parameters[attacker].attacks[attack].accuracy + Math.pow((parameters[defender].stats.wits / 100), 0.985)));
@@ -273,9 +274,9 @@ var playlist = ["./assets/audio/music1.mp3",
 function callAPI(buttonClicked) {
     $('.displayBox').css('visibility', 'visible');
     let x = getRandomInt(10);
-    if(buttonClicked === 1){
+    if (buttonClicked === 1) {
         giphyUrl = "https://api.giphy.com/v1/gifs/search?q=winner&key=" + giphApiKey;
-    }else{
+    } else {
         giphyUrl = "https://api.giphy.com/v1/gifs/search?q=" + buttonClicked + "&key=" + giphApiKey;
     }
     $.ajax({
@@ -345,14 +346,16 @@ function checkTurn() {
         });
         parameters.cpu.stats.actionPoints = 5;
         cpuTurn = true;
+        happySound2.play();
     } else if (parameters.cpu.stats.actionPoints === 0 && cpuTurn === true && parameters.player.stats.parsedHealth > 0) {
         M.toast({
             html: `<span>Your Turn!!</span>`,
             classes: "rounded"
         });
         parameters.player.stats.actionPoints = 5;
-        $('#actionPoints').text(parameters.player.status.actionPoints);
+        $('#actionPoints').text(parameters.player.stats.actionPoints);
         cpuTurn = false;
+        happySound2.play();
     }
     if (parameters.cpu.stats.actionPoints > 0 && cpuTurn === true) {
         console.log("call cpuchoice");
@@ -372,28 +375,33 @@ function computerChoice() {
             if (parameters.cpu.stats.strength > 15 && parameters.cpu.stats.wits < 5) {
                 battle.drink("cpu");
                 console.log("CPU DRANK");
+                beerSound.play();
                 checkTurn();
                 return;
             } else if (throwDPS > punchDPS && throwDPS > kickDPS) {
                 battle.attack("cpu", "throw", "player", "BANG!");
                 console.log("CPU THROW");
+                throwSound.play();
                 checkTurn();
                 return;
             } else if ($(".playerFighter").attr("data-position") === "right" && $(".cpuFighter").attr("data-position") === "left") {
                 if (punchDPS > kickDPS) {
                     battle.attack("cpu", "punch", "player", "POW!");
                     console.log("CPUPUNCH");
+                    kickPunchSound.play();
                     checkTurn();
                     return;
                 } else if (kickDPS > punchDPS) {
                     battle.attack("cpu", "kick", "player", "SNIKT!");
                     console.log("CPUKICK");
+                    kickPunchSound.play();
                     checkTurn();
                     return;
                 }
             } else if ($(".playerFighter").attr("data-position") === "right" && $(".cpuFighter").attr("data-position") === "right") {
                 battle.moveLeft("cpu");
                 console.log("CPUMOVELEFT");
+                stepSound.play();
                 M.toast({
                     html: `<span>${opponentName} moved forwards!</span>`,
                     classes: "rounded"
@@ -403,6 +411,7 @@ function computerChoice() {
             } else if ($(".playerFighter").attr("data-position") === "left") {
                 battle.attack("cpu", "throw", "player", "BANG!");
                 console.log("cpuBANG!");
+                throwSound.play();
                 checkTurn();
                 return;
             }
@@ -410,34 +419,40 @@ function computerChoice() {
             if (throwDPS > punchDPS && throwDPS > kickDPS) {
                 battle.attack("cpu", "throw", "player", "BANG!");
                 console.log("CPU THROW");
+                throwSound.play();
                 checkTurn();
                 return;
             } else if ($(".playerFighter").attr("data-position") === "right" && $(".cpuFighter").attr("data-position") === "left") {
                 if (punchDPS > kickDPS) {
                     battle.attack("cpu", "punch", "player", "POW!");
                     console.log("CPUPUNCH");
+                    kickPunchSound.play();
                     checkTurn();
                     return;
                 } else if (kickDPS > punchDPS) {
                     battle.attack("cpu", "kick", "player", "SNIKT!");
                     console.log("CPUKICK");
+                    kickPunchSound.play();
                     checkTurn();
                     return;
                 }
             } else if ($(".playerFighter").attr("data-position") === "right" && $(".cpuFighter").attr("data-position") === "right") {
                 battle.moveLeft("cpu");
                 console.log("CPUMOVELEFT");
+                stepSound.play();
                 checkTurn();
                 return;
             } else if ($(".playerFighter").attr("data-position") === "left") {
                 battle.attack("cpu", "throw", "player", "BANG!");
                 console.log("cpuBANG!");
+                throwSound.play();
                 checkTurn();
                 return;
             }
         } else if (parameters.cpu.stats.actionPoints === 1 && $(".cpuFighter").attr("data-position") === "left") {
             if (parameters.player.attacks.punch.damage >= parameters.cpu.stats.parsedHealth && parameters.player.attacks.kick.damage >= parameters.cpu.stats.parsedHealth) {
                 battle.moveRight("cpu");
+                stepSound.play();
                 M.toast({
                     html: `<span>${opponentName} moved backwards!</span>`,
                     classes: "rounded"
@@ -445,14 +460,19 @@ function computerChoice() {
                 checkTurn();
                 return;
             } else {
-                battle.endTurn();
+                battle.endTurn("cpu");
+                happySound.play();
                 console.log("cpu ended turn");
                 checkTurn();
                 return;
             }
         } else {
+            battle.endTurn("cpu");
+            happySound.play();
             console.log("Failed");
             parameters.cpu.stats.actionPoints = 0;
+            checkTurn();
+            return;
         }
     }
 }
@@ -609,6 +629,8 @@ function bgAudio() {
 }
 //On ready function, do stuff when page loads.
 $(document).ready(function () {
+    //init tooltips
+    $('.tooltipped').tooltip();
     //pulls up modal to start fight (and music)
     modalFight();
     //controls button on modalFight to start game
@@ -665,31 +687,23 @@ $(document).ready(function () {
                     battle.moveRight("player");
                     stepSound.play();
                     break;
+                case "end":
+                    battle.endTurn("player");
+                    happySound.play();
+                    break;
             }
         } else if (user === "cpu") {
             switch (action) {
                 case "punch":
                     if ($(".playerFighter").attr("data-position") === "right" && $(".cpuFighter").attr("data-position") === "left") {
                         battle.attack("cpu", "punch", "player", "POW!");
-
-                        buttonTemp = $(".cpuPunch");
-                        buttonClassTemp = $(buttonTemp).attr("class");
-                        pulseButton(buttonTemp,buttonClassTemp);
-
                         kickPunchSound.play();
-
                     }
                     break;
                 case "kick":
                     if ($(".playerFighter").attr("data-position") === "right" && $(".cpuFighter").attr("data-position") === "left") {
                         battle.attack("cpu", "kick", "player", "SNIKT!");
-
-                        buttonTemp = $(".cpuStab");
-                        buttonClassTemp = $(buttonTemp).attr("class");
-                        pulseButton(buttonTemp,buttonClassTemp);
-
                         kickPunchSound.play();
-
                     }
                     break;
                 case "throw":
@@ -697,14 +711,7 @@ $(document).ready(function () {
 
                     buttonTemp = $(".cpuThrow");
                     buttonClassTemp = $(buttonTemp).attr("class");
-                    pulseButton(buttonTemp,buttonClassTemp);
-                    break;
-                case "drink":
-                    battle.drink("cpu");
-                    buttonTemp = $(".cpuDrink");
-                    buttonClassTemp = $(buttonTemp).attr("class");
-                    pulseButton(buttonTemp,buttonClassTemp);
-                    throwSound.play();
+                    pulseButton(buttonTemp, buttonClassTemp);
                     break;
                 case "drink":
                     battle.drink("cpu");
@@ -712,7 +719,7 @@ $(document).ready(function () {
                         html: `<span>${opponentName} took a drink! GULP!</span>`,
                         classes: "rounded"
                     });
-                    kickPunchSound.play();
+                    beerSound.play();
                     break;
                 case "left":
                     battle.moveLeft("cpu");
@@ -723,7 +730,7 @@ $(document).ready(function () {
                     });
                     buttonTemp = $(".cpuForward");
                     buttonClassTemp = $(buttonTemp).attr("class");
-                    pulseButton(buttonTemp,buttonClassTemp);
+                    pulseButton(buttonTemp, buttonClassTemp);
                     break;
                 case "right":
                     battle.moveRight("cpu");
@@ -734,7 +741,7 @@ $(document).ready(function () {
                     });
                     buttonTemp = $(".cpuBackward");
                     buttonClassTemp = $(buttonTemp).attr("class");
-                    pulseButton(buttonTemp,buttonClassTemp);
+                    pulseButton(buttonTemp, buttonClassTemp);
                     break;
             }
         }
@@ -793,12 +800,11 @@ $(document).ready(function () {
     //uncomment below to test end modal dsiplay see style.css line #300 to configure.
     //winGame();
     //function to pulse buttons for 3 seconds, then returnt them to previous state.
-    function pulseButton(buttonPressed,fullClass){
+    function pulseButton(buttonPressed, fullClass) {
         $(buttonPressed).attr('class', 'pulse' + fullClass + '');
-        setTimeout(function(){ 
-            $(buttonPressed).attr('class', button );
-        },1000);
+        setTimeout(function () {
+            $(buttonPressed).attr('class', button);
+        }, 1000);
     }
     //end of document on ready
 });
-
