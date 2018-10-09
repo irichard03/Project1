@@ -204,7 +204,7 @@ var battle = {
                 //console.log("wits before: " + parameters[caster].stats.strength);
                 parameters[caster].stats.strength += parameters[caster].stats.strength * 0.5;
                 parameters[caster].stats.wits -= parameters[caster].stats.wits * 0.5;
-                parameters[caster].stats.actionPoints -= 2;
+                parameters[caster].stats.actionPoints -= 3;
                 setTimeout(checkTurn, 3500);
                 //console.log("str after: " + parameters[caster].stats.strength);
                 //console.log("wits after: " + parameters[caster].stats.wits);
@@ -337,9 +337,17 @@ function randomBetween(min, max) {
 
 function checkTurn() {
     if (parameters.player.stats.actionPoints === 0 && cpuTurn === false) {
+        M.toast({
+            html: `<span>${opponentName}'s Turn!!</span>`,
+            classes: "rounded"
+        });
         parameters.cpu.stats.actionPoints = 5;
         cpuTurn = true;
     } else if (parameters.cpu.stats.actionPoints === 0 && cpuTurn === true) {
+        M.toast({
+            html: `<span>Your Turn!!</span>`,
+            classes: "rounded"
+        });
         parameters.player.stats.actionPoints = 5;
         cpuTurn = false;
     }
