@@ -68,7 +68,7 @@ $("#minusBtnHealth").on("click", function () {
         healthStat--;
         totalPower++;
         $("#displayPowerOne").html(`Health: ${healthStat}`);
-        $("#pointsAvailable").html(`Points Avaialble: ${totalPower}`);
+        $("#pointsAvailable").html(`Points Available: ${totalPower}`);
     }
 });
 
@@ -77,7 +77,7 @@ $("#plusBtnHealth").on("click", function () {
         healthStat++;
         totalPower--;
         $("#displayPowerOne").html(`Health: ${healthStat}`);
-        $("#pointsAvailable").html(`Points Avaialble: ${totalPower}`);
+        $("#pointsAvailable").html(`Points Available: ${totalPower}`);
     }
 });
 $("#minusBtnStrength").on("click", function () {
@@ -85,7 +85,7 @@ $("#minusBtnStrength").on("click", function () {
         strengthStat--;
         totalPower++;
         $("#displayPowerTwo").html(`Strength: ${strengthStat}`);
-        $("#pointsAvailable").html(`Points Avaialble: ${totalPower}`);
+        $("#pointsAvailable").html(`Points Available: ${totalPower}`);
     }
 });
 
@@ -94,7 +94,7 @@ $("#plusBtnStrength").on("click", function () {
         strengthStat++;
         totalPower--;
         $("#displayPowerTwo").html(`Strength: ${strengthStat}`);
-        $("#pointsAvailable").html(`Points Avaialble: ${totalPower}`);
+        $("#pointsAvailable").html(`Points Available: ${totalPower}`);
     }
 });
 $("#minusBtnWits").on("click", function () {
@@ -102,7 +102,7 @@ $("#minusBtnWits").on("click", function () {
         witStat--;
         totalPower++;
         $("#displayPowerThree").html(`Wits: ${witStat}`);
-        $("#pointsAvailable").html(`Points Avaialble: ${totalPower}`);
+        $("#pointsAvailable").html(`Points Available: ${totalPower}`);
     }
 });
 
@@ -111,7 +111,7 @@ $("#plusBtnWits").on("click", function () {
         witStat++;
         totalPower--;
         $("#displayPowerThree").html(`Wits: ${witStat}`);
-        $("#pointsAvailable").html(`Points Avaialble: ${totalPower}`);
+        $("#pointsAvailable").html(`Points Available: ${totalPower}`);
     }
 });
 
