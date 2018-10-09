@@ -1,6 +1,4 @@
 /*jshint esversion: 6 */
-//var to hold damage placeholder for testing, actual damage should be passed
-//in as an argument to the attack functions below.
 //Init Firebase
 var config = {
     apiKey: "AIzaSyCzKFhnqEPr92D--fdoL7-hiYJvCB4tbDs",
@@ -176,7 +174,6 @@ var battle = {
                         });
                     }
                 }
-
             } else {
                 //console.log(`You attacked the computer for ${parameters[attacker].attacks[attack].damage} damage!`); //enemyname is placeholder
                 //console.log("Your roll: " + roll);
@@ -194,6 +191,7 @@ var battle = {
                 }
             }
             parameters[attacker].stats.actionPoints -= 2;
+            $('#actionPoints').text(parameters.player.stats.actionPoints);
             setTimeout(checkTurn, 3500);
         }
     },
@@ -205,6 +203,7 @@ var battle = {
                 parameters[caster].stats.strength += parameters[caster].stats.strength * 0.5;
                 parameters[caster].stats.wits -= parameters[caster].stats.wits * 0.5;
                 parameters[caster].stats.actionPoints -= 3;
+                $('#actionPoints').text(parameters.player.stats.actionPoints);
                 setTimeout(checkTurn, 3500);
                 //console.log("str after: " + parameters[caster].stats.strength);
                 //console.log("wits after: " + parameters[caster].stats.wits);
@@ -221,6 +220,7 @@ var battle = {
             if (parameters[caster].stats.actionPoints >= 1) {
                 $('.playerFighter').css("float", "left").attr("data-position", "left");
                 parameters[caster].stats.actionPoints--;
+                $('#actionPoints').text(parameters.player.stats.actionPoints);
                 setTimeout(checkTurn, 3500);
             }
         } else if (caster === "cpu") {
@@ -236,6 +236,7 @@ var battle = {
             if (parameters[caster].stats.actionPoints >= 1) {
                 $('.playerFighter').css("float", "right").attr("data-position", "right");
                 parameters[caster].stats.actionPoints--;
+                $('#actionPoints').text(parameters.player.stats.actionPoints);
                 setTimeout(checkTurn, 3500);
             }
         } else if (caster === "cpu") {
@@ -249,6 +250,7 @@ var battle = {
     },
     endTurn: function (caster) {
         parameters[caster].stats.actionPoints = 0;
+        $('#actionPoints').text(parameters.player.status.actionPoints);
     },
     evadeCheck: function (attacker, attack, defender) {
         var dodgeChance = 1 - (parameters[attacker].attacks[attack].accuracy / (parameters[attacker].attacks[attack].accuracy + Math.pow((parameters[defender].stats.wits / 100), 0.985)));
@@ -336,19 +338,20 @@ function randomBetween(min, max) {
 }
 
 function checkTurn() {
-    if (parameters.player.stats.actionPoints === 0 && cpuTurn === false) {
+    if (parameters.player.stats.actionPoints === 0 && cpuTurn === false && parameters.cpu.stats.parsedHealth > 0) {
         M.toast({
             html: `<span>${opponentName}'s Turn!!</span>`,
             classes: "rounded"
         });
         parameters.cpu.stats.actionPoints = 5;
         cpuTurn = true;
-    } else if (parameters.cpu.stats.actionPoints === 0 && cpuTurn === true) {
+    } else if (parameters.cpu.stats.actionPoints === 0 && cpuTurn === true && parameters.player.stats.parsedHealth > 0) {
         M.toast({
             html: `<span>Your Turn!!</span>`,
             classes: "rounded"
         });
         parameters.player.stats.actionPoints = 5;
+        $('#actionPoints').text(parameters.player.status.actionPoints);
         cpuTurn = false;
     }
     if (parameters.cpu.stats.actionPoints > 0 && cpuTurn === true) {
@@ -564,10 +567,10 @@ function sound(src) {
     document.body.appendChild(this.sound);
     this.play = function () {
         this.sound.play();
-    }
+    };
     this.stop = function () {
         this.sound.pause();
-    }
+    };
 }
 var loginSound = new sound("./assets/audio/login.wav");
 var happySound = new sound("./assets/audio/happysound.wav");
@@ -609,7 +612,7 @@ $(document).ready(function () {
     $('#fightBtn').on('click', function () {
         bgAudio();
         $('#modalFight').css('display', 'none');
-    })
+    });
     // set opponent
     $("#cpuNickName").text(localStorage.getItem("opponent"));
     $("#opponentFightImg").attr("src", localStorage.getItem("image"));
@@ -784,12 +787,8 @@ $(document).ready(function () {
                 $('.main').css('background-image', "url(" + cityImage + ")");
         }
     }
-
-
-
     //uncomment below to test end modal dsiplay see style.css line #300 to configure.
     //winGame();
-
     //function to pulse buttons for 3 seconds, then returnt them to previous state.
     function pulseButton(buttonPressed,fullClass){
         $(buttonPressed).attr('class', 'pulse' + fullClass + '');
