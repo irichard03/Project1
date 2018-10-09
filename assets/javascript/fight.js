@@ -668,21 +668,30 @@ $(document).ready(function () {
                 case "punch":
                     if ($(".playerFighter").attr("data-position") === "right" && $(".cpuFighter").attr("data-position") === "left") {
                         battle.attack("cpu", "punch", "player", "POW!");
+
                         buttonTemp = $(".cpuPunch");
                         buttonClassTemp = $(buttonTemp).attr("class");
                         pulseButton(buttonTemp,buttonClassTemp);
+
+                        kickPunchSound.play();
+
                     }
                     break;
                 case "kick":
                     if ($(".playerFighter").attr("data-position") === "right" && $(".cpuFighter").attr("data-position") === "left") {
                         battle.attack("cpu", "kick", "player", "SNIKT!");
+
                         buttonTemp = $(".cpuStab");
                         buttonClassTemp = $(buttonTemp).attr("class");
                         pulseButton(buttonTemp,buttonClassTemp);
+
+                        kickPunchSound.play();
+
                     }
                     break;
                 case "throw":
                     battle.attack("cpu", "throw", "player", "BANG!");
+
                     buttonTemp = $(".cpuThrow");
                     buttonClassTemp = $(buttonTemp).attr("class");
                     pulseButton(buttonTemp,buttonClassTemp);
@@ -692,7 +701,6 @@ $(document).ready(function () {
                     buttonTemp = $(".cpuDrink");
                     buttonClassTemp = $(buttonTemp).attr("class");
                     pulseButton(buttonTemp,buttonClassTemp);
-
                     throwSound.play();
                     break;
                 case "drink":
@@ -702,7 +710,6 @@ $(document).ready(function () {
                         classes: "rounded"
                     });
                     kickPunchSound.play();
-
                     break;
                 case "left":
                     battle.moveLeft("cpu");
@@ -782,144 +789,17 @@ $(document).ready(function () {
     }
 
 
-    function winGame() {
-        $('#topTen').empty();
-        $('#windAndLosses').empty();
-        //Promise function to get values of accounts
-        fireAccounts.once("value")
-            .then(function (snap) {
-                wins = snap.child(`${displayName}`).child('wins').val();
-                losses = snap.child(`${displayName}`).child('losses').val();
-                if (!losses) {
-                    losses = 0;
-                }
-                //adding to wins
-                wins++;
-                //setting text for info at game end
-                var endText = `${displayName} you won!  You have ${wins} wins and ${losses} losses!`;
-                $('#winsAndLosses').html(`<p>${endText}<p>`);
-                //wins net is your net wins
-                var winsNet = wins - losses;
-                //update database for player and for topten
-                database.ref(`accounts/${displayName}`).update({
-                    wins: wins,
-                });
-                database.ref(`topten/${displayName}`).update({
-                    winsNet: winsNet,
-                });
-            }),
-            function (errorObject) {
-                console.log("Errors handled: " + errorObject.code);
-            };
-        //Promise function for top ten, getting info from to display
-        var search = database.ref('/topten').orderByChild('winsNet').limitToFirst(10);
-        search.once('value')
-            .then(function (snapshot) {
-                snapshot.forEach(function (childsnap) {
-                    var newKey = childsnap.key;
-                    var newVal = childsnap.child('winsNet').val();
-                    console.log(newKey);
-                    console.log(newVal);
-                    //(`${newKey}: ${childsnap.child('winsNet').val()} wins!`);
-                    $('#tableTopTen').prepend(`"<tr><td>${newKey}</td><td>${childsnap.child('winsNet').val()}</td></tr>"`);
-
-                });
-                endModal();
-            });
-
-        //call to end game, endModalmodal will only give option to play again.
-        //   endModal();
-    }
-
-
-                });
-                endmodal();
-            });
-
-
-    }
-    //function to display custom end modal style is controlled in css, does not disappear, only option is to pick another opponent.
-    function endModal() {
-        console.log("end modal called");
-        var modal = $('#endModal');
-        modal.css("display", "block");
-    }
-    //end of endmodal function
 
     //uncomment below to test end modal dsiplay see style.css line #300 to configure.
     //winGame();
- 
-    //end of document on ready
 
-    //Audio
-    function sound(src) {
-        this.sound = document.createElement("audio");
-        this.sound.src = src;
-        this.sound.setAttribute("preload", "auto");
-        this.sound.setAttribute("controls", "none");
-        this.sound.style.display = "none";
-        document.body.appendChild(this.sound);
-        this.play = function(){
-            this.sound.play();
-        }
-        this.stop = function(){
-            this.sound.pause();
-        }
-    }
-    var loginSound = new sound ("./assets/audio/login.wav");
-    var happySound = new sound ("./assets/audio/happysound.wav");
-    var happySound2 = new sound ("./assets/audio/happysound2.wav");
-    var beerSound = new sound ("./assets/audio/beer.wav");
-    var winSound = new sound ("./assets/audio/gameWin.wav");
-    var loseSound = new sound ("./assets/audio/gameLose.wav");
-    var kickPunchSound = new sound ("./assets/audio/kickpunch.wav");
-    var stepSound = new sound ("./assets/audio/step.wav");
-    var throwSound = new sound ("./assets/audio/throw.wav");
-    //Music playlist loop
-    function bgAudio() {
-        var playlist_index;
-        playlist_index = 0;
-        audio = new Audio();
-        audio.src = playlist[0];
-        audio.loop = false;
-        audio.volume = 0.25;
-        audio.play();
-        audio.addEventListener('ended', function() {
-            switchTrack();
-        });
-        function switchTrack() {
-            if(playlist_index == (playlist.length -1)) {
-                playlist_index = 0;
-            }
-            else {
-                playlist_index++;
-            }
-            audio.src = playlist[playlist_index];
-            audio.play();
-        }
-    }
-
-    //function updateAction Points
-    function updateActionPoints(){
-        if (parameters.player.stats.actionPoints > 0){
-            paramerters.player.status.actionPoints --;
-            $('#actionPoints').text(parameters.player.status.actionPoints);
-        }else{
-            parametres.player.status.actionPoints = 5;
-            $('#actionPoints').text(parameters.player.status.actionPoints);
-        }
-
-    
-    }
-
-     //function to pulse buttons for 3 seconds, then returnt them to previous state.
-     function pulseButton(buttonPressed,fullClass){
+    //function to pulse buttons for 3 seconds, then returnt them to previous state.
+    function pulseButton(buttonPressed,fullClass){
         $(buttonPressed).attr('class', 'pulse' + fullClass + '');
         setTimeout(function(){ 
             $(buttonPressed).attr('class', button );
         },1000);
     }
-
     //end of document on ready
 });
 
