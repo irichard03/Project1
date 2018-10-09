@@ -284,8 +284,6 @@ function callAPI(buttonClicked) {
         method: "GET"
     }).then(function (response) {
         if (response) {
-
-
             //console.log("api call succeesfull");
             //console.log(response);
             //if player wins    
@@ -697,6 +695,7 @@ $(document).ready(function () {
                 case "punch":
                     if ($(".playerFighter").attr("data-position") === "right" && $(".cpuFighter").attr("data-position") === "left") {
                         battle.attack("cpu", "punch", "player", "POW!");
+
                         kickPunchSound.play();
                     }
                     break;
