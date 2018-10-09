@@ -349,6 +349,8 @@ margin: auto;
     .toast {
         width: 100%;
         border-radius: 0;
+        font-weight: 100 !important;
+        letter-spacing: 2px !important;
         } 
     }
     
@@ -356,6 +358,8 @@ margin: auto;
         .toast {
             width: 100%;
             border-radius: 0;
+            font-weight: 100 !important;
+            letter-spacing: 2px !important;
         } 
     }
     
@@ -366,6 +370,7 @@ margin: auto;
             top: 70%;
             right: 0%;
             left: 0%;
+            letter-spacing: 2px !important;
         } 
     }
     
@@ -376,6 +381,7 @@ margin: auto;
             top: 70%;
             right: 0%;
             left: 0%;
+            letter-spacing: 2px !important;
         } 
 
 

@@ -487,6 +487,9 @@ function winGame() {
             if (!losses) {
                 losses = 0;
             }
+            if (!wins) {
+                wins = 0;
+            }
             //adding to wins
             wins++;
             //setting text for info at game end
@@ -533,6 +536,9 @@ function loseGame() {
             losses = snap.child(`${displayName}`).child('losses').val();
             if (!losses) {
                 losses = 0;
+            }
+            if (!wins) {
+                wins = 0;
             }
             //adding to losses
             losses++;
