@@ -45,7 +45,7 @@
                         <h7 id="playerWit">Wit</h7>
                         <h7 id="playerBooze">Booze</h7>
                         <h7 id="thisLabel">Action Points:<span id="actionPoints">5</span></h7>
-                       
+
                     </div>
                 </div>
                 <div class="right cpuReadOut ">
@@ -66,17 +66,19 @@
             <div class="row bottom">
                 <div class="col left playerZone">
                     <div class="playerButtons">
-                        <a data-user="player" data-action="left" data-hook="lockable" class="combatBtns btn-floating btn-large waves-effect waves-light orange lighten-3 playerBackward"><i
+                        <a data-position="top" data-tooltip="Move Left. Costs 1 AP" data-user="player" data-action="left" data-hook="lockable" class="combatBtns btn tooltipped btn-floating btn-large waves-effect waves-light orange lighten-3 playerBackward"><i
                                 class="far fa-arrow-alt-circle-left"></i></a>
-                        <a data-user="player" data-action="drink" data-hook="lockable" data-toast="GULP!" class="combatBtns btn-floating btn-large waves-effect waves-light orange lighten-3 playerDrink"><i
+                        <a data-position="top" data-tooltip="Drink a beer to increase your strength but decrease your wits! Costs 3 AP" data-user="player" data-action="drink" data-hook="lockable" data-toast="GULP!" class="combatBtns btn tooltipped btn-floating btn-large waves-effect waves-light orange lighten-3 playerDrink"><i
                                 class="fas fa-beer"></i></a>
-                        <a data-user="player" data-action="right" data-hook="lockable" class="combatBtns btn-floating btn-large waves-effect waves-light orange lighten-3 playerForward"><i
+                        <a data-position="top" data-tooltip="Move Right. Costs 1 AP" data-user="player" data-action="right" data-hook="lockable" class="combatBtns btn tooltipped btn-floating btn-large waves-effect waves-light orange lighten-3 playerForward"><i
                                 class="far fa-arrow-alt-circle-right"></i></a>
-                        <a data-user="player" data-action="throw" data-hook="lockable" data-toast="BANG!" class="combatBtns btn-floating btn-large waves-effect waves-light orange lighten-2 playerThrow"><i
+                        <a data-position="top" data-tooltip="End Your Turn" data-user="player" data-action="end" data-hook="lockable" data-toast="" class="combatBtns btn tooltipped btn-floating btn-large waves-effect waves-light orange lighten-2 playerThrow"><i
+                                class="fas fa-hourglass-end"></i></a>
+                        <a data-position="top" data-tooltip="Throw an object to deal light damage.  Highly Accurate. Costs 2 AP" data-user="player" data-action="throw" data-hook="lockable" data-toast="BANG!" class="combatBtns btn tooltipped btn-floating btn-large waves-effect waves-light orange lighten-2 playerThrow"><i
                                 class="fas fa-trash-alt"></i></a>
-                        <a data-user="player" data-action="kick" data-hook="lockable" data-toast="SNIKT!" class="combatBtns btn-floating btn-large waves-effect waves-light orange lighten-1 playerStab"><i
+                        <a data-position="top" data-tooltip="Kick your Opponent.  High damage but low accuracy. Costs 2 AP" data-user="player" data-action="kick" data-hook="lockable" data-toast="SNIKT!" class="combatBtns btn tooltipped btn-floating btn-large waves-effect waves-light orange lighten-1 playerStab"><i
                                 class="fas fa-screwdriver"></i></a>
-                        <a data-user="player" data-action="punch" data-hook="lockable" data-toast="POW!" class="combatBtns btn-floating btn-large waves-effect waves-light orange playerPunch"><i
+                        <a data-position="top" data-tooltip="Punch your Opponent. Deals moderate damage. Costs 2 AP" data-user="player" data-action="punch" data-hook="lockable" data-toast="POW!" class="combatBtns btn tooltipped btn-floating btn-large waves-effect waves-light orange playerPunch"><i
                                 class="fas fa-hand-rock"></i></a>
 
                     </div>
@@ -136,7 +138,8 @@
                 <h4>Are you ready to fight???????????</h4>
             </div>
             <div class="modal-footer center-align">
-                <button id="fightBtn" class="modal-close waves-effect waves-green btn-flat center-align">Click to Play!!</button>
+                <button id="fightBtn" class="modal-close waves-effect waves-green btn-flat center-align">Click to
+                    Play!!</button>
             </div>
         </div>
     </div>
@@ -144,38 +147,39 @@
     <div id="endModal" class="modal">
         <!-- Modal content -->
         <div class="modal-content center-align">
-                <div class="row center-align">
-                    <div id="modalCol" class="col s4">
-                        <div id="winsAndLosses"></div>
-                        <div>
-                            <table>
-                                <thead>
-                                    <tr>
-                                        <th>Player</th>
-                                        <th>Wins</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="tableTopTen" class="striped center">
-                                </tbody>
-                            </table>
-                        </div>
+            <div class="row center-align">
+                <div id="modalCol" class="col s4">
+                    <div id="winsAndLosses"></div>
+                    <div>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Player</th>
+                                    <th>Wins</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tableTopTen" class="striped center">
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
-            <div class="modal-footer center-align">
-                <a href="./opponent.html" class="modal-close waves-effect waves-green btn-flat center-align">Click to Choose Another
-                    Opponent.</a>
-            </div>
         </div>
+        <div class="modal-footer center-align">
+            <a href="./opponent.html" class="modal-close waves-effect waves-green btn-flat center-align">Click to
+                Choose Another
+                Opponent.</a>
+        </div>
+    </div>
 
 
-        <script src="https://www.gstatic.com/firebasejs/5.5.1/firebase-app.js"></script>
-        <script src="https://www.gstatic.com/firebasejs/5.5.1/firebase-database.js"></script>
-        <script src="https://www.gstatic.com/firebasejs/5.5.1/firebase-auth.js"></script>
-        <script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
-            crossorigin="anonymous"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-        <script src="assets/javascript/fight.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.5.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.5.1/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.5.1/firebase-auth.js"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script src="assets/javascript/fight.js"></script>
 </body>
 
 </html>
