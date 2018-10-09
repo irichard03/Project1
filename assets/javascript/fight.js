@@ -259,7 +259,10 @@ function callAPI(buttonClicked) {
         method: "GET"
     }).then(function (response) {
         if (response) {
-            console.log("api call succeesfull");
+
+
+            //console.log("api call succeesfull");
+            //console.log(response);
             //if player wins    
             if (buttonClicked === 1) {
                 //need to increment players win count.
@@ -710,44 +713,6 @@ $(document).ready(function () {
         //   endModal();
     }
 
-    function loseGame() {
-        $('#topTen').empty();
-        $('#windAndLosses').empty();
-        //Promise function to get values of accounts
-        fireAccounts.once("value")
-            .then(function (snap) {
-                wins = snap.child(`${displayName}`).child('wins').val();
-                losses = snap.child(`${displayName}`).child('losses').val();
-                //adding to losses
-                losses++;
-                //setting info to display at game end
-                var endText = `${displayname} you lost!  You have ${wins} wins and ${losses} losses!`;
-                $('#winsAndLosses').html(`<p>${endText}<p>`);
-                //net wins
-                var winsNet = wins - losses;
-                //update database for wins and net wins, account and top ten
-                database.ref(`accounts/${displayName}`).update({
-                    wins: wins,
-                });
-                database.ref(`topten/${displayName}`).update({
-                    winsNet: winsNet,
-                });
-            }),
-            function (errorObject) {
-                console.log("Errors handled: " + errorObject.code);
-            };
-        //Promise function for top ten to display on game end modal
-        var search = database.ref('/topten').orderByChild('winsNet').limitToFirst(10);
-        search.once('value')
-            .then(function (snapshot) {
-                snapshot.forEach(function (childsnap) {
-                    var newKey = childsnap.key;
-                    var newVal = childsnap.child('winsNet').val();
-                    console.log(newKey);
-                    console.log(newVal);
-                    var newP = $('<p>');
-                    newP.text(`${newKey}: ${childsnap.child('winsNet').val()} wins!`);
-                    $('#topTen').prepend(newP);
 
                 });
                 endmodal();
