@@ -10,12 +10,12 @@
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU"
         crossorigin="anonymous">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Luckiest+Guy" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Bevan|Luckiest+Guy" rel="stylesheet">
     <link rel="stylesheet" href="assets/css/style.css">
     <title>Hooligan Profile</title>
 </head>
 
-<body>
+<body class="bodyImg">
     <!--Navbar: contains instructions and more-->
     <nav>
         <div class="nav-wrapper orange darken-3">
@@ -28,9 +28,6 @@
             <ul id="nav-mobile" class="right hide-on-med-and-down">
                 <li>
                     <a id="profileNavBtn" class="waves-effect waves-light btn disabled" href="index.html">Login</a>
-                </li>
-                <li>
-                    <a id="fightNavBtn" class="waves-effect waves-light btn disabled" href="fight.html">Fight</a>
                 </li>
             </ul>
         </div>
@@ -63,36 +60,38 @@
                 </div>
                 <div class="row center">
                     <p id="creationPoints">
-                        <h5 id="pointsAvailable">Points Avaialble: 50</h5>
+                        <h5 id="pointsAvailable">Points Available: 50</h5>
                     </p>
                 </div>
                 <div class="row noTop">
-                    <div class="input-field col s12">
-                        <p id="displayPowerOne">Health: 0</p>
-                        <a class="waves-effect waves-light btn powerBtn" data-name="Health" data-stat="healthStat" data-display="#displayPowerOne"
-                            id="minusBtnHealth">-</a>
-                        <a class="waves-effect waves-light btn powerBtn" data-name="Health" data-stat="healthStat" data-display="#displayPowerOne"
-                            id="plusBtnHealth">+</a>
-                    </div>
-                </div>
-                <div class="row noTop">
-                    <div class="input-field col s12">
-                        <p id="displayPowerTwo">Strength: 0</p>
-                        <a class="waves-effect waves-light btn powerBtn" data-name="Strength" data-stat="strengthStat" data-display="#displayPowerTwo"
-                            id="minusBtnStrength">-</a>
-                        <a class="waves-effect waves-light btn powerBtn" data-name="Strength" data-stat="strengthStat" data-display="#displayPowerTwo"
-                            id="plusBtnStrength">+</a>
-                    </div>
-                </div>
-                <div class="row noTop">
-                    <div class="input-field col s12">
-                        <p id="displayPowerThree">Wits: 0</p>
-                        <a class="waves-effect waves-light btn powerBtn" data-name="Wits" data-stat="witStat" data-display="#displayPowerThree" id="minusBtnWits">-</a>
-                        <a class="waves-effect waves-light btn powerBtn" data-name="Wits" data-stat="witStat" data-display="#displayPowerThree" id="plusBtnWits">+</a>
-                    </div>
+                    <td>
+                        <div class="input-field col s4">
+                            <p id="displayPowerOne">Health: 0</p>
+                            <a class="waves-effect waves-light btn powerBtn" data-name="Health" data-stat="healthStat" data-display="#displayPowerOne"
+                                id="minusBtnHealth">-</a>
+                            <a class="waves-effect waves-light btn powerBtn" data-name="Health" data-stat="healthStat" data-display="#displayPowerOne"
+                                id="plusBtnHealth">+</a>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="input-field col s4">
+                            <p id="displayPowerTwo">Strength: 0</p>
+                            <a class="waves-effect waves-light btn powerBtn" data-name="Strength" data-stat="strengthStat" data-display="#displayPowerTwo"
+                                id="minusBtnStrength">-</a>
+                            <a class="waves-effect waves-light btn powerBtn" data-name="Strength" data-stat="strengthStat" data-display="#displayPowerTwo"
+                                id="plusBtnStrength">+</a>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="input-field col s4">
+                            <p id="displayPowerThree">Wits: 0</p>
+                            <a class="waves-effect waves-light btn powerBtn" data-name="Wits" data-stat="witStat" data-display="#displayPowerThree" id="minusBtnWits">-</a>
+                            <a class="waves-effect waves-light btn powerBtn" data-name="Wits" data-stat="witStat" data-display="#displayPowerThree" id="plusBtnWits">+</a>
+                        </div>
+                    </td>
                 </div>
                 <div class="row">
-                    <a class="waves-effect waves-orange btn" id="profileBtn">Save/Next
+                    <a class="waves-effect waves-orange btn" id="profileBtn">Save / Next
                         <i class="material-icons left">save</i>
                     </a>
                 </div>

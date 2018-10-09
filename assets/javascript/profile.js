@@ -31,7 +31,6 @@ firebase.auth().onAuthStateChanged(function (user) {
         // User is signed in.
         console.log('signed in!');
         displayName = user.displayName;
-        console.log(user.displayName);
         isAnonymous = user.isAnonymous;
         uid = user.uid;
         $('#nameLabel').text(`Nickname:  ${displayName}`);
@@ -52,10 +51,6 @@ firebase.auth().onAuthStateChanged(function (user) {
                 $("#displayPowerTwo").html(`Strength: ${strengthStat}`);
                 $("#displayPowerThree").html(`Wits: ${witStat}`);
             }
-            console.log(healthStat);
-            console.log(witStat);
-            console.log(strengthStat);
-            console.log(team);
         }),
         function (errorObject) {
             console.log("Errors handled: " + errorObject.code);
@@ -73,7 +68,7 @@ $("#minusBtnHealth").on("click", function () {
         healthStat--;
         totalPower++;
         $("#displayPowerOne").html(`Health: ${healthStat}`);
-        $("#pointsAvailable").html(`Points Avaialble: ${totalPower}`);
+        $("#pointsAvailable").html(`Points Available: ${totalPower}`);
     }
 });
 
@@ -82,7 +77,7 @@ $("#plusBtnHealth").on("click", function () {
         healthStat++;
         totalPower--;
         $("#displayPowerOne").html(`Health: ${healthStat}`);
-        $("#pointsAvailable").html(`Points Avaialble: ${totalPower}`);
+        $("#pointsAvailable").html(`Points Available: ${totalPower}`);
     }
 });
 $("#minusBtnStrength").on("click", function () {
@@ -90,7 +85,7 @@ $("#minusBtnStrength").on("click", function () {
         strengthStat--;
         totalPower++;
         $("#displayPowerTwo").html(`Strength: ${strengthStat}`);
-        $("#pointsAvailable").html(`Points Avaialble: ${totalPower}`);
+        $("#pointsAvailable").html(`Points Available: ${totalPower}`);
     }
 });
 
@@ -99,7 +94,7 @@ $("#plusBtnStrength").on("click", function () {
         strengthStat++;
         totalPower--;
         $("#displayPowerTwo").html(`Strength: ${strengthStat}`);
-        $("#pointsAvailable").html(`Points Avaialble: ${totalPower}`);
+        $("#pointsAvailable").html(`Points Available: ${totalPower}`);
     }
 });
 $("#minusBtnWits").on("click", function () {
@@ -107,7 +102,7 @@ $("#minusBtnWits").on("click", function () {
         witStat--;
         totalPower++;
         $("#displayPowerThree").html(`Wits: ${witStat}`);
-        $("#pointsAvailable").html(`Points Avaialble: ${totalPower}`);
+        $("#pointsAvailable").html(`Points Available: ${totalPower}`);
     }
 });
 
@@ -116,30 +111,15 @@ $("#plusBtnWits").on("click", function () {
         witStat++;
         totalPower--;
         $("#displayPowerThree").html(`Wits: ${witStat}`);
-        $("#pointsAvailable").html(`Points Avaialble: ${totalPower}`);
+        $("#pointsAvailable").html(`Points Available: ${totalPower}`);
     }
 });
-function powerDisplay(stat, display, direction, name) {
-    if (totalPower <= 50 && totalPower > 0 && direction.indexOf("plus") !== -1) {
-        stat++;
-        totalPower--;
-    } else if (totalPower < 50 && totalPower >= 0 && direction.indexOf("minus") !== -1) {
-        stat--;
-        totalPower++;
-    }
-    $(display).html(name + ":" + stat);
-    $("#pointsAvailable").html(`Points Avaialble: ${totalPower}`);
-    console.log(stat);
-}
+
 var toastNoTeam = '<span>Please choose a team!</span>';
 var toastNoPower = '<span>Make sure to use all of your power!</span>';
 
 $("#profileBtn").on("click", function () {
     team = $('#prefTeam :selected').text();
-    console.log(`Favorite Team: ${team}`);
-    console.log(`Health: ${healthStat}`);
-    console.log(`Strength: ${strengthStat}`);
-    console.log(`Wit: ${witStat}`);
     if(team === 'Choose your Team' || totalPower > 0) {
         if(team === 'Choose your Team') {
             M.toast({html: toastNoTeam});

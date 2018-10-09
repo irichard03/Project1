@@ -10,12 +10,13 @@
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU"
         crossorigin="anonymous">
     <link rel="stylesheet" href="assets/css/style.css">
+    <link href="https://fonts.googleapis.com/css?family=Bevan|Luckiest+Guy" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
     <title>Hooligans Fight!</title>
 </head>
 
-<body>
+<body id="bodyFight">
     <header>
         <nav>
             <div class="nav-wrapper orange darken-3">
@@ -24,7 +25,6 @@
                 </ul>
                 <a class="center brand-logo">Hooligans</a>
                 <ul id="nav-mobile" class="right hide-on-med-and-down">
-                    <li><a class="waves-effect waves-light btn disabled" href="fight.html">Fight</a></li>
                 </ul>
             </div>
         </nav>
@@ -145,7 +145,7 @@
         <!-- Modal content -->
         <div class="modal-content center-align">
                 <div class="row center-align">
-                    <div class="col">
+                    <div id="modalCol" class="col s4">
                         <div id="winsAndLosses"></div>
                         <div>
                             <table>
