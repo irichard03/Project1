@@ -130,6 +130,7 @@ var battle = {
                         parameters[defender].stats.parsedHealth = 0;
                         $('#cpuHealth').css('width', '0px');
                         callAPI(1);
+                        winGame();
                     } else {
                         let cpuHealthString = parameters[defender].stats.parsedHealth.toString();
                         cpuHealthString += 'px';
@@ -144,6 +145,7 @@ var battle = {
                         parameters[defender].stats.parsedHealth = 0;
                         $("#playerHealth").css("width", "0px");
                         callAPI("lose");
+                        loseGame();
                     } else {
                         let playerHealthString = parameters[defender].stats.parsedHealth.toString();
                         playerHealthString += "px";
@@ -237,10 +239,10 @@ var battle = {
 };
 //Audio Playlist
 var playlist = ["./assets/audio/music1.mp3",
-"./assets/audio/music2.mp3",
-"./assets/audio/music3.mp3",
-"./assets/audio/music4.mp3",
-"./assets/audio/music5.mp3"];
+    "./assets/audio/music2.mp3",
+    "./assets/audio/music3.mp3",
+    "./assets/audio/music4.mp3",
+    "./assets/audio/music5.mp3"];
 //Giphy call pass in string to change search parameter for gif results.
 function callAPI(buttonClicked) {
     $('.displayBox').css('visibility', 'visible');
@@ -343,16 +345,119 @@ function computerChoice() {
         }
     }
 }
+function winGame() {
+    $('#tableTopTen').empty();
+    $('#windAndLosses').empty();
+    winSound();
+    //Promise function to get values of accounts
+    fireAccounts.once("value")
+        .then(function (snap) {
+            wins = snap.child(`${displayName}`).child('wins').val();
+            losses = snap.child(`${displayName}`).child('losses').val();
+            if (!losses) {
+                losses = 0;
+            }
+            //adding to wins
+            wins++;
+            //setting text for info at game end
+            var endText = `${displayName} you won!  You have ${wins} wins and ${losses} losses!`;
+            $('#winsAndLosses').html(`<p>${endText}<p>`);
+            //wins net is your net wins
+            var winsNet = wins - losses;
+            //update database for player and for topten
+            database.ref(`accounts/${displayName}`).update({
+                wins: wins,
+            });
+            database.ref(`topten/${displayName}`).update({
+                winsNet: winsNet,
+            });
+        }),
+        function (errorObject) {
+            console.log("Errors handled: " + errorObject.code);
+        };
+    //Promise function for top ten, getting info from to display
+    var search = database.ref('/topten').orderByChild('winsNet').limitToFirst(10);
+    search.once('value')
+        .then(function (snapshot) {
+            snapshot.forEach(function (childsnap) {
+                var newKey = childsnap.key;
+                var newVal = childsnap.child('winsNet').val();
+                console.log(newKey);
+                console.log(newVal);
+                //(`${newKey}: ${childsnap.child('winsNet').val()} wins!`);
+                $('#tableTopTen').prepend(`"<tr><td>${newKey}</td><td>${childsnap.child('winsNet').val()}</td></tr>"`);
+
+            });
+            endModal();
+        });
+}
+
+function loseGame() {
+    $('#tableTopTen').empty();
+    $('#windAndLosses').empty();
+    loseSound();
+    //Promise function to get values of accounts
+    fireAccounts.once("value")
+        .then(function (snap) {
+            wins = snap.child(`${displayName}`).child('wins').val();
+            losses = snap.child(`${displayName}`).child('losses').val();
+            //adding to losses
+            losses++;
+            //setting info to display at game end
+            var endText = `${displayname} you lost!  You have ${wins} wins and ${losses} losses!`;
+            $('#winsAndLosses').html(`<p>${endText}<p>`);
+            //net wins
+            var winsNet = wins - losses;
+            //update database for wins and net wins, account and top ten
+            database.ref(`accounts/${displayName}`).update({
+                wins: wins,
+            });
+            database.ref(`topten/${displayName}`).update({
+                winsNet: winsNet,
+            });
+        }),
+        function (errorObject) {
+            console.log("Errors handled: " + errorObject.code);
+        };
+    //Promise function for top ten to display on game end modal
+    var search = database.ref('/topten').orderByChild('winsNet').limitToFirst(10);
+    search.once('value')
+        .then(function (snapshot) {
+            snapshot.forEach(function (childsnap) {
+                var newKey = childsnap.key;
+                var newVal = childsnap.child('winsNet').val();
+                console.log(newKey);
+                console.log(newVal);
+                $('#tableTopTen').prepend(`"<tr><td>${newKey}</td><td>${childsnap.child('winsNet').val()}</td></tr>"`);
+            });
+            endmodal();
+        });
+}
+//function to display custom end modal style is controlled in css, does not disappear, only option is to pick another opponent.
+function endModal() {
+    console.log("end modal called");
+    var modal = $('#endModal');
+    modal.css("display", "block");
+}
+//modal to start fight (and music!!)
+function modalFight() {
+    console.log("fight modal called");
+    var modalF = $('#modalFight');
+    modalF.css("display", "block");
+}
 //On ready function, do stuff when page loads.
 $(document).ready(function () {
-
+    //pulls up modal to start fight (and music)
+    modalFight();
+    //controls button on modalFight to start game
+    $('#fightBtn').on('click', function () {
+        bgAudio();
+        $('#modalFight').css('display','none');
+    })
     // set opponent
     $("#cpuNickName").text(localStorage.getItem("opponent"));
     $("#opponentFightImg").attr("src", localStorage.getItem("image"));
     $("#opponentFightImg2").attr("src", localStorage.getItem("image"));
-
-    //console.log(localStorage.getItem("opponent"));
-    //console.log(localStorage.getItem("image"));
     //Combat Functions
     //battle commands
     $(document).on("click", ".combatBtns", function (action, user) {
@@ -488,108 +593,6 @@ $(document).ready(function () {
                 $('.main').css('background-image', "url(" + cityImage + ")");
         }
     }
-
-    function winGame() {
-        $('#topTen').empty();
-        $('#windAndLosses').empty();
-        //Promise function to get values of accounts
-        fireAccounts.once("value")
-            .then(function (snap) {
-                wins = snap.child(`${displayName}`).child('wins').val();
-                losses = snap.child(`${displayName}`).child('losses').val();
-                if (!losses) {
-                    losses = 0;
-                }
-                //adding to wins
-                wins++;
-                //setting text for info at game end
-                var endText = `${displayName} you won!  You have ${wins} wins and ${losses} losses!`;
-                $('#winsAndLosses').html(`<p>${endText}<p>`);
-                //wins net is your net wins
-                var winsNet = wins - losses;
-                //update database for player and for topten
-                database.ref(`accounts/${displayName}`).update({
-                    wins: wins,
-                });
-                database.ref(`topten/${displayName}`).update({
-                    winsNet: winsNet,
-                });
-            }),
-            function (errorObject) {
-                console.log("Errors handled: " + errorObject.code);
-            };
-        //Promise function for top ten, getting info from to display
-        var search = database.ref('/topten').orderByChild('winsNet').limitToFirst(10);
-        search.once('value')
-            .then(function (snapshot) {
-                snapshot.forEach(function (childsnap) {
-                    var newKey = childsnap.key;
-                    var newVal = childsnap.child('winsNet').val();
-                    console.log(newKey);
-                    console.log(newVal);
-                    //(`${newKey}: ${childsnap.child('winsNet').val()} wins!`);
-                    $('#tableTopTen').prepend(`"<tr><td>${newKey}</td><td>${childsnap.child('winsNet').val()}</td></tr>"`);
-
-                });
-                endModal();
-            });
-
-        //call to end game, endModalmodal will only give option to play again.
-        //   endModal();
-    }
-
-    function loseGame() {
-        $('#topTen').empty();
-        $('#windAndLosses').empty();
-        //Promise function to get values of accounts
-        fireAccounts.once("value")
-            .then(function (snap) {
-                wins = snap.child(`${displayName}`).child('wins').val();
-                losses = snap.child(`${displayName}`).child('losses').val();
-                //adding to losses
-                losses++;
-                //setting info to display at game end
-                var endText = `${displayname} you lost!  You have ${wins} wins and ${losses} losses!`;
-                $('#winsAndLosses').html(`<p>${endText}<p>`);
-                //net wins
-                var winsNet = wins - losses;
-                //update database for wins and net wins, account and top ten
-                database.ref(`accounts/${displayName}`).update({
-                    wins: wins,
-                });
-                database.ref(`topten/${displayName}`).update({
-                    winsNet: winsNet,
-                });
-            }),
-            function (errorObject) {
-                console.log("Errors handled: " + errorObject.code);
-            };
-        //Promise function for top ten to display on game end modal
-        var search = database.ref('/topten').orderByChild('winsNet').limitToFirst(10);
-        search.once('value')
-            .then(function (snapshot) {
-                snapshot.forEach(function (childsnap) {
-                    var newKey = childsnap.key;
-                    var newVal = childsnap.child('winsNet').val();
-                    console.log(newKey);
-                    console.log(newVal);
-                    var newP = $('<p>');
-                    newP.text(`${newKey}: ${childsnap.child('winsNet').val()} wins!`);
-                    $('#topTen').prepend(newP);
-
-                });
-                endmodal();
-            });
-
-
-    }
-    //function to display custom end modal style is controlled in css, does not disappear, only option is to pick another opponent.
-    function endModal() {
-        console.log("end modal called");
-        var modal = $('#endModal');
-        modal.css("display", "block");
-    }
-    //end of endmodal function
     //Audio
     function sound(src) {
         this.sound = document.createElement("audio");
