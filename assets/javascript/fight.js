@@ -21,6 +21,8 @@ var displayName;
 var isAnonymous;
 var uid;
 //combat variables
+var buttonTemp;
+var buttonClassTemp;
 var cpuTurn = false;
 var tempAcc;
 var opponentName = localStorage.getItem("opponent");
@@ -29,7 +31,7 @@ var basePunch = 3.5;
 var baseThrow = 2.25;
 var giphApiKey = "Y3h4ksc22JmMFoYTKH2XUYmRwrnYL8Gd";
 var cityImage;
-var cpuHealth = randomBetween(1, 50 - 3);
+var cpuHealth = randomBetween(1, 30 - 3);
 var cpuStrength = randomBetween(1, 50 - 2 - cpuHealth);
 var cpuWits = 50 - cpuHealth - cpuStrength;
 var cpuAcc = 3.677 - (23 / Math.pow((10 + cpuWits), 0.7));
@@ -247,12 +249,18 @@ var playlist = ["./assets/audio/music1.mp3",
 function callAPI(buttonClicked) {
     $('.displayBox').css('visibility', 'visible');
     let x = getRandomInt(10);
-    giphyUrl = "https://api.giphy.com/v1/gifs/search?q=" + buttonClicked + "&key=" + giphApiKey;
+    if(buttonClicked === 1){
+        giphyUrl = "https://api.giphy.com/v1/gifs/search?q=winner&key=" + giphApiKey;
+    }else{
+        giphyUrl = "https://api.giphy.com/v1/gifs/search?q=" + buttonClicked + "&key=" + giphApiKey;
+    }
     $.ajax({
         url: giphyUrl,
         method: "GET"
     }).then(function (response) {
         if (response) {
+
+
             //console.log("api call succeesfull");
             //console.log(response);
             //if player wins    
@@ -556,17 +564,39 @@ $(document).ready(function () {
                 case "punch":
                     if ($(".playerFighter").attr("data-position") === "right" && $(".cpuFighter").attr("data-position") === "left") {
                         battle.attack("cpu", "punch", "player", "POW!");
+
+                        buttonTemp = $(".cpuPunch");
+                        buttonClassTemp = $(buttonTemp).attr("class");
+                        pulseButton(buttonTemp,buttonClassTemp);
+
                         kickPunchSound.play();
+
                     }
                     break;
                 case "kick":
                     if ($(".playerFighter").attr("data-position") === "right" && $(".cpuFighter").attr("data-position") === "left") {
                         battle.attack("cpu", "kick", "player", "SNIKT!");
+
+                        buttonTemp = $(".cpuStab");
+                        buttonClassTemp = $(buttonTemp).attr("class");
+                        pulseButton(buttonTemp,buttonClassTemp);
+
                         kickPunchSound.play();
+
                     }
                     break;
                 case "throw":
                     battle.attack("cpu", "throw", "player", "BANG!");
+
+                    buttonTemp = $(".cpuThrow");
+                    buttonClassTemp = $(buttonTemp).attr("class");
+                    pulseButton(buttonTemp,buttonClassTemp);
+                    break;
+                case "drink":
+                    battle.drink("cpu");
+                    buttonTemp = $(".cpuDrink");
+                    buttonClassTemp = $(buttonTemp).attr("class");
+                    pulseButton(buttonTemp,buttonClassTemp);
                     throwSound.play();
                     break;
                 case "drink":
@@ -580,6 +610,9 @@ $(document).ready(function () {
                         html: `<span>${opponentName} moved forwards!</span>`,
                         classes: "rounded"
                     });
+                    buttonTemp = $(".cpuForward");
+                    buttonClassTemp = $(buttonTemp).attr("class");
+                    pulseButton(buttonTemp,buttonClassTemp);
                     break;
                 case "right":
                     battle.moveRight("cpu");
@@ -588,6 +621,9 @@ $(document).ready(function () {
                         html: `<span>${opponentName} moved backwards!</span>`,
                         classes: "rounded"
                     });
+                    buttonTemp = $(".cpuBackward");
+                    buttonClassTemp = $(buttonTemp).attr("class");
+                    pulseButton(buttonTemp,buttonClassTemp);
                     break;
             }
         }
@@ -640,6 +676,25 @@ $(document).ready(function () {
                 $('.main').css('background-image', "url(" + cityImage + ")");
         }
     }
+
+
+
+    //uncomment below to test end modal dsiplay see style.css line #300 to configure.
+    //winGame();
+
+    //function to pulse buttons for 3 seconds, then returnt them to previous state.
+    function pulseButton(buttonPressed,fullClass){
+        $(buttonPressed).attr('class', 'pulse' + fullClass + '');
+        setTimeout(function(){ 
+            $(buttonPressed).attr('class', button );
+        },1000);
+    }
+    
+
+
+    //end of document on ready
+
+ 
 });
 
 
