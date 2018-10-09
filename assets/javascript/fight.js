@@ -20,6 +20,22 @@ var topTen = database.ref("/topten");
 var displayName;
 var isAnonymous;
 var uid;
+//sound files
+var loginSound = new sound("./assets/audio/login.wav");
+var happySound = new sound("./assets/audio/happysound.wav");
+var happySound2 = new sound("./assets/audio/happysound2.wav");
+var beerSound = new sound("./assets/audio/beer.wav");
+var winSound = new sound("./assets/audio/gameWin.wav");
+var loseSound = new sound("./assets/audio/gameLose.wav");
+var kickPunchSound = new sound("./assets/audio/kickpunch.wav");
+var stepSound = new sound("./assets/audio/step.wav");
+var throwSound = new sound("./assets/audio/throw.wav");
+var playlist = ["./assets/audio/music1.mp3",
+    "./assets/audio/music2.mp3",
+    "./assets/audio/music3.mp3",
+    "./assets/audio/music4.mp3",
+    "./assets/audio/music5.mp3"
+];
 //combat variables
 var buttonTemp;
 var buttonClassTemp;
@@ -80,7 +96,7 @@ firebase.auth().onAuthStateChanged(function (user) {
                     strength: snap.child(`${displayName}`).child('strength').val(),
                     wits: snap.child(`${displayName}`).child('wits').val(),
                     accuracy: 3.677 - 23 / Math.pow(10 + snap.child(`${displayName}`).child('wits').val(), 0.7),
-                    actionPoints: 4
+                    actionPoints: 5
                 };
                 parameters.player.attacks = {
                     "kick": {
@@ -120,7 +136,9 @@ var battle = {
         var dodgeChance = battle.evadeCheck(attacker, attack, defender);
         if (parameters[attacker].stats.actionPoints >= 2) {
             if (roll > dodgeChance) {
-                parameters[defender].stats.parsedHealth -= parameters[attacker].attacks[attack].damage;
+                let coefficient = (200 / parameters[defender].stats.parsedHealth);
+                parameters[defender].stats.parsedHealth = parameters[defender].stats.parsedHealth * coefficient;
+                parameters[defender].stats.parsedHealth -= parameters[attacker].attacks[attack].damage * coefficient;
                 //console.log(`You attacked the computer for ${parameters[attacker].attacks[attack].damage} damage!`); //enemyname is placeholder
                 //console.log(attacker + " roll: " + roll);
                 //console.log(defender + " dodge chance: " + dodgeChance);
@@ -176,7 +194,7 @@ var battle = {
                 }
             }
             parameters[attacker].stats.actionPoints -= 2;
-            checkTurn();
+            setTimeout(checkTurn, 3500);
         }
     },
     drink: function (caster) {
@@ -184,10 +202,10 @@ var battle = {
             if (parameters[caster].stats.parsedHealth > 0) {
                 //console.log("str before: " + parameters[caster].stats.strength);
                 //console.log("wits before: " + parameters[caster].stats.strength);
-                parameters[caster].stats.strength = parameters[caster].stats.strength + (parameters[caster].stats.strength * 0.5);
-                parameters[caster].stats.wits = parameters[caster].stats.wits - parameters[caster].stats.wits * 0.5;
-                parameters[caster].stats.actionPoints -= 2;
-                checkTurn();
+                parameters[caster].stats.strength += parameters[caster].stats.strength * 0.5;
+                parameters[caster].stats.wits -= parameters[caster].stats.wits * 0.5;
+                parameters[caster].stats.actionPoints -= 3;
+                setTimeout(checkTurn, 3500);
                 //console.log("str after: " + parameters[caster].stats.strength);
                 //console.log("wits after: " + parameters[caster].stats.wits);
                 M.toast({
@@ -203,13 +221,13 @@ var battle = {
             if (parameters[caster].stats.actionPoints >= 1) {
                 $('.playerFighter').css("float", "left").attr("data-position", "left");
                 parameters[caster].stats.actionPoints--;
-                checkTurn();
+                setTimeout(checkTurn, 3500);
             }
         } else if (caster === "cpu") {
             if (parameters[caster].stats.actionPoints >= 1) {
                 $(".cpuFighter").css("float", "left").attr("data-position", "left");
                 parameters[caster].stats.actionPoints--;
-                checkTurn();
+                setTimeout(checkTurn, 3500);
             }
         }
     },
@@ -218,16 +236,19 @@ var battle = {
             if (parameters[caster].stats.actionPoints >= 1) {
                 $('.playerFighter').css("float", "right").attr("data-position", "right");
                 parameters[caster].stats.actionPoints--;
-                checkTurn();
+                setTimeout(checkTurn, 3500);
             }
         } else if (caster === "cpu") {
             if (parameters[caster].stats.actionPoints >= 1) {
                 $(".cpuFighter").css("float", "right").attr("data-position", "right");
                 parameters[caster].stats.actionPoints--;
-                checkTurn();
+                setTimeout(checkTurn, 3500);
             }
         }
-        checkTurn();
+        setTimeout(checkTurn, 3500);
+    },
+    endTurn: function (caster) {
+        parameters[caster].stats.actionPoints = 0;
     },
     evadeCheck: function (attacker, attack, defender) {
         var dodgeChance = 1 - (parameters[attacker].attacks[attack].accuracy / (parameters[attacker].attacks[attack].accuracy + Math.pow((parameters[defender].stats.wits / 100), 0.985)));
@@ -244,7 +265,8 @@ var playlist = ["./assets/audio/music1.mp3",
     "./assets/audio/music2.mp3",
     "./assets/audio/music3.mp3",
     "./assets/audio/music4.mp3",
-    "./assets/audio/music5.mp3"];
+    "./assets/audio/music5.mp3"
+];
 //Giphy call pass in string to change search parameter for gif results.
 function callAPI(buttonClicked) {
     $('.displayBox').css('visibility', 'visible');
@@ -271,6 +293,7 @@ function callAPI(buttonClicked) {
                     $('.displayBox').empty();
                     $('.displayBox').css('visibility', 'hidden');
                 }, 20000);
+                setTimeout(endModal(), 21000);
             } else {
                 $('.displayBox').append(`<img src="${response.data[x].images.original.url}" width="360px" height="360px">`);
                 setTimeout(function () {
@@ -314,38 +337,115 @@ function randomBetween(min, max) {
 
 function checkTurn() {
     if (parameters.player.stats.actionPoints === 0 && cpuTurn === false) {
-        parameters.cpu.stats.actionPoints = 4;
+        M.toast({
+            html: `<span>${opponentName}'s Turn!!</span>`,
+            classes: "rounded"
+        });
+        parameters.cpu.stats.actionPoints = 5;
         cpuTurn = true;
     } else if (parameters.cpu.stats.actionPoints === 0 && cpuTurn === true) {
-        parameters.player.stats.actionPoints = 4;
+        M.toast({
+            html: `<span>Your Turn!!</span>`,
+            classes: "rounded"
+        });
+        parameters.player.stats.actionPoints = 5;
         cpuTurn = false;
     }
-    computerChoice();
+    if (parameters.cpu.stats.actionPoints > 0 && cpuTurn === true) {
+        console.log("call cpuchoice");
+        setTimeout(computerChoice, 4000);
+    }
 }
 
 function computerChoice() {
     var humanEvadeKick = battle.evadeCheck("cpu", "kick", "player");
     var humanEvadePunch = battle.evadeCheck("cpu", "punch", "player");
+    var humanEvadeThrow = battle.evadeCheck("cpu", "throw", "player");
     var kickDPS = (1 - humanEvadeKick) * parameters.cpu.attacks.kick.damage;
     var punchDPS = (1 - humanEvadePunch) * parameters.cpu.attacks.punch.damage;
+    var throwDPS = (1 - humanEvadeThrow) * parameters.cpu.attacks.throw.damage;
     while (parameters.cpu.stats.actionPoints > 0 && cpuTurn === true) {
-        if ($(".playerFighter").attr("data-position") === "left") {
-            setTimeout(battle.attack("cpu", "throw", "player", "BANG!"), 3500);
-            console.log("cpuBANG!");
-            checkTurn();
-        } else if ($(".playerFighter").attr("data-position") === "right" && $(".cpuFighter").attr("data-position") === "right") {
-            setTimeout(battle.moveLeft("cpu"), 3500);
-            console.log("CPUMOVE");
-            checkTurn();
-        } else if ($(".playerFighter").attr("data-position") === "right" && $(".cpuFighter").attr("data-position") === "left") {
-            if (punchDPS > kickDPS) {
-                setTimeout(battle.attack("cpu", "punch", "player", "POW!"), 3500);
-                console.log("CPUPUNCH");
+        if (parameters.cpu.stats.actionPoints >= 3) {
+            if (parameters.cpu.stats.strength > 15 && parameters.cpu.stats.wits < 5) {
+                battle.drink("cpu");
+                console.log("CPU DRANK");
                 checkTurn();
-            } else if (kickDPS > punchDPS) {
-                setTimeout(battle.attack("cpu", "kick", "player", "SNIKT!"), 3500);
-                console.log("CPUKICK");
+                return;
+            } else if (throwDPS > punchDPS && throwDPS > kickDPS) {
+                battle.attack("cpu", "throw", "player", "BANG!");
+                console.log("CPU THROW");
                 checkTurn();
+                return;
+            } else if ($(".playerFighter").attr("data-position") === "right" && $(".cpuFighter").attr("data-position") === "left") {
+                if (punchDPS > kickDPS) {
+                    battle.attack("cpu", "punch", "player", "POW!");
+                    console.log("CPUPUNCH");
+                    checkTurn();
+                    return;
+                } else if (kickDPS > punchDPS) {
+                    battle.attack("cpu", "kick", "player", "SNIKT!");
+                    console.log("CPUKICK");
+                    checkTurn();
+                    return;
+                }
+            } else if ($(".playerFighter").attr("data-position") === "right" && $(".cpuFighter").attr("data-position") === "right") {
+                battle.moveLeft("cpu");
+                console.log("CPUMOVELEFT");
+                M.toast({
+                    html: `<span>${opponentName} moved forwards!</span>`,
+                    classes: "rounded"
+                });
+                checkTurn();
+                return;
+            } else if ($(".playerFighter").attr("data-position") === "left") {
+                battle.attack("cpu", "throw", "player", "BANG!");
+                console.log("cpuBANG!");
+                checkTurn();
+                return;
+            }
+        } else if (parameters.cpu.stats.actionPoints >= 2) {
+            if (throwDPS > punchDPS && throwDPS > kickDPS) {
+                battle.attack("cpu", "throw", "player", "BANG!");
+                console.log("CPU THROW");
+                checkTurn();
+                return;
+            } else if ($(".playerFighter").attr("data-position") === "right" && $(".cpuFighter").attr("data-position") === "left") {
+                if (punchDPS > kickDPS) {
+                    battle.attack("cpu", "punch", "player", "POW!");
+                    console.log("CPUPUNCH");
+                    checkTurn();
+                    return;
+                } else if (kickDPS > punchDPS) {
+                    battle.attack("cpu", "kick", "player", "SNIKT!");
+                    console.log("CPUKICK");
+                    checkTurn();
+                    return;
+                }
+            } else if ($(".playerFighter").attr("data-position") === "right" && $(".cpuFighter").attr("data-position") === "right") {
+                battle.moveLeft("cpu");
+                console.log("CPUMOVELEFT");
+                checkTurn();
+                return;
+            } else if ($(".playerFighter").attr("data-position") === "left") {
+                battle.attack("cpu", "throw", "player", "BANG!");
+                console.log("cpuBANG!");
+                checkTurn();
+                return;
+            }
+        } else if (parameters.cpu.stats.actionPoints === 1 && $(".cpuFighter").attr("data-position") === "left") {
+            if (parameters.player.attacks.punch.damage >= parameters.cpu.stats.parsedHealth && parameters.player.attacks.kick.damage >= parameters.cpu.stats.parsedHealth) {
+                battle.moveRight("cpu");
+                M.toast({
+                    html: `<span>${opponentName} moved backwards!</span>`,
+                    classes: "rounded"
+                });
+                checkTurn();
+                return;
+            } else {
+                battle.endTurn();
+                console.log("cpu ended turn");
+                checkTurn();
+                return;
             }
         } else {
             console.log("Failed");
@@ -353,6 +453,7 @@ function computerChoice() {
         }
     }
 }
+
 function winGame() {
     $('#tableTopTen').empty();
     $('#windAndLosses').empty();
@@ -461,22 +562,22 @@ function sound(src) {
     this.sound.setAttribute("controls", "none");
     this.sound.style.display = "none";
     document.body.appendChild(this.sound);
-    this.play = function(){
+    this.play = function () {
         this.sound.play();
     }
-    this.stop = function(){
+    this.stop = function () {
         this.sound.pause();
     }
 }
-var loginSound = new sound ("./assets/audio/login.wav");
-var happySound = new sound ("./assets/audio/happysound.wav");
-var happySound2 = new sound ("./assets/audio/happysound2.wav");
-var beerSound = new sound ("./assets/audio/beer.wav");
-var winSound = new sound ("./assets/audio/gameWin.wav");
-var loseSound = new sound ("./assets/audio/gameLose.wav");
-var kickPunchSound = new sound ("./assets/audio/kickpunch.wav");
-var stepSound = new sound ("./assets/audio/step.wav");
-var throwSound = new sound ("./assets/audio/throw.wav");
+var loginSound = new sound("./assets/audio/login.wav");
+var happySound = new sound("./assets/audio/happysound.wav");
+var happySound2 = new sound("./assets/audio/happysound2.wav");
+var beerSound = new sound("./assets/audio/beer.wav");
+var winSound = new sound("./assets/audio/gameWin.wav");
+var loseSound = new sound("./assets/audio/gameLose.wav");
+var kickPunchSound = new sound("./assets/audio/kickpunch.wav");
+var stepSound = new sound("./assets/audio/step.wav");
+var throwSound = new sound("./assets/audio/throw.wav");
 //Music playlist loop
 function bgAudio() {
     var playlist_index;
@@ -486,14 +587,14 @@ function bgAudio() {
     audio.loop = false;
     audio.volume = 0.25;
     audio.play();
-    audio.addEventListener('ended', function() {
+    audio.addEventListener('ended', function () {
         switchTrack();
     });
+
     function switchTrack() {
-        if(playlist_index == (playlist.length -1)) {
+        if (playlist_index == (playlist.length - 1)) {
             playlist_index = 0;
-        }
-        else {
+        } else {
             playlist_index++;
         }
         audio.src = playlist[playlist_index];
@@ -507,7 +608,7 @@ $(document).ready(function () {
     //controls button on modalFight to start game
     $('#fightBtn').on('click', function () {
         bgAudio();
-        $('#modalFight').css('display','none');
+        $('#modalFight').css('display', 'none');
     })
     // set opponent
     $("#cpuNickName").text(localStorage.getItem("opponent"));
@@ -601,6 +702,10 @@ $(document).ready(function () {
                     break;
                 case "drink":
                     battle.drink("cpu");
+                    M.toast({
+                        html: `<span>${opponentName} took a drink! GULP!</span>`,
+                        classes: "rounded"
+                    });
                     kickPunchSound.play();
                     break;
                 case "left":
@@ -626,6 +731,9 @@ $(document).ready(function () {
                     pulseButton(buttonTemp,buttonClassTemp);
                     break;
             }
+        }
+        while (parameters.player.stats.actionsPoints > 0) {
+            $("#playerAP").html(`AP: ${parameters.player.stats.actionPoints}`);
         }
         console.log("playerAP: " + parameters.player.stats.actionPoints);
         console.log("cpuAP: " + parameters.cpu.stats.actionPoints);
@@ -696,8 +804,5 @@ $(document).ready(function () {
 
  
 });
-
-
 //uncomment below to test end modal dsiplay see style.css line #300 to configure.
-
-//end of document on ready
+//endModal();

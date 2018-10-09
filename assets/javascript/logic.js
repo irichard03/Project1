@@ -32,7 +32,7 @@ firebase.auth().onAuthStateChanged(function (user) {
                 }).then(function () {
                     var displayName = user.displayName;
                     fireAccounts.once("value")
-                    .then(function (snap) {
+                        .then(function (snap) {
                             if (!snap.child(user.displayName).exists()) { //this way of identifying if the username is already in  use doesnt work
                                 database.ref(`accounts/${user.displayName}`).set({
                                     wins: '',
@@ -62,7 +62,7 @@ firebase.auth().onAuthStateChanged(function (user) {
         uid = user.uid;
         // ...
     } else {
-        if(newConnection){
+        if (newConnection) {
             newConnection.remove();
         }
         $('#login1').removeAttr('hidden');
@@ -88,7 +88,7 @@ function login() {
 }
 function logout() {
     firebase.auth().signOut().then(function () {
-        
+
     }).catch(function (error) {
         // An error happened.
     });
@@ -142,7 +142,7 @@ for (i = 0; i < cityArray.length; i++) {
             var randomName = data.results[0].name.first;
             randomName.toString();
             nameArray.push(randomName.substr(0, 1).toUpperCase() + randomName.substr(1));
-        }).then(function(){
+        }).then(function () {
             giveNames();
         });
 }
@@ -164,10 +164,10 @@ function sound(src) {
     document.body.appendChild(this.sound);
     this.play = function(){
         this.sound.play();
-    }
+    };
     this.stop = function(){
         this.sound.pause();
-    }
+    };
 }
 var loginSound = new sound ("./assets/audio/login.wav");
 var happySound = new sound ("./assets/audio/happysound.wav");
