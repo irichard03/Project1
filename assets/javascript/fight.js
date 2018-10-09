@@ -485,7 +485,7 @@ function winGame() {
             console.log("Errors handled: " + errorObject.code);
         };
     //Promise function for top ten, getting info from to display
-    var search = database.ref('/topten').orderByChild('winsNet').limitToFirst(10);
+    var search = database.ref('/topten').orderByChild('winsNet').limitToLast(10);
     search.once('value')
         .then(function (snapshot) {
             snapshot.forEach(function (childsnap) {
@@ -797,12 +797,6 @@ $(document).ready(function () {
             $(buttonPressed).attr('class', button );
         },1000);
     }
-    
-
-
     //end of document on ready
-
- 
 });
-//uncomment below to test end modal dsiplay see style.css line #300 to configure.
-//endModal();
+
