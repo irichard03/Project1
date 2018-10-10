@@ -23,7 +23,9 @@ Jquery http://jquery.com/
 
 Use Paper JS http://paperjs.org/
 
+## Photo Credits
 
+Background Image: https://www.setaswall.com/8-bit-wallpapers/8-bit-wallpaper-16-1920x1200/
 
 **Docs**
 
