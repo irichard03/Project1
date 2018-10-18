@@ -50,10 +50,7 @@ var cpuStrength = randomBetween(1, 50 - 2 - cpuHealth);
 var cpuWits = 50 - cpuHealth - cpuStrength;
 var cpuAcc = 3.677 - (23 / Math.pow((10 + cpuWits), 0.7));
 var parameters = {
-    "player": {
-        // "stats": {},
-        // "attacks": {}
-    },
+    "player": {},
     "cpu": {
         "stats": {
             parsedHealth: cpuHealth * 10,
@@ -89,6 +86,7 @@ firebase.auth().onAuthStateChanged(function (user) {
                 var tempStr = snap.child(`${displayName}`).child('strength').val();
                 tempAcc = 3.677 - 23 / Math.pow(10 + snap.child(`${displayName}`).child('wits').val(), 0.7);
                 parameters.player.stats = {
+                    //define the objects for the player within parameters
                     health: snap.child(`${displayName}`).child('health').val(),
                     parsedHealth: snap.child(`${displayName}`).child('health').val() * 10,
                     strength: snap.child(`${displayName}`).child('strength').val(),
@@ -110,14 +108,6 @@ firebase.auth().onAuthStateChanged(function (user) {
                         accuracy: tempAcc + 0.35
                     }
                 };
-            }).then(function () {
-                // console.log(parameters.player);
-                // console.log(parameters.cpu);
-                var humanEvadeKick = battle.evadeCheck("cpu", "kick", "player");
-                var humanEvadePunch = battle.evadeCheck("cpu", "punch", "player");
-                var kickDPS = (1 - humanEvadeKick) * parameters.cpu.attacks.kick.damage;
-                var punchDPS = (1 - humanEvadePunch) * parameters.cpu.attacks.punch.damage;
-                // console.log(humanEvadeKick);
             }),
             function (errorObject) {
                 console.log("Errors handled: " + errorObject.code);
@@ -129,26 +119,24 @@ firebase.auth().onAuthStateChanged(function (user) {
 });
 
 var battle = {
+    //function to handle attacks
     attack: function (attacker, attack, defender, toast) {
-        var roll = Math.random();
-        var dodgeChance = battle.evadeCheck(attacker, attack, defender);
-        if (parameters[attacker].stats.actionPoints >= 2) {
-            if (roll > dodgeChance) {
-                let coefficient = (200 / parameters[defender].stats.parsedHealth);
+        var roll = Math.random(); //random roll for the attacker to check for accuracy
+        var dodgeChance = battle.evadeCheck(attacker, attack, defender); //call evadeCheck to get a roll for the evade chance
+        if (parameters[attacker].stats.actionPoints >= 2) { //if the attacker has at least 2 AP
+            if (roll > dodgeChance) { //if the attacker  attack roll is higher than the defenders dodge roll
+                let coefficient = (200 / parameters[defender].stats.parsedHealth); //normalize the defenders health to 200px for CSS styling
                 parameters[defender].stats.parsedHealth = parameters[defender].stats.parsedHealth * coefficient;
-                parameters[defender].stats.parsedHealth -= parameters[attacker].attacks[attack].damage * coefficient;
-                //console.log(`You attacked the computer for ${parameters[attacker].attacks[attack].damage} damage!`); //enemyname is placeholder
-                //console.log(attacker + " roll: " + roll);
-                //console.log(defender + " dodge chance: " + dodgeChance);
-                if (parameters[defender].stats.parsedHealth > 0) {
-                    callAPI(attack);
+                parameters[defender].stats.parsedHealth -= parameters[attacker].attacks[attack].damage * coefficient; //defender takes damage
+                if (parameters[defender].stats.parsedHealth > 0) { // if the defender still has HP
+                    callAPI(attack); //play a gif with the attack animation
                 }
-                if (attacker === "player") {
-                    if (parameters[defender].stats.parsedHealth < 0) {
-                        parameters[defender].stats.parsedHealth = 0;
+                if (attacker === "player") { //if the attacker is player
+                    if (parameters[defender].stats.parsedHealth < 0) { // if the defender's health drops below 0
+                        parameters[defender].stats.parsedHealth = 0; //set their hp to 0 and update the CSS
                         $('#cpuHealth').css('width', '0px');
-                        callAPI(1);
-                        winGame();
+                        callAPI(1); //call gif api to play the win game gif
+                        setTimeout(winGame, 5000); //win the game after 5 seconds
                     } else {
                         let cpuHealthString = parameters[defender].stats.parsedHealth.toString();
                         cpuHealthString += 'px';
@@ -174,10 +162,7 @@ var battle = {
                         });
                     }
                 }
-            } else {
-                //console.log(`You attacked the computer for ${parameters[attacker].attacks[attack].damage} damage!`); //enemyname is placeholder
-                //console.log("Your roll: " + roll);
-                //console.log("cpu evade chance: " + battle.evadeCheck(attacker, attack, defender));
+            } else { //if the attacker missed
                 if (attacker === "player") {
                     M.toast({
                         html: `<span>YOU MISSED!</span>`,
@@ -190,19 +175,17 @@ var battle = {
                     });
                 }
             }
-            parameters[attacker].stats.actionPoints -= 2;
+            parameters[attacker].stats.actionPoints -= 2; //subtract 2 action points
             $('#actionPoints').text(parameters.player.stats.actionPoints);
             setTimeout(checkTurn, 3500);
         }
     },
-    drink: function (caster) {
-        if (parameters[caster].stats.actionPoints >= 2) {
-            if (parameters[caster].stats.parsedHealth > 0) {
-                //console.log("str before: " + parameters[caster].stats.strength);
-                //console.log("wits before: " + parameters[caster].stats.strength);
-                parameters[caster].stats.strength += parameters[caster].stats.strength * 0.5;
-                parameters[caster].stats.wits -= parameters[caster].stats.wits * 0.5;
-                parameters[caster].stats.actionPoints -= 3;
+    drink: function (caster) { //function when you drink beer
+        if (parameters[caster].stats.actionPoints >= 3) { //if you have at least 3 action points
+            if (parameters[caster].stats.parsedHealth > 0) { //if you still have HP
+                parameters[caster].stats.strength += parameters[caster].stats.strength * 0.5; //increase strength by 50% of current strength
+                parameters[caster].stats.wits -= parameters[caster].stats.wits * 0.5; //decreas wits by 50% of current wits
+                parameters[caster].stats.actionPoints -= 3; //subtract 3 ap
                 $('#actionPoints').text(parameters.player.stats.actionPoints);
                 setTimeout(checkTurn, 3500);
                 //console.log("str after: " + parameters[caster].stats.strength);
@@ -212,10 +195,10 @@ var battle = {
                     classes: "rounded"
                 });
             }
-            updateStats(caster);
+            updateStats(caster); //needed to update damage and accuracy after your stats change
         }
     },
-    moveLeft: function (caster) {
+    moveLeft: function (caster) { //move player left
         if (caster === "player") {
             if (parameters[caster].stats.actionPoints >= 1) {
                 $('.playerFighter').css("float", "left").attr("data-position", "left");
@@ -231,7 +214,7 @@ var battle = {
             }
         }
     },
-    moveRight: function (caster) {
+    moveRight: function (caster) { //move player right
         if (caster === "player") {
             if (parameters[caster].stats.actionPoints >= 1) {
                 $('.playerFighter').css("float", "right").attr("data-position", "right");
@@ -246,20 +229,18 @@ var battle = {
                 setTimeout(checkTurn, 3500);
             }
         }
-        setTimeout(checkTurn, 3500);
     },
-    endTurn: function (caster) {
+    endTurn: function (caster) { //ends turn
         parameters[caster].stats.actionPoints = 0;
         $('#actionPoints').text(parameters.player.stats.actionPoints);
-        checkTurn();
+        setTimeout(checkTurn, 3500);
     },
-    evadeCheck: function (attacker, attack, defender) {
+    evadeCheck: function (attacker, attack, defender) { //determines defenders evade chance, depenand on attack wits, defender wits, and attack type
         var dodgeChance = 1 - (parameters[attacker].attacks[attack].accuracy / (parameters[attacker].attacks[attack].accuracy + Math.pow((parameters[defender].stats.wits / 100), 0.985)));
         if ((typeof dodgeChance) === "number" && isNaN(dodgeChance) === false) {
             return dodgeChance;
         } else {
-            //console.log("dodgeChance: " + dodgeChance);
-            //console.log(parameters[attacker].attacks);
+            console.log("Error calculating dodge chance."); //error message
         }
     },
 };
@@ -284,11 +265,7 @@ function callAPI(buttonClicked) {
         method: "GET"
     }).then(function (response) {
         if (response) {
-            //console.log("api call succeesfull");
-            //console.log(response);
-            //if player wins    
             if (buttonClicked === 1) {
-                //need to increment players win count.
                 $('.displayBox').append(`<img src="${response.data[x].images.original.url}" width="360px" height="360px">`);
                 setTimeout(function () {
                     $('.displayBox').empty();
@@ -308,7 +285,7 @@ function callAPI(buttonClicked) {
     });
 }
 
-function updateStats(caster) {
+function updateStats(caster) { //update damage and accuracy after drink beer
     parameters[caster].stats.accuracy = 3.677 - 23 / Math.pow(10 + parameters[caster].stats.wits, 0.7);
     var updateAcc = parameters[caster].stats.accuracy;
     parameters[caster].attacks = {
@@ -326,7 +303,7 @@ function updateStats(caster) {
         }
     };
 }
-
+//getting random number
 function getRandomInt(max) {
     return Math.floor(Math.random() * Math.floor(max));
 }
@@ -335,8 +312,9 @@ function getRandomInt(max) {
 function randomBetween(min, max) {
     return Math.floor(Math.random() * (max - min + 1) + min);
 }
-
+//checking whos turn it is
 function checkTurn() {
+    //player runs out of ap, computers turn
     if (parameters.player.stats.actionPoints === 0 && cpuTurn === false && parameters.cpu.stats.parsedHealth > 0) {
         M.toast({
             html: `<span>${opponentName}'s Turn!!</span>`,
@@ -345,6 +323,7 @@ function checkTurn() {
         parameters.cpu.stats.actionPoints = 5;
         cpuTurn = true;
         happySound2.play();
+        //cpu runs out of ap, player turn
     } else if (parameters.cpu.stats.actionPoints === 0 && cpuTurn === true && parameters.player.stats.parsedHealth > 0) {
         M.toast({
             html: `<span>Your Turn!!</span>`,
@@ -355,13 +334,15 @@ function checkTurn() {
         cpuTurn = false;
         happySound2.play();
     }
+    //if its the computers turn, make an action every 4 seconds
     if (parameters.cpu.stats.actionPoints > 0 && cpuTurn === true) {
         console.log("call cpuchoice");
         setTimeout(computerChoice, 4000);
     }
 }
-
+//AI for computer
 function computerChoice() {
+    //calculatin the optimal move to make
     var humanEvadeKick = battle.evadeCheck("cpu", "kick", "player");
     var humanEvadePunch = battle.evadeCheck("cpu", "punch", "player");
     var humanEvadeThrow = battle.evadeCheck("cpu", "throw", "player");
@@ -369,19 +350,20 @@ function computerChoice() {
     var punchDPS = (1 - humanEvadePunch) * parameters.cpu.attacks.punch.damage;
     var throwDPS = (1 - humanEvadeThrow) * parameters.cpu.attacks.throw.damage;
     while (parameters.cpu.stats.actionPoints > 0 && cpuTurn === true) {
-        if (parameters.cpu.stats.actionPoints >= 3) {
-            if (parameters.cpu.stats.strength > 15 && parameters.cpu.stats.wits < 5) {
+        if (parameters.cpu.stats.actionPoints >= 3) { //if cpu has at least 3 ap
+            if (parameters.cpu.stats.strength > 15 && parameters.cpu.stats.wits < 5) { //drink beer if strength and wits meet certain requirements
                 battle.drink("cpu");
                 console.log("CPU DRANK");
                 beerSound.play();
                 checkTurn();
                 return;
-            } else if (throwDPS > punchDPS && throwDPS > kickDPS) {
+            } else if (throwDPS > punchDPS && throwDPS > kickDPS) { //if throwing will do the most damage, spam throw
                 battle.attack("cpu", "throw", "player", "BANG!");
                 console.log("CPU THROW");
                 throwSound.play();
                 checkTurn();
                 return;
+                //if cpu is next to player and able to kick/punch, use the more damaging move
             } else if ($(".playerFighter").attr("data-position") === "right" && $(".cpuFighter").attr("data-position") === "left") {
                 if (punchDPS > kickDPS) {
                     battle.attack("cpu", "punch", "player", "POW!");
@@ -396,6 +378,7 @@ function computerChoice() {
                     checkTurn();
                     return;
                 }
+                //if the player is in melee range and the cpu is not, move into melee range
             } else if ($(".playerFighter").attr("data-position") === "right" && $(".cpuFighter").attr("data-position") === "right") {
                 battle.moveLeft("cpu");
                 console.log("CPUMOVELEFT");
@@ -406,6 +389,7 @@ function computerChoice() {
                 });
                 checkTurn();
                 return;
+                //if the player is far away, always throw
             } else if ($(".playerFighter").attr("data-position") === "left") {
                 battle.attack("cpu", "throw", "player", "BANG!");
                 console.log("cpuBANG!");
@@ -413,6 +397,7 @@ function computerChoice() {
                 checkTurn();
                 return;
             }
+            //throw if throw will do the most damage
         } else if (parameters.cpu.stats.actionPoints >= 2) {
             if (throwDPS > punchDPS && throwDPS > kickDPS) {
                 battle.attack("cpu", "throw", "player", "BANG!");
@@ -420,6 +405,7 @@ function computerChoice() {
                 throwSound.play();
                 checkTurn();
                 return;
+                //kick or throw when both are in melee range
             } else if ($(".playerFighter").attr("data-position") === "right" && $(".cpuFighter").attr("data-position") === "left") {
                 if (punchDPS > kickDPS) {
                     battle.attack("cpu", "punch", "player", "POW!");
@@ -447,6 +433,7 @@ function computerChoice() {
                 checkTurn();
                 return;
             }
+            //if cpu has only 1 ap and player is in melee range, move out of melee range
         } else if (parameters.cpu.stats.actionPoints === 1 && $(".cpuFighter").attr("data-position") === "left") {
             if (parameters.player.attacks.punch.damage >= parameters.cpu.stats.parsedHealth && parameters.player.attacks.kick.damage >= parameters.cpu.stats.parsedHealth) {
                 battle.moveRight("cpu");
@@ -464,6 +451,7 @@ function computerChoice() {
                 checkTurn();
                 return;
             }
+            //end turn if nothing else applies
         } else {
             battle.endTurn("cpu");
             happySound.play();
@@ -474,7 +462,7 @@ function computerChoice() {
         }
     }
 }
-
+//function when game is won
 function winGame() {
     $('#tableTopTen').empty();
     $('#windAndLosses').empty();
@@ -512,16 +500,12 @@ function winGame() {
             snapshot.forEach(function (childsnap) {
                 var newKey = childsnap.key;
                 var newVal = childsnap.child('winsNet').val();
-                console.log(newKey);
-                console.log(newVal);
-                //(`${newKey}: ${childsnap.child('winsNet').val()} wins!`);
                 $('#tableTopTen').prepend(`"<tr><td>${newKey}</td><td>${childsnap.child('winsNet').val()}</td></tr>"`);
-
             });
             endModal();
         });
 }
-
+//function when you lose game
 function loseGame() {
     $('#tableTopTen').empty();
     $('#windAndLosses').empty();
@@ -559,8 +543,6 @@ function loseGame() {
             snapshot.forEach(function (childsnap) {
                 var newKey = childsnap.key;
                 var newVal = childsnap.child('winsNet').val();
-                console.log(newKey);
-                console.log(newVal);
                 $('#tableTopTen').prepend(`"<tr><td>${newKey}</td><td>${childsnap.child('winsNet').val()}</td></tr>"`);
             });
             endModal();
@@ -568,13 +550,11 @@ function loseGame() {
 }
 //function to display custom end modal style is controlled in css, does not disappear, only option is to pick another opponent.
 function endModal() {
-    console.log("end modal called");
     var modal = $('#endModal');
     modal.css("display", "block");
 }
 //modal to start fight (and music!!)
 function modalFight() {
-    console.log("fight modal called");
     var modalF = $('#modalFight');
     modalF.css("display", "block");
 }
